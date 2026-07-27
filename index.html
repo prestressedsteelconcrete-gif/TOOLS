@@ -16,6 +16,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 
   :root{
@@ -115,6 +116,15 @@
   .page-tab-btn{ display:none; }
   .page-panel{ display:none; width:100%; max-width:1400px; flex-direction:column; align-items:center; }
   .page-panel.active{ display:flex; }
+  .ss-chk-regular{ background:rgba(34,197,94,.16); color:#16a34a; font-weight:700; }
+  .ss-chk-bad{ background:rgba(239,68,68,.18); color:#dc2626; font-weight:700; }
+  .ss-chk-blank{ background:transparent; }
+  .ss-table{ font-size:12.5px; }
+  .ss-table th, .ss-table td{ text-align:center; padding:6px 8px; }
+  .ss-table th.grp{ background:#2aa9c7; color:#fff; }
+  .ss-table th.hdr2{ background:rgba(34,197,94,.14); }
+  .ss-upload-row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:10px 0 4px; }
+  .ss-upload-row input[type=file]{ max-width:280px; }
 
   /* Sidebar nav (new markup, mirrors page-tab-btn active state via JS) — fixed navy/gold, independent of theme */
   .side-link{
@@ -1106,6 +1116,7 @@
 <div class="tabs">
   <button class="tab-btn active" id="tabEqBtn">Earthquake</button>
   <button class="tab-btn" id="tabWindBtn">Wind</button>
+  <button class="tab-btn" id="tabSoftBtn">Soft Storey Check</button>
 </div>
 
 <!-- ================= EARTHQUAKE PANEL ================= -->
@@ -1202,6 +1213,28 @@
   </div>
 
   <div class="note">This calculation follows BNBC-2020 / ASCE 7 Directional Procedure, based on the "Software Input" sheet formulas in "wind.xlsx" (assuming a rigid structure — resonant/flexible gust factor terms and e1/e2 torsional eccentricity are omitted, per your instructions).</div>
+</div>
+
+<!-- ================= SOFT STOREY CHECK PANEL ================= -->
+<div class="card panel" id="panelSoft">
+  <h2 class="section">Upload ETABS "Story Stiffness" Table</h2>
+  <p class="sub" style="margin-top:-6px;">Export the <strong>Story Stiffness</strong> table from ETABS (Display &rarr; Show Tables, or Excel export) as a .xlsx file — same format as an ETABS database table — and upload it below. The tool will average Stiff X / Stiff Y across all analysis steps for each story and run the BNBC 2020 / ASCE 7-05 Soft-Storey and Extreme Soft-Storey Irregularity checks in both directions.</p>
+
+  <div class="ss-upload-row">
+    <input type="file" id="softStoreyFile" accept=".xlsx,.xls">
+    <button id="softStoreyCalcBtn" style="margin:0;">Run Soft-Storey Check</button>
+  </div>
+  <div id="softStoreyStatus" style="font-size:13px; opacity:.8; margin-top:4px;"></div>
+
+  <div id="softStoreyResult" style="width:100%; display:none; margin-top:18px;">
+    <h2 class="section coral">X-Direction</h2>
+    <div style="overflow-x:auto;"><table class="ss-table" id="softStoreyTableX"></table></div>
+
+    <h2 class="section coral" style="margin-top:26px;">Y-Direction</h2>
+    <div style="overflow-x:auto;"><table class="ss-table" id="softStoreyTableY"></table></div>
+  </div>
+
+  <div class="note">Ki/Ki+1 &gt; 0.7 (Soft-Storey) / &gt;= 0.6 (Extreme) checks stiffness against the story immediately above. Ki/Kmi &gt;= 0.8 (Soft-Storey) / &gt;= 0.7 (Extreme) checks stiffness against the average of the 3 stories above, per BNBC 2020 / ASCE 7-05 vertical structural irregularity provisions. Based on the "Soft story X &amp; Y Direction" calculation sheet.</div>
 </div>
 
 
@@ -2643,18 +2676,23 @@ buildStoryRows();
 document.getElementById('rebuildStoriesBtn').addEventListener('click', buildStoryRows);
 
 /* ---- Tabs ---- */
+function activateEtabsTab(which){
+  const tabs = {eq:['tabEqBtn','panelEq'], wind:['tabWindBtn','panelWind'], soft:['tabSoftBtn','panelSoft']};
+  Object.keys(tabs).forEach(k=>{
+    const [btnId, panelId] = tabs[k];
+    document.getElementById(btnId).classList.toggle('active', k===which);
+    document.getElementById(panelId).classList.toggle('active', k===which);
+  });
+}
 document.getElementById('tabEqBtn').addEventListener('click', ()=>{
-  document.getElementById('tabEqBtn').classList.add('active');
-  document.getElementById('tabWindBtn').classList.remove('active');
-  document.getElementById('panelEq').classList.add('active');
-  document.getElementById('panelWind').classList.remove('active');
+  activateEtabsTab('eq');
 });
 document.getElementById('tabWindBtn').addEventListener('click', ()=>{
   if(windDimensionMode === 'auto') syncWindDimensions({force:true});
-  document.getElementById('tabWindBtn').classList.add('active');
-  document.getElementById('tabEqBtn').classList.remove('active');
-  document.getElementById('panelWind').classList.add('active');
-  document.getElementById('panelEq').classList.remove('active');
+  activateEtabsTab('wind');
+});
+document.getElementById('tabSoftBtn').addEventListener('click', ()=>{
+  activateEtabsTab('soft');
 });
 
 /* ============== EARTHQUAKE CALCULATION ============== */
@@ -3649,6 +3687,243 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
     console.error('Chart rendering failed:', err);
   }
 });
+
+/* ============== SOFT-STOREY IRREGULARITY CHECK (ETABS Story Stiffness import) ============== */
+(function(){
+  const fileInput = document.getElementById('softStoreyFile');
+  const calcBtn = document.getElementById('softStoreyCalcBtn');
+  const statusEl = document.getElementById('softStoreyStatus');
+  const resultWrap = document.getElementById('softStoreyResult');
+  const tableXEl = document.getElementById('softStoreyTableX');
+  const tableYEl = document.getElementById('softStoreyTableY');
+
+  function setStatus(msg, isError){
+    statusEl.textContent = msg;
+    statusEl.style.color = isError ? '#dc2626' : '';
+  }
+
+  function num(v){
+    const n = parseFloat(v);
+    return isNaN(n) ? 0 : n;
+  }
+
+  // Locate the "Story Stiffness" table inside a raw sheet-to-json (array of arrays) export
+  // and return an ordered list of { story, stiffX, stiffY }.
+  function extractStoryStiffness(rows){
+    let headerRowIdx = -1;
+    for (let i = 0; i < rows.length; i++){
+      const r = rows[i] || [];
+      const joined = (r[0] || '').toString();
+      if (/table\s*:?\s*story stiffness/i.test(joined)){
+        // header row (column names) is typically 1 row below the "TABLE: ..." title row
+        for (let j = i + 1; j < Math.min(i + 4, rows.length); j++){
+          const cand = rows[j] || [];
+          if (cand.some(c => (c || '').toString().trim().toLowerCase() === 'story')){
+            headerRowIdx = j;
+            break;
+          }
+        }
+        if (headerRowIdx >= 0) break;
+      }
+    }
+    // Fallback: search the whole sheet for a header row containing Story/Stiff X/Stiff Y
+    if (headerRowIdx < 0){
+      for (let i = 0; i < rows.length; i++){
+        const r = (rows[i] || []).map(c => (c || '').toString().trim().toLowerCase());
+        if (r.includes('story') && r.some(c => c.replace(/\s+/g,'') === 'stiffx') && r.some(c => c.replace(/\s+/g,'') === 'stiffy')){
+          headerRowIdx = i;
+          break;
+        }
+      }
+    }
+    if (headerRowIdx < 0) return null;
+
+    const header = (rows[headerRowIdx] || []).map(c => (c || '').toString().trim().toLowerCase());
+    const colStory = header.indexOf('story');
+    const colOutputCase = header.findIndex(c => c === 'output case');
+    let colStiffX = header.findIndex(c => c.replace(/\s+/g,'') === 'stiffx');
+    let colStiffY = header.findIndex(c => c.replace(/\s+/g,'') === 'stiffy');
+    if (colStory < 0 || colStiffX < 0 || colStiffY < 0) return null;
+
+    // Skip the units row right after the header (e.g. "kip/in") if present
+    let dataStart = headerRowIdx + 1;
+    const maybeUnits = rows[dataStart] || [];
+    const storyCellNextRow = (maybeUnits[colStory] || '').toString().trim();
+    if (storyCellNextRow === '' ) dataStart++;
+
+    const order = [];
+    const acc = {}; // story -> {xSum,xCount,ySum,yCount}
+    for (let i = dataStart; i < rows.length; i++){
+      const r = rows[i] || [];
+      const storyCell = (r[colStory] || '').toString().trim();
+      if (!storyCell) break; // blank row -> end of this table
+      if (/^table\s*:?/i.test(storyCell)) break; // next table started
+
+      if (!(storyCell in acc)){
+        acc[storyCell] = { xSum: 0, xCount: 0, ySum: 0, yCount: 0 };
+        order.push(storyCell);
+      }
+      const oc = colOutputCase >= 0 ? (r[colOutputCase] || '').toString().toUpperCase() : '';
+      const xv = num(r[colStiffX]);
+      const yv = num(r[colStiffY]);
+      // Only average the stiffness value for the direction it was actually computed in
+      // (ETABS reports 0 for the direction not being pushed in each output case).
+      const useX = xv !== 0 || /X/.test(oc);
+      const useY = yv !== 0 || /Y/.test(oc);
+      if (xv !== 0 || (oc && /X/.test(oc))){ acc[storyCell].xSum += xv; acc[storyCell].xCount += 1; }
+      if (yv !== 0 || (oc && /Y/.test(oc))){ acc[storyCell].ySum += yv; acc[storyCell].yCount += 1; }
+    }
+
+    return order.map(story => {
+      const a = acc[story];
+      return {
+        story,
+        stiffX: a.xCount ? a.xSum / a.xCount : 0,
+        stiffY: a.yCount ? a.ySum / a.yCount : 0
+      };
+    });
+  }
+
+  // Given an ordered top-to-bottom array of stiffness values, compute the Soft-Storey and
+  // Extreme Soft-Storey Irregularity checks, replicating the "Soft story X & Y Direction" sheet.
+  function computeChecks(values, thresholds){
+    // thresholds: {ratioAbove, ratioAvg, ratioAboveExact}
+    const n = values.length;
+    const rows = [];
+    for (let i = 0; i < n; i++){
+      const D = values[i];
+      const row = { D, ratio: null, ratioCheck: null, Kmi: null, ratioAvg: null, avgCheck: null };
+      if (D === 0 || i === 0){
+        rows.push(row);
+        continue;
+      }
+      const Dprev = values[i - 1];
+      if (Dprev === 0){
+        rows.push(row);
+        continue;
+      }
+      row.ratio = D / Dprev;
+      row.ratioCheck = thresholds.exact ? (row.ratio >= thresholds.ratioAbove) : (row.ratio > thresholds.ratioAbove);
+      if (i >= 3){
+        const Kmi = (values[i-1] + values[i-2] + values[i-3]) / 3;
+        row.Kmi = Kmi;
+        if (Kmi !== 0){
+          row.ratioAvg = D / Kmi;
+          row.avgCheck = row.ratioAvg >= thresholds.ratioAvg;
+        }
+      }
+      rows.push(row);
+    }
+    return rows;
+  }
+
+  function fmt(v, dec){
+    if (v === null || v === undefined || isNaN(v)) return '-';
+    return v.toLocaleString(undefined, {minimumFractionDigits: dec, maximumFractionDigits: dec});
+  }
+
+  function checkCell(pass){
+    if (pass === null || pass === undefined) return `<td class="ss-chk-blank">-</td>`;
+    return pass
+      ? `<td class="ss-chk-regular">Regular</td>`
+      : `<td class="ss-chk-bad">Soft Storey</td>`;
+  }
+  function checkCellExtreme(pass){
+    if (pass === null || pass === undefined) return `<td class="ss-chk-blank">-</td>`;
+    return pass
+      ? `<td class="ss-chk-regular">Regular</td>`
+      : `<td class="ss-chk-bad">Ex-Soft Storey</td>`;
+  }
+
+  function renderDirectionTable(el, stories, values, dirLabel){
+    const soft = computeChecks(values, {ratioAbove: 0.7, ratioAvg: 0.8, exact: false});
+    const extreme = computeChecks(values, {ratioAbove: 0.6, ratioAvg: 0.7, exact: true});
+
+    let html = '<thead>';
+    html += `<tr>
+      <th class="grp" rowspan="2">Story</th>
+      <th class="grp" rowspan="2">Stiffness ${dirLabel}</th>
+      <th class="grp" colspan="5">Soft-Storey Irregularity Check</th>
+      <th class="grp" colspan="5">Extreme Soft-Storey Irregularity Check</th>
+    </tr>`;
+    html += `<tr>
+      <th class="hdr2">Ki/Ki+1</th><th class="hdr2">check</th><th class="hdr2">Kmi</th><th class="hdr2">Ki/Kmi</th><th class="hdr2">check</th>
+      <th class="hdr2">Ki/Ki+1</th><th class="hdr2">check</th><th class="hdr2">Kmi</th><th class="hdr2">Ki/Kmi</th><th class="hdr2">check</th>
+    </tr>`;
+    html += `<tr><td></td><td></td><td>0.7</td><td></td><td></td><td>0.8</td><td></td><td>0.6</td><td></td><td>0.7</td><td></td><td>0.7</td></tr>`;
+    html += '</thead><tbody>';
+
+    for (let i = 0; i < stories.length; i++){
+      const s = soft[i], e = extreme[i];
+      html += `<tr>
+        <td style="text-align:left;font-weight:600;">${stories[i]}</td>
+        <td>${fmt(values[i], 2)}</td>
+        <td>${fmt(s.ratio, 2)}</td>
+        ${checkCell(s.ratioCheck)}
+        <td>${fmt(s.Kmi, 2)}</td>
+        <td>${fmt(s.ratioAvg, 2)}</td>
+        ${checkCell(s.avgCheck)}
+        <td>${fmt(e.ratio, 2)}</td>
+        ${checkCellExtreme(e.ratioCheck)}
+        <td>${fmt(e.Kmi, 2)}</td>
+        <td>${fmt(e.ratioAvg, 2)}</td>
+        ${checkCellExtreme(e.avgCheck)}
+      </tr>`;
+    }
+    html += '</tbody>';
+    el.innerHTML = html;
+  }
+
+  let parsedRows = null;
+
+  fileInput.addEventListener('change', () => {
+    parsedRows = null;
+    resultWrap.style.display = 'none';
+    const f = fileInput.files && fileInput.files[0];
+    if (!f) { setStatus(''); return; }
+    setStatus('Reading ' + f.name + ' ...');
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const wb = XLSX.read(data, {type: 'array'});
+        // Prefer a sheet literally containing the Story Stiffness table; otherwise scan all sheets.
+        let found = null;
+        for (const sn of wb.SheetNames){
+          const rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], {header: 1, raw: true, defval: ''});
+          const extracted = extractStoryStiffness(rows);
+          if (extracted && extracted.length){ found = extracted; break; }
+        }
+        if (!found){
+          setStatus('Could not find a "Story Stiffness" table in this file. Please export the ETABS Story Stiffness table and try again.', true);
+          return;
+        }
+        parsedRows = found;
+        setStatus(`Found ${found.length} stories in "${f.name}". Click "Run Soft-Storey Check".`);
+      } catch(err){
+        console.error(err);
+        setStatus('Could not read this file as an Excel workbook.', true);
+      }
+    };
+    reader.readAsArrayBuffer(f);
+  });
+
+  calcBtn.addEventListener('click', () => {
+    if (!parsedRows){
+      setStatus('Please choose a valid Story Stiffness .xlsx file first.', true);
+      return;
+    }
+    const stories = parsedRows.map(r => r.story);
+    const stiffX = parsedRows.map(r => r.stiffX);
+    const stiffY = parsedRows.map(r => r.stiffY);
+
+    renderDirectionTable(tableXEl, stories, stiffX, 'X-Direction');
+    renderDirectionTable(tableYEl, stories, stiffY, 'Y-Direction');
+
+    resultWrap.style.display = 'block';
+    setStatus(`Soft-Storey check complete for ${stories.length} stories.`);
+  });
+})();
 
 })();
 </script>
