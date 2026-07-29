@@ -1052,6 +1052,9 @@
   .brd-table th,.brd-table td{padding:6px 8px;white-space:nowrap;text-align:right;}
   .brd-table th:first-child,.brd-table td:first-child{text-align:left;}
   .brd-warnings{margin-top:9px;padding:9px;border-radius:10px;background:color-mix(in srgb,#ef4444 7%,var(--card));border:1px solid color-mix(in srgb,#ef4444 22%,var(--card-border));font-size:9.5px;color:var(--muted);line-height:1.5;}
+  .brd-filter-summary{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-height:34px;margin:-4px 0 13px;padding:7px 9px;border:1px solid var(--card-border);border-radius:13px;background:color-mix(in srgb,var(--card-soft) 88%,transparent);}
+  .brd-filter-pill{display:inline-flex;align-items:center;min-height:25px;padding:5px 9px;border-radius:999px;background:var(--card);border:1px solid var(--card-border);color:var(--muted);font-size:9.5px;font-weight:750;line-height:1.25;}
+  .brd-filter-pill.active{background:var(--accent-soft);border-color:rgba(var(--accent-rgb),.22);color:var(--accent);}
   @media(max-width:950px){
     .brd-hero{grid-template-columns:repeat(3,1fr);}
     .brd-hero-copy{grid-column:1/-1;}
@@ -1159,6 +1162,93 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px rgba(var(--accent-r
 @media(max-width:390px){#themeGrid{grid-template-columns:1fr 1fr;gap:8px}.theme-option{padding:8px}.theme-preview{height:54px!important}.theme-option-name{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.orb{animation:none!important}.card,.side-link{transition:none!important}}
 </style>
+
+<style id="beam-diagram-mobile-pwa-v1">
+/* ===== Live beam elevation, mobile beam navigator & PWA controls ===== */
+.brd-sketch{padding:0!important;overflow:hidden;background:
+  radial-gradient(circle at 50% 0%,rgba(var(--accent-rgb),.09),transparent 54%),
+  color-mix(in srgb,var(--card-soft) 96%,transparent)!important}
+.brd-sketch-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px;border-bottom:1px solid var(--card-border)}
+.brd-sketch-head strong{display:block;color:var(--ink);font-size:11px}
+.brd-sketch-head span{display:block;margin-top:2px;color:var(--muted);font-size:9px;line-height:1.35}
+.brd-diagram-open{width:auto!important;margin:0!important;padding:8px 11px!important;border-radius:10px!important;white-space:nowrap;font-size:10px!important}
+.brd-diagram-canvas{padding:5px 7px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.brd-diagram-canvas svg{display:block;width:100%;min-width:620px;height:auto}
+.brd-svg-label{font-family:var(--sans);font-weight:800;fill:var(--ink)}
+.brd-svg-note{font-family:var(--sans);font-weight:650;fill:var(--muted)}
+.brd-svg-mono{font-family:var(--mono);font-weight:800}
+.brd-mobile-tools,.brd-mobile-nav{display:none}
+.brd-diagram-modal{position:fixed;inset:0;z-index:420;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,8,18,.76);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.brd-diagram-modal.open{display:flex}
+.brd-diagram-dialog{width:min(1180px,100%);max-height:calc(100vh - 36px);display:flex;flex-direction:column;overflow:hidden;border:1px solid color-mix(in srgb,var(--accent) 24%,var(--card-border));border-radius:24px;background:color-mix(in srgb,var(--card) 96%,transparent);box-shadow:0 38px 110px rgba(0,0,0,.48)}
+.brd-diagram-modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;border-bottom:1px solid var(--card-border);background:linear-gradient(135deg,rgba(var(--accent-rgb),.12),transparent)}
+.brd-diagram-modal-head h3{margin:0;color:var(--ink);font-size:18px}
+.brd-diagram-modal-head p{margin:4px 0 0;color:var(--muted);font-size:10px}
+.brd-modal-close{width:42px!important;height:42px;padding:0!important;margin:0!important;border-radius:13px!important;font-size:22px!important;flex:0 0 auto}
+.brd-diagram-modal-controls{display:grid;grid-template-columns:repeat(2,minmax(150px,220px));gap:10px;padding:12px 17px;border-bottom:1px solid var(--card-border);background:var(--card-soft)}
+.brd-diagram-modal-controls label{display:block;margin-bottom:5px;color:var(--muted);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.brd-diagram-modal-controls select{width:100%;min-height:44px;font-size:13px!important}
+.brd-diagram-modal-body{overflow:auto;padding:14px 17px 18px}
+.brd-diagram-modal-body .brd-diagram-canvas{border:1px solid var(--card-border);border-radius:18px;background:var(--card-soft);padding:10px}
+.brd-diagram-modal-body .brd-diagram-canvas svg{min-width:820px}
+.brd-diagram-modal-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:12px}
+.brd-modal-bar{padding:11px;border:1px solid var(--card-border);border-radius:12px;background:var(--card-soft)}
+.brd-modal-bar small{display:block;color:var(--muted);font-size:9px;line-height:1.35}
+.brd-modal-bar strong{display:block;margin-top:5px;color:var(--ink);font:850 14px var(--mono)}
+.brd-diagram-modal-foot{display:grid;grid-template-columns:auto minmax(120px,1fr) auto;align-items:center;gap:10px;padding:11px 17px calc(11px + env(safe-area-inset-bottom));border-top:1px solid var(--card-border);background:color-mix(in srgb,var(--card) 92%,transparent)}
+.brd-diagram-modal-foot button{width:auto!important;margin:0!important;min-height:44px}
+.brd-modal-counter{text-align:center;color:var(--muted);font:750 11px var(--mono)}
+body.brd-modal-open{overflow:hidden}
+
+.pwa-install-btn{position:fixed;right:18px;top:18px;z-index:360;display:flex;align-items:center;gap:8px;width:auto!important;padding:10px 14px!important;margin:0!important;border-radius:999px!important;box-shadow:0 14px 36px rgba(var(--accent-rgb),.25)!important}
+.pwa-install-btn[hidden]{display:none!important}
+.pwa-update-toast{position:fixed;right:18px;top:72px;z-index:361;display:none;width:min(360px,calc(100vw - 36px));padding:13px;border:1px solid var(--card-border);border-radius:16px;background:color-mix(in srgb,var(--card) 96%,transparent);box-shadow:var(--shadow-lg);backdrop-filter:blur(18px)}
+.pwa-update-toast.show{display:block}
+.pwa-update-toast strong{display:block;color:var(--ink);font-size:12px}
+.pwa-update-toast span{display:block;margin:4px 0 10px;color:var(--muted);font-size:10px;line-height:1.45}
+.pwa-update-toast button{width:auto!important;margin:0!important;padding:8px 11px!important}
+
+@media(max-width:650px){
+  #panelBeamDesign{padding-bottom:88px!important}
+  .brd-controls{display:none!important}
+  .brd-mobile-tools{position:sticky;top:8px;z-index:55;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 13px;padding:10px;border:1px solid color-mix(in srgb,var(--accent) 22%,var(--card-border));border-radius:17px;background:color-mix(in srgb,var(--card) 88%,transparent);box-shadow:0 13px 34px rgba(0,0,0,.15);backdrop-filter:blur(22px) saturate(145%);-webkit-backdrop-filter:blur(22px) saturate(145%)}
+  .brd-mobile-field label{display:block;margin:0 0 4px;color:var(--muted);font-size:8.5px;font-weight:850;letter-spacing:.055em;text-transform:uppercase}
+  .brd-mobile-field select,.brd-mobile-field input{width:100%;height:50px;padding:0 12px!important;border-radius:13px!important;font-size:15px!important;font-weight:750}
+  .brd-mobile-tools .brd-mobile-diagram{grid-column:1/-1;width:100%!important;min-height:46px;margin:0!important}
+  .brd-grid{display:block!important;min-height:260px}
+  .brd-card{display:none}
+  .brd-card.is-mobile-active{display:block;animation:brdCardIn .24s ease both}
+  .brd-card-head{position:relative}
+  .brd-card-selects select{min-height:48px;font-size:14px!important;padding:0 12px!important}
+  .brd-diagram-open{min-height:43px;font-size:11px!important}
+  .brd-diagram-canvas{padding:2px 4px 8px}
+  .brd-diagram-canvas svg{min-width:720px}
+  body.brd-beam-panel-active .brd-mobile-nav{position:fixed;left:12px;right:12px;bottom:calc(88px + env(safe-area-inset-bottom));z-index:210;display:grid;grid-template-columns:72px minmax(0,1fr) 72px 58px;align-items:center;gap:7px;padding:7px;border:1px solid color-mix(in srgb,var(--accent) 26%,var(--card-border));border-radius:18px;background:color-mix(in srgb,var(--card) 90%,transparent);box-shadow:0 18px 45px rgba(0,0,0,.26);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%)}
+  .brd-mobile-nav button{width:100%!important;height:48px;margin:0!important;padding:0 8px!important;border-radius:13px!important;font-size:18px!important}
+  .brd-mobile-nav button:disabled{opacity:.35;cursor:not-allowed}
+  .brd-mobile-count{text-align:center;min-width:0}
+  .brd-mobile-count strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);font-size:12px}
+  .brd-mobile-count span{display:block;margin-top:3px;color:var(--muted);font:700 9px var(--mono)}
+  .brd-diagram-modal{padding:0;align-items:stretch}
+  .brd-diagram-dialog{width:100%;max-height:100%;height:100%;border-radius:0;border:0}
+  .brd-diagram-modal-head{padding:12px 13px}
+  .brd-diagram-modal-controls{grid-template-columns:1fr 1fr;padding:10px 12px}
+  .brd-diagram-modal-controls select{height:50px;font-size:15px!important}
+  .brd-diagram-modal-body{padding:10px 8px 14px}
+  .brd-diagram-modal-body .brd-diagram-canvas{padding:6px 2px}
+  .brd-diagram-modal-body .brd-diagram-canvas svg{min-width:900px}
+  .brd-diagram-modal-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .brd-diagram-modal-foot{padding-left:10px;padding-right:10px}
+  .pwa-install-btn{top:10px;right:10px;padding:9px 11px!important;font-size:11px!important}
+  .pwa-update-toast{right:10px;top:62px;width:calc(100vw - 20px)}
+}
+@keyframes brdCardIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+@media print{
+  .brd-mobile-tools,.brd-mobile-nav,.brd-diagram-modal,.pwa-install-btn,.pwa-update-toast,.brd-diagram-open{display:none!important}
+  .brd-card{display:block!important}
+}
+</style>
+
 </head>
 <body>
 
@@ -1548,7 +1638,7 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px rgba(var(--accent-r
       <h2>Beam Reinforcement Design</h2>
       <p>ETABS Concrete Beam Design Summary Excel upload করুন। Tool প্রতিটি beam-এর left support, mid-span ও right support demand থেকে straight এবং extra longitudinal bar suggestion তৈরি করবে।</p>
     </div>
-    <div class="brd-stat"><strong id="brdBeamCount">0</strong><span>Beam objects</span></div>
+    <div class="brd-stat"><strong id="brdBeamCount">0</strong><span id="brdBeamCountLabel">Visible / total beams</span></div>
     <div class="brd-stat"><strong id="brdRowCount">0</strong><span>ETABS station rows</span></div>
     <div class="brd-stat"><strong id="brdActiveExtra">+20%</strong><span>Current reinforcement addition</span></div>
   </div>
@@ -1566,7 +1656,8 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px rgba(var(--accent-r
   <div id="brdStatus" class="brd-status"></div>
 
   <div class="brd-controls">
-    <div class="field"><label>Beam Search</label><input id="brdSearch" type="text" placeholder="B15, B-16, 10X15…"></div>
+    <div class="field"><label>Beam Name Search</label><input id="brdSearch" type="text" placeholder="B4 B6 B7 অথবা B4, B6, B7"></div>
+    <div class="field"><label>Floor / Story</label><select id="brdStoryFilter"><option value="all">All floors</option></select></div>
     <div class="field"><label>Default Main Bar</label><select id="brdGlobalDia"><option value="12">12 mm</option><option value="16" selected>16 mm</option><option value="20">20 mm</option><option value="25">25 mm</option></select></div>
     <div class="field"><label>Additional Reinforcement</label><select id="brdExtraPct"><option value="0">0%</option><option value="10">10%</option><option value="15">15%</option><option value="20" selected>20%</option><option value="25">25%</option></select></div>
     <div class="field"><label>Steel Area Unit</label><select id="brdAreaUnit"><option value="auto" selected>Auto detect</option><option value="in2">in²</option><option value="mm2">mm²</option><option value="cm2">cm²</option></select></div>
@@ -1576,8 +1667,20 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px rgba(var(--accent-r
     <div class="field"><label>Detected Source</label><input id="brdSourceInfo" type="text" value="No Excel loaded" readonly></div>
     <div class="brd-control-actions">
       <button type="button" id="brdResetOverrides">Use global settings for all beams</button>
+      <button type="button" id="brdClearFilters" class="ghost">Clear floor &amp; beam filters</button>
       <button type="button" id="brdPrintBtn" class="ghost">Print / Save PDF</button>
     </div>
+  </div>
+  <div class="brd-filter-summary" id="brdFilterSummary"><span class="brd-filter-pill">No Excel loaded</span></div>
+
+  <div class="brd-mobile-tools" id="brdMobileTools" aria-label="Sticky beam calculation controls">
+    <div class="brd-mobile-field"><label>Main bar</label><select id="brdMobileDia"><option value="12">12 mm</option><option value="16" selected>16 mm</option><option value="20">20 mm</option><option value="25">25 mm</option></select></div>
+    <div class="brd-mobile-field"><label>Additional As</label><select id="brdMobileExtra"><option value="0">0%</option><option value="10">10%</option><option value="15">15%</option><option value="20" selected>20%</option><option value="25">25%</option></select></div>
+    <div class="brd-mobile-field"><label>Support zone</label><select id="brdMobileSupport"><option value="0.20">20% L</option><option value="0.25" selected>25% L</option><option value="0.30">30% L</option></select></div>
+    <div class="brd-mobile-field"><label>Floor / Story</label><select id="brdMobileStory"><option value="all">All floors</option></select></div>
+    <div class="brd-mobile-field"><label>Beam search</label><input id="brdMobileSearch" type="search" placeholder="B4 B6 B7"></div>
+    <div class="brd-mobile-field"><label>Beam</label><select id="brdMobileBeamSelect" aria-label="Select beam"></select></div>
+    <button type="button" class="brd-mobile-diagram ghost" id="brdMobileDiagram">⛶ Full-screen live beam diagram</button>
   </div>
 
   <details class="brd-method">
@@ -1590,6 +1693,32 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px rgba(var(--accent-r
   </details>
 
   <div id="brdGrid" class="brd-grid"><div class="brd-empty">ETABS beam design Excel upload করলে এখানে beam-wise schedule দেখা যাবে।</div></div>
+
+  <nav class="brd-mobile-nav" id="brdMobileNav" aria-label="Beam navigation">
+    <button type="button" class="ghost" id="brdMobilePrev" onclick="ssBeamNav(-1)" aria-label="Previous beam">‹</button>
+    <div class="brd-mobile-count"><strong id="brdMobileBeamName">No beam</strong><span id="brdMobileCounter">0 / 0</span></div>
+    <button type="button" class="ghost" id="brdMobileNext" onclick="ssBeamNav(1)" aria-label="Next beam">›</button>
+    <button type="button" id="brdMobileFull" onclick="ssOpenCurrentBeamDiagram()" aria-label="Open full-screen diagram">⛶</button>
+  </nav>
+
+  <div class="brd-diagram-modal" id="brdDiagramModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="brdDiagramTitle">
+    <div class="brd-diagram-dialog">
+      <div class="brd-diagram-modal-head">
+        <div><h3 id="brdDiagramTitle">Beam diagram</h3><p id="brdDiagramMeta">Live reinforcement elevation</p></div>
+        <button type="button" class="ghost brd-modal-close" onclick="ssCloseBeamDiagram()" aria-label="Close diagram">×</button>
+      </div>
+      <div class="brd-diagram-modal-controls">
+        <div><label>Main bar</label><div id="brdModalDia"></div></div>
+        <div><label>Additional reinforcement</label><div id="brdModalExtra"></div></div>
+      </div>
+      <div class="brd-diagram-modal-body" id="brdDiagramBody"></div>
+      <div class="brd-diagram-modal-foot">
+        <button type="button" class="ghost" onclick="ssModalNav(-1)">← Previous</button>
+        <div class="brd-modal-counter" id="brdModalCounter">0 / 0</div>
+        <button type="button" onclick="ssModalNav(1)">Next →</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -4280,9 +4409,10 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
   function saveJSON(key,value){ try{localStorage.setItem(key,JSON.stringify(value));}catch(_){} }
 
   const state = {
-    beams:[], search:'', globalDia:16, extraPct:20, support:.25, minBars:2, cover:40,
+    beams:[], search:'', storyFilter:'all', globalDia:16, extraPct:20, support:.25, minBars:2, cover:40,
     areaUnit:'auto', diaOverrides:loadJSON(storageKeyDia), extraOverrides:loadJSON(storageKeyExtra),
-    sourceSheets:[], sourceFile:'', rowCount:0, detectedUnits:[]
+    sourceSheets:[], sourceFile:'', rowCount:0, detectedUnits:[],
+    filteredKeys:[], mobileIndex:0, modalKey:''
   };
 
   function normalize(v){
@@ -4405,6 +4535,37 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
 
   function keyOf(b){return `${b.story}|${b.label}|${b.uniqueName}`;}
   function niceLabel(label){const m=String(label).match(/^([A-Za-z]+)[-\s]?(\d+)$/);return m?`${m[1].toUpperCase()}-${m[2]}`:String(label);}
+  function compactText(value){return String(value??'').toLowerCase().replace(/[^a-z0-9]+/g,'');}
+  function searchTokens(){return String(state.search||'').trim().split(/[\s,;|]+/).map(compactText).filter(Boolean);}
+  function matchesBeamSearch(beam){
+    const tokens=searchTokens();
+    if(!tokens.length)return true;
+    const labels=[beam.label,niceLabel(beam.label),beam.uniqueName].map(compactText).filter(Boolean);
+    const exactBeamToken=t=>/^[a-z]+\d+$/.test(t);
+    if(tokens.length>1){
+      return tokens.some(t=>labels.some(v=>v===t)||(t.length>=3&&labels.some(v=>v.includes(t))));
+    }
+    const t=tokens[0];
+    if(exactBeamToken(t))return labels.some(v=>v===t);
+    return compactText(`${beam.story} ${beam.label} ${niceLabel(beam.label)} ${beam.section} ${beam.uniqueName}`).includes(t);
+  }
+  function storyNames(){
+    return [...new Set(state.beams.map(b=>String(b.story||'—')))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}));
+  }
+  function syncStoryFilters(){
+    const stories=storyNames();
+    if(state.storyFilter!=='all'&&!stories.includes(state.storyFilter))state.storyFilter='all';
+    const counts=new Map();state.beams.forEach(b=>counts.set(String(b.story||'—'),(counts.get(String(b.story||'—'))||0)+1));
+    const options=`<option value="all">All floors (${state.beams.length})</option>`+stories.map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)} (${counts.get(s)||0})</option>`).join('');
+    ['brdStoryFilter','brdMobileStory'].forEach(id=>{const node=el(id);if(node){node.innerHTML=options;node.value=state.storyFilter;}});
+  }
+  function filterSummary(filtered){
+    const box=el('brdFilterSummary');if(!box)return;
+    const floor=state.storyFilter==='all'?'All floors':state.storyFilter;
+    const parts=[`<span class="brd-filter-pill active">${escapeHtml(floor)}</span>`,`<span class="brd-filter-pill">${filtered.length} visible of ${state.beams.length} beams</span>`];
+    if(state.search.trim())parts.push(`<span class="brd-filter-pill active">Search: ${escapeHtml(state.search.trim())}</span>`);
+    box.innerHTML=state.beams.length?parts.join(''):'<span class="brd-filter-pill">No Excel loaded</span>';
+  }
   function barArea(d){return Math.PI*d*d/4;}
   function ceilBars(required,dia,min=0){return Math.max(min,Math.ceil(Math.max(0,required-1e-7)/barArea(dia)));}
   function fmt(n,d=0){return Number(n||0).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});}
@@ -4455,18 +4616,63 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
     const bot=extra?`${fmt(rawBot)} → <b>${fmt(adjBot)}</b>`:`<b>${fmt(adjBot)}</b>`;
     return `<div class="brd-env"><small>${label}</small><div class="brd-env-line">Top ${top}</div><div class="brd-env-line">Bot ${bot}</div><div class="brd-env-line">mm²</div></div>`;
   }
-  function sketch(dia,r){
-    const tl=r.topExtraLeft?`${r.topExtraLeft}-${dia}`:'0',tr=r.topExtraRight?`${r.topExtraRight}-${dia}`:'0',bm=r.botExtraMid?`${r.botExtraMid}-${dia}`:'0';
-    return `<div class="brd-sketch"><svg viewBox="0 0 620 150" role="img" aria-label="Beam reinforcement sketch">
-      <rect x="38" y="40" width="544" height="72" rx="6" fill="none" stroke="currentColor" opacity=".28" stroke-width="2"/>
-      <rect x="20" y="29" width="21" height="94" rx="4" fill="currentColor" opacity=".15"/><rect x="579" y="29" width="21" height="94" rx="4" fill="currentColor" opacity=".15"/>
-      <line x1="42" y1="61" x2="578" y2="61" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>
-      <line x1="42" y1="50" x2="177" y2="50" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/><line x1="443" y1="50" x2="578" y2="50" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
-      <line x1="42" y1="97" x2="578" y2="97" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/><line x1="177" y1="108" x2="443" y2="108" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
-      <text x="310" y="19" text-anchor="middle" font-size="12" font-weight="750" fill="currentColor">Top straight ${r.topStraight}-${dia} mm</text>
-      <text x="108" y="44" text-anchor="middle" font-size="11" font-weight="750" fill="#b45309">L extra ${tl}</text><text x="510" y="44" text-anchor="middle" font-size="11" font-weight="750" fill="#b45309">R extra ${tr}</text>
-      <text x="310" y="137" text-anchor="middle" font-size="12" font-weight="750" fill="currentColor">Bottom straight ${r.botStraight}-${dia} mm · Mid extra ${bm}</text>
+  function barStack(x1,x2,y,count,color,width=5){
+    if(!count)return '';
+    const shown=Math.min(Math.max(1,count),5), gap=6;
+    return Array.from({length:shown},(_,i)=>{
+      const yy=y+(i-(shown-1)/2)*gap;
+      return `<line x1="${x1}" y1="${yy}" x2="${x2}" y2="${yy}" stroke="${color}" stroke-width="${width}" stroke-linecap="round"/>`;
+    }).join('');
+  }
+  function diagramSvg(beam,dia,r){
+    const x0=78,x1=822,w=x1-x0,topY=128,botY=224;
+    const cutL=x0+w*state.support,cutR=x1-w*state.support,pct=Math.round(state.support*100);
+    const topColor='var(--accent)',extraColor='#f59e0b',bottomColor='var(--accent-2, #14b8a6)';
+    const dims=beam.bMm&&beam.hMm?`${fmt(beam.bMm)} × ${fmt(beam.hMm)} mm`:'section size not detected';
+    const topLabel=`${r.topStraight}-${dia} mm`;
+    const leftLabel=r.topExtraLeft?`${r.topExtraLeft}-${dia} mm`:'No extra';
+    const rightLabel=r.topExtraRight?`${r.topExtraRight}-${dia} mm`:'No extra';
+    const botLabel=`${r.botStraight}-${dia} mm`;
+    const midLabel=r.botExtraMid?`${r.botExtraMid}-${dia} mm`:'No extra';
+    const safeId=encodeURIComponent(keyOf(beam)).replace(/%/g,'');
+    return `<div class="brd-diagram-canvas"><svg viewBox="0 0 900 350" role="img" aria-label="${escapeHtml(niceLabel(beam.label))} reinforcement elevation">
+      <defs>
+        <marker id="brdArrow-${safeId}" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="currentColor"/></marker>
+        <linearGradient id="brdConcrete-${safeId}" x1="0" x2="1"><stop offset="0" stop-color="var(--card-soft)"/><stop offset=".5" stop-color="var(--card)"/><stop offset="1" stop-color="var(--card-soft)"/></linearGradient>
+      </defs>
+      <rect x="${x0}" y="92" width="${w}" height="166" rx="9" fill="url(#brdConcrete-${safeId})" stroke="currentColor" opacity=".88" stroke-width="2"/>
+      <rect x="38" y="72" width="42" height="206" rx="7" fill="currentColor" opacity=".14"/>
+      <rect x="820" y="72" width="42" height="206" rx="7" fill="currentColor" opacity=".14"/>
+      <rect x="${x0}" y="92" width="${cutL-x0}" height="166" fill="rgba(245,158,11,.075)"/>
+      <rect x="${cutR}" y="92" width="${x1-cutR}" height="166" fill="rgba(245,158,11,.075)"/>
+      <line x1="${cutL}" y1="82" x2="${cutL}" y2="272" stroke="#f59e0b" stroke-width="2" stroke-dasharray="7 6"/>
+      <line x1="${cutR}" y1="82" x2="${cutR}" y2="272" stroke="#f59e0b" stroke-width="2" stroke-dasharray="7 6"/>
+      ${barStack(x0+8,x1-8,topY,r.topStraight,topColor,5)}
+      ${barStack(x0+8,cutL+18,topY-26,r.topExtraLeft,extraColor,5)}
+      ${barStack(cutR-18,x1-8,topY-26,r.topExtraRight,extraColor,5)}
+      ${barStack(x0+8,x1-8,botY,r.botStraight,bottomColor,5)}
+      ${barStack(cutL-4,cutR+4,botY+27,r.botExtraMid,extraColor,5)}
+      <circle cx="${cutL+18}" cy="${topY-26}" r="5" fill="${extraColor}"/><circle cx="${cutR-18}" cy="${topY-26}" r="5" fill="${extraColor}"/>
+      <circle cx="${cutL-4}" cy="${botY+27}" r="5" fill="${extraColor}"/><circle cx="${cutR+4}" cy="${botY+27}" r="5" fill="${extraColor}"/>
+      <text x="450" y="30" text-anchor="middle" class="brd-svg-label" font-size="17">${escapeHtml(niceLabel(beam.label))} · ${escapeHtml(dims)}</text>
+      <text x="450" y="51" text-anchor="middle" class="brd-svg-note" font-size="11">Live longitudinal reinforcement elevation · selected additional As +${beamExtra(beam)}%</text>
+      <g transform="translate(96,112)"><rect width="154" height="31" rx="10" fill="var(--card)" stroke="var(--card-border)"/><text x="77" y="20" text-anchor="middle" class="brd-svg-mono" font-size="12" fill="var(--ink)">Top straight ${topLabel}</text></g>
+      <g transform="translate(92,61)"><rect width="150" height="28" rx="9" fill="rgba(245,158,11,.13)" stroke="rgba(245,158,11,.35)"/><text x="75" y="18" text-anchor="middle" class="brd-svg-mono" font-size="11" fill="#d97706">Left extra ${leftLabel}</text></g>
+      <g transform="translate(658,61)"><rect width="150" height="28" rx="9" fill="rgba(245,158,11,.13)" stroke="rgba(245,158,11,.35)"/><text x="75" y="18" text-anchor="middle" class="brd-svg-mono" font-size="11" fill="#d97706">Right extra ${rightLabel}</text></g>
+      <g transform="translate(96,232)"><rect width="170" height="31" rx="10" fill="var(--card)" stroke="var(--card-border)"/><text x="85" y="20" text-anchor="middle" class="brd-svg-mono" font-size="12" fill="var(--ink)">Bottom straight ${botLabel}</text></g>
+      <g transform="translate(365,263)"><rect width="170" height="29" rx="9" fill="rgba(245,158,11,.13)" stroke="rgba(245,158,11,.35)"/><text x="85" y="19" text-anchor="middle" class="brd-svg-mono" font-size="11" fill="#d97706">Mid extra ${midLabel}</text></g>
+      <text x="${(x0+cutL)/2}" y="315" text-anchor="middle" class="brd-svg-note" font-size="11">Left support zone ${pct}% L</text>
+      <text x="${(cutL+cutR)/2}" y="315" text-anchor="middle" class="brd-svg-note" font-size="11">Mid-span zone ${100-2*pct}% L</text>
+      <text x="${(cutR+x1)/2}" y="315" text-anchor="middle" class="brd-svg-note" font-size="11">Right support zone ${pct}% L</text>
+      <line x1="${x0}" y1="299" x2="${cutL}" y2="299" stroke="currentColor" opacity=".45" marker-start="url(#brdArrow-${safeId})" marker-end="url(#brdArrow-${safeId})"/>
+      <line x1="${cutL}" y1="299" x2="${cutR}" y2="299" stroke="currentColor" opacity=".45" marker-start="url(#brdArrow-${safeId})" marker-end="url(#brdArrow-${safeId})"/>
+      <line x1="${cutR}" y1="299" x2="${x1}" y2="299" stroke="currentColor" opacity=".45" marker-start="url(#brdArrow-${safeId})" marker-end="url(#brdArrow-${safeId})"/>
+      <text x="450" y="341" text-anchor="middle" class="brd-svg-note" font-size="10">Approx. cut-off shown at support-zone boundary. Final curtailment must satisfy development length, anchorage and design-code detailing.</text>
     </svg></div>`;
+  }
+  function sketch(beam,dia,r){
+    const token=encodeURIComponent(keyOf(beam));
+    return `<div class="brd-sketch"><div class="brd-sketch-head"><div><strong>Live Beam Reinforcement Diagram</strong><span>Support zone, cut-off location, quantity and diameter update instantly.</span></div><button type="button" class="ghost brd-diagram-open" onclick="ssOpenBeamDiagram('${token}')">⛶ Full-screen</button></div>${diagramSvg(beam,dia,r)}</div>`;
   }
   function warningBlock(beam){
     const all=[...beam.statuses,...beam.warnings,...beam.errors].filter(Boolean);
@@ -4480,39 +4686,113 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
     return `<details class="brd-raw"><summary>ETABS station data (${beam.stations.length} rows)</summary><div class="brd-table-wrap"><table class="brd-table"><thead><tr><th>Station</th><th>Top ETABS</th><th>Top adjusted</th><th>Bot ETABS</th><th>Bot adjusted</th><th>Transverse raw</th></tr></thead><tbody>${rows}</tbody></table></div></details>`;
   }
   function diaSelect(beam,dia){
-    const key=escapeHtml(keyOf(beam)),override=state.diaOverrides[keyOf(beam)];
-    return `<select onchange="ssSetBeamDia('${key}',this.value)"><option value="global" ${override==null?'selected':''}>Global (${state.globalDia} mm)</option>${DIAS.map(d=>`<option value="${d}" ${Number(override)===d?'selected':''}>${d} mm</option>`).join('')}</select>`;
+    const token=encodeURIComponent(keyOf(beam)),override=state.diaOverrides[keyOf(beam)];
+    return `<select onchange="ssSetBeamDia('${token}',this.value)"><option value="global" ${override==null?'selected':''}>Global (${state.globalDia} mm)</option>${DIAS.map(d=>`<option value="${d}" ${Number(override)===d?'selected':''}>${d} mm</option>`).join('')}</select>`;
   }
   function extraSelect(beam,extra){
-    const key=escapeHtml(keyOf(beam)),override=state.extraOverrides[keyOf(beam)];
-    return `<select onchange="ssSetBeamExtra('${key}',this.value)"><option value="global" ${override==null?'selected':''}>Global (+${state.extraPct}%)</option>${EXTRA_OPTIONS.map(v=>`<option value="${v}" ${Number(override)===v?'selected':''}>+${v}%</option>`).join('')}</select>`;
+    const token=encodeURIComponent(keyOf(beam)),override=state.extraOverrides[keyOf(beam)];
+    return `<select onchange="ssSetBeamExtra('${token}',this.value)"><option value="global" ${override==null?'selected':''}>Global (+${state.extraPct}%)</option>${EXTRA_OPTIONS.map(v=>`<option value="${v}" ${Number(override)===v?'selected':''}>+${v}%</option>`).join('')}</select>`;
   }
-  function beamCard(beam){
+  function beamCard(beam,index){
     const dia=beamDia(beam),extra=beamExtra(beam),r=design(beam,dia,extra),raw=r.env.raw,adj=r.env.adjusted;
     const maxLine=Math.max(r.topStraight+r.topExtraLeft,r.topStraight+r.topExtraRight,r.botStraight+r.botExtraMid),fit=layerInfo(maxLine,dia,beam.bMm);
     const bad=beam.statuses.length||beam.warnings.length||beam.errors.length;
     const dims=beam.bMm&&beam.hMm?`${fmt(beam.bMm)} × ${fmt(beam.hMm)} mm`:'size not detected';
-    return `<article class="brd-card"><div class="brd-card-head"><div class="brd-title-wrap"><div class="brd-badge">${escapeHtml(niceLabel(beam.label)).replace('-','<br>')}</div><div class="brd-title"><h3>${escapeHtml(niceLabel(beam.label))}</h3><div class="brd-meta">${escapeHtml(beam.story)} · ETABS ${escapeHtml(beam.label)} · ${escapeHtml(beam.section)} (${dims}) · ID ${escapeHtml(beam.uniqueName)}</div>${bad?'<span class="brd-error-flag">Check ETABS message</span>':''}</div></div><div class="brd-card-selects"><div><label>Main bar</label>${diaSelect(beam,dia)}</div><div><label>Additional As</label>${extraSelect(beam,extra)}</div></div></div>
+    const token=encodeURIComponent(keyOf(beam));
+    return `<article class="brd-card" data-beam-key="${token}" data-beam-index="${index}"><div class="brd-card-head"><div class="brd-title-wrap"><div class="brd-badge">${escapeHtml(niceLabel(beam.label)).replace('-','<br>')}</div><div class="brd-title"><h3>${escapeHtml(niceLabel(beam.label))}</h3><div class="brd-meta">${escapeHtml(beam.story)} · ETABS ${escapeHtml(beam.label)} · ${escapeHtml(beam.section)} (${dims}) · ID ${escapeHtml(beam.uniqueName)}</div>${bad?'<span class="brd-error-flag">Check ETABS message</span>':''}</div></div><div class="brd-card-selects"><div><label>Main bar</label>${diaSelect(beam,dia)}</div><div><label>Additional As</label>${extraSelect(beam,extra)}</div></div></div>
       <div class="brd-card-body"><div class="brd-adjust-chip">ETABS demand ${extra?`+ ${extra}%`:'without addition'} · bar count rounded up</div><div class="brd-envelope">${envBox('LEFT SUPPORT',raw.top.left,adj.top.left,raw.bot.left,adj.bot.left,extra)}${envBox('MID-SPAN',raw.top.mid,adj.top.mid,raw.bot.mid,adj.bot.mid,extra)}${envBox('RIGHT SUPPORT',raw.top.right,adj.top.right,raw.bot.right,adj.bot.right,extra)}</div>
-      <div class="brd-schedule">${scheduleItem('Top straight — full length',r.topStraight,dia,adj.top.mid,'straight')}${scheduleItem('Top extra — left support',r.topExtraLeft,dia,Math.max(0,adj.top.left-r.topStraight*r.a),'extra')}${scheduleItem('Top extra — right support',r.topExtraRight,dia,Math.max(0,adj.top.right-r.topStraight*r.a),'extra')}${scheduleItem('Bottom straight — full length',r.botStraight,dia,Math.max(adj.bot.left,adj.bot.right),'straight')}${scheduleItem('Bottom extra — middle',r.botExtraMid,dia,Math.max(0,adj.bot.mid-r.botStraight*r.a),'extra')}</div>${sketch(dia,r)}<div class="brd-fit ${fit.warn?'warn':''}">${fit.text}</div>${warningBlock(beam)}${rawTable(beam,extra)}</div></article>`;
+      <div class="brd-schedule">${scheduleItem('Top straight — full length',r.topStraight,dia,adj.top.mid,'straight')}${scheduleItem('Top extra — left support',r.topExtraLeft,dia,Math.max(0,adj.top.left-r.topStraight*r.a),'extra')}${scheduleItem('Top extra — right support',r.topExtraRight,dia,Math.max(0,adj.top.right-r.topStraight*r.a),'extra')}${scheduleItem('Bottom straight — full length',r.botStraight,dia,Math.max(adj.bot.left,adj.bot.right),'straight')}${scheduleItem('Bottom extra — middle',r.botExtraMid,dia,Math.max(0,adj.bot.mid-r.botStraight*r.a),'extra')}</div>${sketch(beam,dia,r)}<div class="brd-fit ${fit.warn?'warn':''}">${fit.text}</div>${warningBlock(beam)}${rawTable(beam,extra)}</div></article>`;
   }
 
+  function activeBeam(){
+    const key=state.filteredKeys[state.mobileIndex];
+    return state.beams.find(b=>keyOf(b)===key)||null;
+  }
+  function syncMobileControls(){
+    const dia=el('brdMobileDia'),extra=el('brdMobileExtra'),support=el('brdMobileSupport'),picker=el('brdMobileBeamSelect'),mobileSearch=el('brdMobileSearch');
+    if(dia)dia.value=String(state.globalDia);
+    if(extra)extra.value=String(state.extraPct);
+    if(support)support.value=state.support.toFixed(2);
+    if(mobileSearch&&mobileSearch.value!==state.search)mobileSearch.value=state.search;
+    if(picker){
+      picker.innerHTML=state.filteredKeys.map((key,i)=>{
+        const b=state.beams.find(x=>keyOf(x)===key);
+        return `<option value="${i}" ${i===state.mobileIndex?'selected':''}>${escapeHtml(b?`${niceLabel(b.label)} · ${b.story}`:`Beam ${i+1}`)}</option>`;
+      }).join('');
+      picker.disabled=!state.filteredKeys.length;
+    }
+  }
+  function updateMobileUI(scroll=false){
+    const total=state.filteredKeys.length;
+    state.mobileIndex=total?Math.max(0,Math.min(state.mobileIndex,total-1)):0;
+    const cards=[...el('brdGrid').querySelectorAll('.brd-card')];
+    cards.forEach((card,i)=>card.classList.toggle('is-mobile-active',i===state.mobileIndex));
+    const beam=activeBeam();
+    el('brdMobileBeamName').textContent=beam?`${niceLabel(beam.label)} · ${beam.story}`:'No beam';
+    el('brdMobileCounter').textContent=total?`${state.mobileIndex+1} / ${total}`:'0 / 0';
+    el('brdMobilePrev').disabled=!total||state.mobileIndex===0;
+    el('brdMobileNext').disabled=!total||state.mobileIndex>=total-1;
+    el('brdMobileFull').disabled=!beam;
+    const mobileDiagram=el('brdMobileDiagram');if(mobileDiagram)mobileDiagram.disabled=!beam;
+    syncMobileControls();
+    if(scroll && window.innerWidth<=650){
+      const card=cards[state.mobileIndex];
+      if(card)card.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  }
+  function modalSummary(r,dia){
+    const bars=[
+      ['Top straight',r.topStraight],['Left top extra',r.topExtraLeft],['Right top extra',r.topExtraRight],
+      ['Bottom straight',r.botStraight],['Mid bottom extra',r.botExtraMid]
+    ];
+    return `<div class="brd-diagram-modal-summary">${bars.map(([label,n])=>`<div class="brd-modal-bar"><small>${label}</small><strong>${n?`${n}-${dia} mm`:'None'}</strong></div>`).join('')}</div>`;
+  }
+  function renderModal(){
+    const modal=el('brdDiagramModal');
+    if(!state.modalKey){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.classList.remove('brd-modal-open');return;}
+    const beam=state.beams.find(b=>keyOf(b)===state.modalKey);
+    if(!beam){state.modalKey='';renderModal();return;}
+    const index=state.filteredKeys.indexOf(state.modalKey);
+    if(index>=0)state.mobileIndex=index;
+    const dia=beamDia(beam),extra=beamExtra(beam),r=design(beam,dia,extra);
+    el('brdDiagramTitle').textContent=`${niceLabel(beam.label)} — Reinforcement Elevation`;
+    el('brdDiagramMeta').textContent=`${beam.story} · ${beam.section} · Support zone ${Math.round(state.support*100)}% L · ETABS As +${extra}%`;
+    el('brdModalDia').innerHTML=diaSelect(beam,dia);
+    el('brdModalExtra').innerHTML=extraSelect(beam,extra);
+    el('brdDiagramBody').innerHTML=diagramSvg(beam,dia,r)+modalSummary(r,dia);
+    el('brdModalCounter').textContent=state.filteredKeys.length&&index>=0?`${index+1} / ${state.filteredKeys.length}`:niceLabel(beam.label);
+    modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.classList.add('brd-modal-open');
+    updateMobileUI(false);
+  }
   function render(){
-    el('brdBeamCount').textContent=state.beams.length;
+    syncStoryFilters();
+    if(el('brdSearch').value!==state.search)el('brdSearch').value=state.search;
     el('brdRowCount').textContent=state.rowCount;
     el('brdActiveExtra').textContent=`+${state.extraPct}%`;
-    const q=state.search.toLowerCase().replace(/[-\s]/g,'');
-    const filtered=state.beams.filter(b=>`${b.story} ${b.label} ${niceLabel(b.label)} ${b.section} ${b.uniqueName}`.toLowerCase().replace(/[-\s]/g,'').includes(q));
+    const previousKey=state.filteredKeys[state.mobileIndex]||state.modalKey;
+    const filtered=state.beams.filter(b=>(state.storyFilter==='all'||String(b.story)===state.storyFilter)&&matchesBeamSearch(b));
+    el('brdBeamCount').textContent=filtered.length===state.beams.length?String(state.beams.length):`${filtered.length} / ${state.beams.length}`;
+    filterSummary(filtered);
+    state.filteredKeys=filtered.map(keyOf);
+    const retained=previousKey?state.filteredKeys.indexOf(previousKey):-1;
+    state.mobileIndex=retained>=0?retained:Math.min(state.mobileIndex,Math.max(0,filtered.length-1));
     el('brdGrid').innerHTML=filtered.length?filtered.map(beamCard).join(''):`<div class="brd-empty">${state.beams.length?'Matching beam পাওয়া যায়নি।':'ETABS beam design Excel upload করলে এখানে beam-wise schedule দেখা যাবে।'}</div>`;
+    updateMobileUI(false);
+    if(state.modalKey)renderModal();
   }
   function setStatus(message,type=''){
     const box=el('brdStatus');box.textContent=message;box.className=`brd-status show ${type}`;
   }
   function clearStatus(){el('brdStatus').className='brd-status';el('brdStatus').textContent='';}
-  function clearData(){state.beams=[];state.rowCount=0;state.sourceSheets=[];state.sourceFile='';state.detectedUnits=[];el('brdFile').value='';el('brdSourceInfo').value='No Excel loaded';clearStatus();render();}
+  function clearData(){state.beams=[];state.rowCount=0;state.sourceSheets=[];state.sourceFile='';state.detectedUnits=[];state.filteredKeys=[];state.mobileIndex=0;state.modalKey='';state.search='';state.storyFilter='all';el('brdFile').value='';el('brdSearch').value='';el('brdSourceInfo').value='No Excel loaded';clearStatus();renderModal();render();}
 
-  window.ssSetBeamDia=function(key,value){if(value==='global')delete state.diaOverrides[key];else state.diaOverrides[key]=Number(value);saveJSON(storageKeyDia,state.diaOverrides);render();};
-  window.ssSetBeamExtra=function(key,value){if(value==='global')delete state.extraOverrides[key];else state.extraOverrides[key]=Number(value);saveJSON(storageKeyExtra,state.extraOverrides);render();};
+  window.ssSetBeamDia=function(token,value){const key=decodeURIComponent(token);if(value==='global')delete state.diaOverrides[key];else state.diaOverrides[key]=Number(value);saveJSON(storageKeyDia,state.diaOverrides);render();};
+  window.ssSetBeamExtra=function(token,value){const key=decodeURIComponent(token);if(value==='global')delete state.extraOverrides[key];else state.extraOverrides[key]=Number(value);saveJSON(storageKeyExtra,state.extraOverrides);render();};
+  window.ssBeamNav=function(delta){if(!state.filteredKeys.length)return;state.mobileIndex=Math.max(0,Math.min(state.mobileIndex+Number(delta||0),state.filteredKeys.length-1));updateMobileUI(true);};
+  window.ssOpenBeamDiagram=function(token){const key=decodeURIComponent(token);state.modalKey=key;const i=state.filteredKeys.indexOf(key);if(i>=0)state.mobileIndex=i;renderModal();};
+  window.ssOpenCurrentBeamDiagram=function(){const beam=activeBeam();if(beam)window.ssOpenBeamDiagram(encodeURIComponent(keyOf(beam)));};
+  window.ssCloseBeamDiagram=function(){state.modalKey='';renderModal();};
+  window.ssModalNav=function(delta){if(!state.filteredKeys.length)return;state.mobileIndex=Math.max(0,Math.min(state.mobileIndex+Number(delta||0),state.filteredKeys.length-1));state.modalKey=state.filteredKeys[state.mobileIndex];renderModal();};
 
   el('brdFile').addEventListener('change',function(){
     const file=this.files&&this.files[0];if(!file){clearData();return;}
@@ -4535,6 +4815,7 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
   });
   el('brdClearBtn').addEventListener('click',clearData);
   el('brdSearch').addEventListener('input',e=>{state.search=e.target.value;render();});
+  el('brdStoryFilter').addEventListener('change',e=>{state.storyFilter=e.target.value;state.mobileIndex=0;render();});
   el('brdGlobalDia').addEventListener('change',e=>{state.globalDia=Number(e.target.value);render();});
   el('brdExtraPct').addEventListener('change',e=>{state.extraPct=Number(e.target.value);render();});
   el('brdAreaUnit').addEventListener('change',e=>{state.areaUnit=e.target.value;render();});
@@ -4542,10 +4823,102 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
   el('brdMinBars').addEventListener('change',e=>{state.minBars=Number(e.target.value);render();});
   el('brdCover').addEventListener('change',e=>{state.cover=Number(e.target.value);render();});
   el('brdResetOverrides').addEventListener('click',()=>{state.diaOverrides={};state.extraOverrides={};saveJSON(storageKeyDia,{});saveJSON(storageKeyExtra,{});render();setStatus('সব beam এখন global main bar এবং global additional reinforcement setting ব্যবহার করছে।','ok');});
+  el('brdClearFilters').addEventListener('click',()=>{state.search='';state.storyFilter='all';state.mobileIndex=0;el('brdSearch').value='';render();setStatus('Floor এবং beam-name filter clear করা হয়েছে।','ok');});
   el('brdPrintBtn').addEventListener('click',()=>window.print());
+  el('brdMobileDia').addEventListener('change',e=>{state.globalDia=Number(e.target.value);el('brdGlobalDia').value=e.target.value;render();});
+  el('brdMobileExtra').addEventListener('change',e=>{state.extraPct=Number(e.target.value);el('brdExtraPct').value=e.target.value;render();});
+  el('brdMobileSupport').addEventListener('change',e=>{state.support=Number(e.target.value);el('brdSupportZone').value=e.target.value;render();});
+  el('brdMobileStory').addEventListener('change',e=>{state.storyFilter=e.target.value;state.mobileIndex=0;render();});
+  el('brdMobileSearch').addEventListener('input',e=>{state.search=e.target.value;el('brdSearch').value=e.target.value;state.mobileIndex=0;render();});
+  el('brdMobileBeamSelect').addEventListener('change',e=>{state.mobileIndex=Number(e.target.value)||0;updateMobileUI(true);});
+  el('brdMobileDiagram').addEventListener('click',window.ssOpenCurrentBeamDiagram);
+  el('brdDiagramModal').addEventListener('click',e=>{if(e.target===el('brdDiagramModal'))window.ssCloseBeamDiagram();});
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'&&state.modalKey)window.ssCloseBeamDiagram();
+    if(state.modalKey&&e.key==='ArrowLeft')window.ssModalNav(-1);
+    if(state.modalKey&&e.key==='ArrowRight')window.ssModalNav(1);
+  });
+  let swipeX=null,swipeY=null;
+  el('brdGrid').addEventListener('touchstart',e=>{
+    if(e.target.closest('select,input,button,details,summary')){swipeX=null;return;}
+    const t=e.changedTouches[0];swipeX=t.clientX;swipeY=t.clientY;
+  },{passive:true});
+  el('brdGrid').addEventListener('touchend',e=>{
+    if(swipeX==null)return;
+    const t=e.changedTouches[0],dx=t.clientX-swipeX,dy=t.clientY-swipeY;swipeX=null;
+    if(Math.abs(dx)>58&&Math.abs(dx)>Math.abs(dy)*1.35)window.ssBeamNav(dx<0?1:-1);
+  },{passive:true});
+
+  // Keep viewport-level controls truly fixed even when the glass app shell uses backdrop-filter.
+  const beamPanel=el('panelBeamDesign'),etabsPage=el('page-etabs'),mobileNav=el('brdMobileNav'),diagramModal=el('brdDiagramModal');
+  const syncBeamPanelActive=()=>document.body.classList.toggle('brd-beam-panel-active',!!(beamPanel&&etabsPage&&beamPanel.classList.contains('active')&&etabsPage.classList.contains('active')));
+  if(mobileNav)document.body.appendChild(mobileNav);
+  if(diagramModal)document.body.appendChild(diagramModal);
+  if(beamPanel&&etabsPage){
+    const beamObserver=new MutationObserver(syncBeamPanelActive);
+    beamObserver.observe(beamPanel,{attributes:true,attributeFilter:['class','style']});
+    beamObserver.observe(etabsPage,{attributes:true,attributeFilter:['class','style']});
+  }
+  document.querySelectorAll('.page-tab-btn,.etabs-tabs .tab-btn').forEach(btn=>btn.addEventListener('click',()=>setTimeout(syncBeamPanelActive,0)));
+  syncBeamPanelActive();
   render();
 })();
 </script>
 
+
+<button type="button" id="pwaInstallBtn" class="pwa-install-btn" hidden>⬇ Install Structural Suite</button>
+<div id="pwaUpdateToast" class="pwa-update-toast" role="status" aria-live="polite">
+  <strong>Structural Suite update available</strong>
+  <span>নতুন version install করতে update করুন। আপনার browser data অপরিবর্তিত থাকবে।</span>
+  <button type="button" id="pwaUpdateBtn">Update now</button>
+</div>
+
+
+<script id="structural-suite-pwa-v1">
+(function(){
+  'use strict';
+  const installBtn=document.getElementById('pwaInstallBtn');
+  const updateToast=document.getElementById('pwaUpdateToast');
+  const updateBtn=document.getElementById('pwaUpdateBtn');
+  let deferredPrompt=null,registration=null;
+
+  const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+  if(standalone&&installBtn)installBtn.hidden=true;
+
+  window.addEventListener('beforeinstallprompt',event=>{
+    event.preventDefault();deferredPrompt=event;
+    if(installBtn&&!standalone)installBtn.hidden=false;
+  });
+  if(installBtn)installBtn.addEventListener('click',async()=>{
+    if(!deferredPrompt)return;
+    deferredPrompt.prompt();
+    try{await deferredPrompt.userChoice;}catch(_){}
+    deferredPrompt=null;installBtn.hidden=true;
+  });
+  window.addEventListener('appinstalled',()=>{deferredPrompt=null;if(installBtn)installBtn.hidden=true;});
+
+  function showUpdate(){if(updateToast)updateToast.classList.add('show');}
+  if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
+    window.addEventListener('load',async()=>{
+      try{
+        registration=await navigator.serviceWorker.register('./sw.js');
+        if(registration.waiting)showUpdate();
+        registration.addEventListener('updatefound',()=>{
+          const worker=registration.installing;
+          if(!worker)return;
+          worker.addEventListener('statechange',()=>{
+            if(worker.state==='installed'&&navigator.serviceWorker.controller)showUpdate();
+          });
+        });
+      }catch(err){console.warn('PWA service worker was not registered.',err);}
+    });
+    navigator.serviceWorker.addEventListener('controllerchange',()=>location.reload());
+  }
+  if(updateBtn)updateBtn.addEventListener('click',()=>{
+    if(registration&&registration.waiting)registration.waiting.postMessage({type:'SKIP_WAITING'});
+    else location.reload();
+  });
+})();
+</script>
 </body>
 </html>
