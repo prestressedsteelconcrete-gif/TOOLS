@@ -125,6 +125,15 @@
   .ss-table th.hdr2{ background:rgba(34,197,94,.14); }
   .ss-upload-row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:10px 0 4px; }
   .ss-upload-row input[type=file]{ max-width:280px; }
+  .ss-step-block{ margin:14px 0 22px; border:1px solid rgba(148,163,184,.28); border-radius:14px; overflow:hidden; background:rgba(255,255,255,.35); }
+  .ss-step-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:10px 12px; background:rgba(42,169,199,.10); border-bottom:1px solid rgba(148,163,184,.22); }
+  .ss-step-title{ margin:0; font-size:14px; font-weight:800; }
+  .ss-step-meta{ font-size:11.5px; opacity:.72; margin-top:2px; }
+  .ss-step-status{ display:inline-flex; align-items:center; justify-content:center; padding:4px 9px; border-radius:999px; font-size:11px; font-weight:800; white-space:nowrap; }
+  .ss-step-pass{ background:rgba(34,197,94,.16); color:#15803d; }
+  .ss-step-soft{ background:rgba(245,158,11,.18); color:#b45309; }
+  .ss-step-extreme{ background:rgba(239,68,68,.18); color:#dc2626; }
+  .ss-step-empty{ padding:14px; opacity:.72; border:1px dashed rgba(148,163,184,.45); border-radius:12px; }
 
   /* Sidebar nav (new markup, mirrors page-tab-btn active state via JS) — fixed navy/gold, independent of theme */
   .side-link{
@@ -1611,23 +1620,23 @@ body.brd-modal-open{overflow:hidden}
 <!-- ================= SOFT STOREY CHECK PANEL ================= -->
 <div class="card panel" id="panelSoft">
   <h2 class="section">Upload ETABS "Story Stiffness" Table</h2>
-  <p class="sub" style="margin-top:-6px;">Export the <strong>Story Stiffness</strong> table from ETABS (Display &rarr; Show Tables, or Excel export) as a .xlsx file — same format as an ETABS database table — and upload it below. The tool will average Stiff X / Stiff Y across all analysis steps for each story and run the BNBC 2020 / ASCE 7-05 Soft-Storey and Extreme Soft-Storey Irregularity checks in both directions.</p>
+  <p class="sub" style="margin-top:-6px;">Export the <strong>Story Stiffness</strong> table from ETABS (Display &rarr; Show Tables, or Excel export) as a .xlsx file and upload it below. Each <strong>Output Case + Step Number</strong> is checked in a separate table; stiffness values are no longer averaged across analysis steps.</p>
 
   <div class="ss-upload-row">
     <input type="file" id="softStoreyFile" accept=".xlsx,.xls">
-    <button id="softStoreyCalcBtn" style="margin:0;">Run Soft-Storey Check</button>
+    <button id="softStoreyCalcBtn" style="margin:0;">Run Step-wise Soft-Storey Check</button>
   </div>
   <div id="softStoreyStatus" style="font-size:13px; opacity:.8; margin-top:4px;"></div>
 
   <div id="softStoreyResult" style="width:100%; display:none; margin-top:18px;">
-    <h2 class="section coral">X-Direction</h2>
-    <div style="overflow-x:auto;"><table class="ss-table" id="softStoreyTableX"></table></div>
+    <h2 class="section coral">X-Direction — Step-wise Tables</h2>
+    <div id="softStoreyTablesX"></div>
 
-    <h2 class="section coral" style="margin-top:26px;">Y-Direction</h2>
-    <div style="overflow-x:auto;"><table class="ss-table" id="softStoreyTableY"></table></div>
+    <h2 class="section coral" style="margin-top:26px;">Y-Direction — Step-wise Tables</h2>
+    <div id="softStoreyTablesY"></div>
   </div>
 
-  <div class="note">Ki/Ki+1 &gt; 0.7 (Soft-Storey) / &gt;= 0.6 (Extreme) checks stiffness against the story immediately above. Ki/Kmi &gt;= 0.8 (Soft-Storey) / &gt;= 0.7 (Extreme) checks stiffness against the average of the 3 stories above, per BNBC 2020 / ASCE 7-05 vertical structural irregularity provisions. Based on the "Soft story X &amp; Y Direction" calculation sheet.</div>
+  <div class="note">Every Output Case and Step Number is evaluated independently. A step is marked <strong>Pass</strong> only when all available storeys pass both checks. Ki/Ki+1 &gt; 0.7 (Soft-Storey) / &gt;= 0.6 (Extreme) checks stiffness against the storey immediately above. Ki/Kmi &gt;= 0.8 (Soft-Storey) / &gt;= 0.7 (Extreme) checks stiffness against the average of the 3 storeys above. Missing storey data remains blank and is not compared across a gap.</div>
 </div>
 
 <!-- ================= ETABS BEAM REINFORCEMENT PANEL ================= -->
@@ -4159,31 +4168,43 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
   const calcBtn = document.getElementById('softStoreyCalcBtn');
   const statusEl = document.getElementById('softStoreyStatus');
   const resultWrap = document.getElementById('softStoreyResult');
-  const tableXEl = document.getElementById('softStoreyTableX');
-  const tableYEl = document.getElementById('softStoreyTableY');
+  const tablesXEl = document.getElementById('softStoreyTablesX');
+  const tablesYEl = document.getElementById('softStoreyTablesY');
 
   function setStatus(msg, isError){
     statusEl.textContent = msg;
     statusEl.style.color = isError ? '#dc2626' : '';
   }
 
-  function num(v){
-    const n = parseFloat(v);
-    return isNaN(n) ? 0 : n;
+  function numberOrNull(v){
+    if (v === null || v === undefined || v === '') return null;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
   }
 
-  // Locate the "Story Stiffness" table inside a raw sheet-to-json (array of arrays) export
-  // and return an ordered list of { story, stiffX, stiffY }.
+  function cleanText(v){
+    return (v === null || v === undefined ? '' : String(v)).trim();
+  }
+
+  function normalizedHeader(v){
+    return cleanText(v).toLowerCase().replace(/\s+/g, ' ');
+  }
+
+  function findHeaderIndex(header, candidates){
+    return header.findIndex(h => candidates.includes(h));
+  }
+
+  // Return one record per ETABS row. No averaging is performed here.
+  // Record shape: {story, outputCase, stepType, stepNumber, stepLabel, direction, stiffness, sourceOrder}
   function extractStoryStiffness(rows){
     let headerRowIdx = -1;
     for (let i = 0; i < rows.length; i++){
       const r = rows[i] || [];
-      const joined = (r[0] || '').toString();
+      const joined = cleanText(r[0]);
       if (/table\s*:?\s*story stiffness/i.test(joined)){
-        // header row (column names) is typically 1 row below the "TABLE: ..." title row
-        for (let j = i + 1; j < Math.min(i + 4, rows.length); j++){
-          const cand = rows[j] || [];
-          if (cand.some(c => (c || '').toString().trim().toLowerCase() === 'story')){
+        for (let j = i + 1; j < Math.min(i + 5, rows.length); j++){
+          const cand = (rows[j] || []).map(normalizedHeader);
+          if (cand.includes('story')){
             headerRowIdx = j;
             break;
           }
@@ -4191,10 +4212,10 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
         if (headerRowIdx >= 0) break;
       }
     }
-    // Fallback: search the whole sheet for a header row containing Story/Stiff X/Stiff Y
+
     if (headerRowIdx < 0){
       for (let i = 0; i < rows.length; i++){
-        const r = (rows[i] || []).map(c => (c || '').toString().trim().toLowerCase());
+        const r = (rows[i] || []).map(normalizedHeader);
         if (r.includes('story') && r.some(c => c.replace(/\s+/g,'') === 'stiffx') && r.some(c => c.replace(/\s+/g,'') === 'stiffy')){
           headerRowIdx = i;
           break;
@@ -4203,77 +4224,133 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
     }
     if (headerRowIdx < 0) return null;
 
-    const header = (rows[headerRowIdx] || []).map(c => (c || '').toString().trim().toLowerCase());
-    const colStory = header.indexOf('story');
-    const colOutputCase = header.findIndex(c => c === 'output case');
-    let colStiffX = header.findIndex(c => c.replace(/\s+/g,'') === 'stiffx');
-    let colStiffY = header.findIndex(c => c.replace(/\s+/g,'') === 'stiffy');
+    const header = (rows[headerRowIdx] || []).map(normalizedHeader);
+    const colStory = findHeaderIndex(header, ['story']);
+    const colOutputCase = findHeaderIndex(header, ['output case', 'outputcase']);
+    const colStepType = findHeaderIndex(header, ['step type', 'steptype']);
+    const colStepNumber = findHeaderIndex(header, ['step number', 'stepnumber', 'step num', 'stepnum']);
+    const colStepLabel = findHeaderIndex(header, ['step label', 'steplabel']);
+    const colStiffX = header.findIndex(c => c.replace(/\s+/g,'') === 'stiffx');
+    const colStiffY = header.findIndex(c => c.replace(/\s+/g,'') === 'stiffy');
     if (colStory < 0 || colStiffX < 0 || colStiffY < 0) return null;
 
-    // Skip the units row right after the header (e.g. "kip/in") if present
     let dataStart = headerRowIdx + 1;
     const maybeUnits = rows[dataStart] || [];
-    const storyCellNextRow = (maybeUnits[colStory] || '').toString().trim();
-    if (storyCellNextRow === '' ) dataStart++;
+    if (!cleanText(maybeUnits[colStory])) dataStart++;
 
-    const order = [];
-    const acc = {}; // story -> {xSum,xCount,ySum,yCount}
+    const records = [];
+    let sourceOrder = 0;
     for (let i = dataStart; i < rows.length; i++){
       const r = rows[i] || [];
-      const storyCell = (r[colStory] || '').toString().trim();
-      if (!storyCell) break; // blank row -> end of this table
-      if (/^table\s*:?/i.test(storyCell)) break; // next table started
+      const story = cleanText(r[colStory]);
+      if (!story) break;
+      if (/^table\s*:?/i.test(story)) break;
 
-      if (!(storyCell in acc)){
-        acc[storyCell] = { xSum: 0, xCount: 0, ySum: 0, yCount: 0 };
-        order.push(storyCell);
+      const outputCase = colOutputCase >= 0 ? cleanText(r[colOutputCase]) : '';
+      const stepType = colStepType >= 0 ? cleanText(r[colStepType]) : '';
+      const stepNumber = colStepNumber >= 0 ? cleanText(r[colStepNumber]) : '';
+      const stepLabel = colStepLabel >= 0 ? cleanText(r[colStepLabel]) : '';
+      const stiffX = numberOrNull(r[colStiffX]);
+      const stiffY = numberOrNull(r[colStiffY]);
+
+      if (stiffX !== null && stiffX !== 0){
+        records.push({story, outputCase, stepType, stepNumber, stepLabel, direction:'X', stiffness:stiffX, sourceOrder:sourceOrder++});
       }
-      const oc = colOutputCase >= 0 ? (r[colOutputCase] || '').toString().toUpperCase() : '';
-      const xv = num(r[colStiffX]);
-      const yv = num(r[colStiffY]);
-      // Only average the stiffness value for the direction it was actually computed in
-      // (ETABS reports 0 for the direction not being pushed in each output case).
-      const useX = xv !== 0 || /X/.test(oc);
-      const useY = yv !== 0 || /Y/.test(oc);
-      if (xv !== 0 || (oc && /X/.test(oc))){ acc[storyCell].xSum += xv; acc[storyCell].xCount += 1; }
-      if (yv !== 0 || (oc && /Y/.test(oc))){ acc[storyCell].ySum += yv; acc[storyCell].yCount += 1; }
+      if (stiffY !== null && stiffY !== 0){
+        records.push({story, outputCase, stepType, stepNumber, stepLabel, direction:'Y', stiffness:stiffY, sourceOrder:sourceOrder++});
+      }
     }
+    return records;
+  }
 
-    return order.map(story => {
-      const a = acc[story];
-      return {
-        story,
-        stiffX: a.xCount ? a.xSum / a.xCount : 0,
-        stiffY: a.yCount ? a.ySum / a.yCount : 0
-      };
+  function stepDisplay(record){
+    if (record.stepNumber) return `Step ${record.stepNumber}`;
+    if (record.stepLabel) return record.stepLabel;
+    return 'Single / Unnumbered Step';
+  }
+
+  function groupRecords(records, direction){
+    const map = new Map();
+    records.filter(r => r.direction === direction).forEach(record => {
+      const caseName = record.outputCase || `${direction}-Direction`;
+      const stepKey = record.stepNumber || record.stepLabel || '__single__';
+      const key = `${caseName}\u0001${stepKey}`;
+      if (!map.has(key)){
+        map.set(key, {
+          key,
+          outputCase:caseName,
+          stepNumber:record.stepNumber,
+          stepLabel:record.stepLabel,
+          stepType:record.stepType,
+          stepName:stepDisplay(record),
+          values:new Map(),
+          order:[],
+          firstOrder:record.sourceOrder
+        });
+      }
+      const group = map.get(key);
+      if (!group.values.has(record.story)){
+        group.values.set(record.story, record.stiffness);
+        group.order.push(record.story);
+      } else {
+        // Exact duplicate rows are not averaged. Retain the lower value as the governing stiffness.
+        group.values.set(record.story, Math.min(group.values.get(record.story), record.stiffness));
+      }
+    });
+
+    return Array.from(map.values()).sort((a,b) => {
+      const caseCmp = a.outputCase.localeCompare(b.outputCase, undefined, {numeric:true, sensitivity:'base'});
+      if (caseCmp) return caseCmp;
+      const an = Number(a.stepNumber), bn = Number(b.stepNumber);
+      const aNum = Number.isFinite(an) && a.stepNumber !== '';
+      const bNum = Number.isFinite(bn) && b.stepNumber !== '';
+      if (aNum && bNum && an !== bn) return an - bn;
+      if (aNum !== bNum) return aNum ? -1 : 1;
+      return a.firstOrder - b.firstOrder;
     });
   }
 
-  // Given an ordered top-to-bottom array of stiffness values, compute the Soft-Storey and
-  // Extreme Soft-Storey Irregularity checks, replicating the "Soft story X & Y Direction" sheet.
+  // Use the most complete step as the master top-to-bottom story order.
+  // This prevents a missing story in one step from being mistaken for the immediately-above story.
+  function masterStoryOrder(groups){
+    if (!groups.length) return [];
+    let master = groups[0];
+    for (const g of groups){
+      if (g.order.length > master.order.length) master = g;
+    }
+    const order = master.order.slice();
+    const seen = new Set(order);
+    groups.forEach(g => g.order.forEach(story => {
+      if (!seen.has(story)){
+        seen.add(story);
+        order.push(story);
+      }
+    }));
+    return order;
+  }
+
   function computeChecks(values, thresholds){
-    // thresholds: {ratioAbove, ratioAvg, ratioAboveExact}
     const n = values.length;
     const rows = [];
     for (let i = 0; i < n; i++){
       const D = values[i];
-      const row = { D, ratio: null, ratioCheck: null, Kmi: null, ratioAvg: null, avgCheck: null };
-      if (D === 0 || i === 0){
+      const row = {D, ratio:null, ratioCheck:null, Kmi:null, ratioAvg:null, avgCheck:null};
+      if (!(D > 0) || i === 0){
         rows.push(row);
         continue;
       }
+
       const Dprev = values[i - 1];
-      if (Dprev === 0){
-        rows.push(row);
-        continue;
+      if (Dprev > 0){
+        row.ratio = D / Dprev;
+        row.ratioCheck = thresholds.exact ? (row.ratio >= thresholds.ratioAbove) : (row.ratio > thresholds.ratioAbove);
       }
-      row.ratio = D / Dprev;
-      row.ratioCheck = thresholds.exact ? (row.ratio >= thresholds.ratioAbove) : (row.ratio > thresholds.ratioAbove);
+
       if (i >= 3){
-        const Kmi = (values[i-1] + values[i-2] + values[i-3]) / 3;
-        row.Kmi = Kmi;
-        if (Kmi !== 0){
-          row.ratioAvg = D / Kmi;
+        const above = [values[i-1], values[i-2], values[i-3]];
+        if (above.every(v => v > 0)){
+          row.Kmi = (above[0] + above[1] + above[2]) / 3;
+          row.ratioAvg = D / row.Kmi;
           row.avgCheck = row.ratioAvg >= thresholds.ratioAvg;
         }
       }
@@ -4283,26 +4360,23 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
   }
 
   function fmt(v, dec){
-    if (v === null || v === undefined || isNaN(v)) return '-';
-    return v.toLocaleString(undefined, {minimumFractionDigits: dec, maximumFractionDigits: dec});
+    if (v === null || v === undefined || !Number.isFinite(v)) return '-';
+    return v.toLocaleString(undefined, {minimumFractionDigits:dec, maximumFractionDigits:dec});
   }
 
   function checkCell(pass){
     if (pass === null || pass === undefined) return `<td class="ss-chk-blank">-</td>`;
-    return pass
-      ? `<td class="ss-chk-regular">Regular</td>`
-      : `<td class="ss-chk-bad">Soft Storey</td>`;
+    return pass ? `<td class="ss-chk-regular">Regular</td>` : `<td class="ss-chk-bad">Soft Storey</td>`;
   }
+
   function checkCellExtreme(pass){
     if (pass === null || pass === undefined) return `<td class="ss-chk-blank">-</td>`;
-    return pass
-      ? `<td class="ss-chk-regular">Regular</td>`
-      : `<td class="ss-chk-bad">Ex-Soft Storey</td>`;
+    return pass ? `<td class="ss-chk-regular">Regular</td>` : `<td class="ss-chk-bad">Ex-Soft Storey</td>`;
   }
 
   function renderDirectionTable(el, stories, values, dirLabel){
-    const soft = computeChecks(values, {ratioAbove: 0.7, ratioAvg: 0.8, exact: false});
-    const extreme = computeChecks(values, {ratioAbove: 0.6, ratioAvg: 0.7, exact: true});
+    const soft = computeChecks(values, {ratioAbove:0.7, ratioAvg:0.8, exact:false});
+    const extreme = computeChecks(values, {ratioAbove:0.6, ratioAvg:0.7, exact:true});
 
     let html = '<thead>';
     html += `<tr>
@@ -4312,10 +4386,10 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
       <th class="grp" colspan="5">Extreme Soft-Storey Irregularity Check</th>
     </tr>`;
     html += `<tr>
-      <th class="hdr2">Ki/Ki+1</th><th class="hdr2">check</th><th class="hdr2">Kmi</th><th class="hdr2">Ki/Kmi</th><th class="hdr2">check</th>
-      <th class="hdr2">Ki/Ki+1</th><th class="hdr2">check</th><th class="hdr2">Kmi</th><th class="hdr2">Ki/Kmi</th><th class="hdr2">check</th>
+      <th class="hdr2">Ki/Ki+1</th><th class="hdr2">Check</th><th class="hdr2">Kmi</th><th class="hdr2">Ki/Kmi</th><th class="hdr2">Check</th>
+      <th class="hdr2">Ki/Ki+1</th><th class="hdr2">Check</th><th class="hdr2">Kmi</th><th class="hdr2">Ki/Kmi</th><th class="hdr2">Check</th>
     </tr>`;
-    html += `<tr><td></td><td></td><td>0.7</td><td></td><td></td><td>0.8</td><td></td><td>0.6</td><td></td><td>0.7</td><td></td><td>0.7</td></tr>`;
+    html += `<tr><td></td><td></td><td>0.7</td><td></td><td></td><td>0.8</td><td></td><td>0.6</td><td></td><td>0.7</td><td></td><td></td></tr>`;
     html += '</thead><tbody>';
 
     for (let i = 0; i < stories.length; i++){
@@ -4337,34 +4411,99 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
     }
     html += '</tbody>';
     el.innerHTML = html;
+
+    const softFail = soft.some(r => r.ratioCheck === false || r.avgCheck === false);
+    const extremeFail = extreme.some(r => r.ratioCheck === false || r.avgCheck === false);
+    return {softFail, extremeFail};
   }
 
-  let parsedRows = null;
+  function renderDirectionTables(container, groups, stories, dirLabel){
+    container.innerHTML = '';
+    if (!groups.length){
+      container.innerHTML = `<div class="ss-step-empty">No non-zero ${dirLabel} stiffness rows were found.</div>`;
+      return;
+    }
+
+    groups.forEach(group => {
+      const block = document.createElement('section');
+      block.className = 'ss-step-block';
+
+      const head = document.createElement('div');
+      head.className = 'ss-step-head';
+      const titleWrap = document.createElement('div');
+      const title = document.createElement('h3');
+      title.className = 'ss-step-title';
+      title.textContent = `${group.outputCase} — ${group.stepName}`;
+      const meta = document.createElement('div');
+      meta.className = 'ss-step-meta';
+      const metaBits = [];
+      if (group.stepType) metaBits.push(group.stepType);
+      if (group.stepLabel && group.stepLabel !== group.stepName) metaBits.push(`Label: ${group.stepLabel}`);
+      metaBits.push(`${group.values.size} storey value${group.values.size === 1 ? '' : 's'}`);
+      meta.textContent = metaBits.join(' • ');
+      titleWrap.append(title, meta);
+
+      const badge = document.createElement('span');
+      badge.className = 'ss-step-status';
+      head.append(titleWrap, badge);
+
+      const scroll = document.createElement('div');
+      scroll.style.overflowX = 'auto';
+      const table = document.createElement('table');
+      table.className = 'ss-table';
+      scroll.appendChild(table);
+      block.append(head, scroll);
+      container.appendChild(block);
+
+      const values = stories.map(story => group.values.has(story) ? group.values.get(story) : null);
+      const result = renderDirectionTable(table, stories, values, dirLabel);
+      if (result.extremeFail){
+        badge.textContent = 'EXTREME SOFT STOREY';
+        badge.classList.add('ss-step-extreme');
+      } else if (result.softFail){
+        badge.textContent = 'SOFT STOREY';
+        badge.classList.add('ss-step-soft');
+      } else {
+        badge.textContent = 'PASS';
+        badge.classList.add('ss-step-pass');
+      }
+    });
+  }
+
+  let parsedRecords = null;
 
   fileInput.addEventListener('change', () => {
-    parsedRows = null;
+    parsedRecords = null;
     resultWrap.style.display = 'none';
+    tablesXEl.innerHTML = '';
+    tablesYEl.innerHTML = '';
     const f = fileInput.files && fileInput.files[0];
-    if (!f) { setStatus(''); return; }
+    if (!f){ setStatus(''); return; }
+
     setStatus('Reading ' + f.name + ' ...');
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = e => {
       try {
         const data = new Uint8Array(e.target.result);
-        const wb = XLSX.read(data, {type: 'array'});
-        // Prefer a sheet literally containing the Story Stiffness table; otherwise scan all sheets.
+        const wb = XLSX.read(data, {type:'array'});
         let found = null;
         for (const sn of wb.SheetNames){
-          const rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], {header: 1, raw: true, defval: ''});
+          const rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], {header:1, raw:true, defval:''});
           const extracted = extractStoryStiffness(rows);
-          if (extracted && extracted.length){ found = extracted; break; }
+          if (extracted && extracted.length){
+            found = extracted;
+            break;
+          }
         }
         if (!found){
-          setStatus('Could not find a "Story Stiffness" table in this file. Please export the ETABS Story Stiffness table and try again.', true);
+          setStatus('Could not find a valid "Story Stiffness" table. Please export the ETABS Story Stiffness table and try again.', true);
           return;
         }
-        parsedRows = found;
-        setStatus(`Found ${found.length} stories in "${f.name}". Click "Run Soft-Storey Check".`);
+
+        parsedRecords = found;
+        const groupsX = groupRecords(found, 'X');
+        const groupsY = groupRecords(found, 'Y');
+        setStatus(`Found ${found.length} stiffness rows: ${groupsX.length} X-direction step table(s) and ${groupsY.length} Y-direction step table(s). Click "Run Step-wise Soft-Storey Check".`);
       } catch(err){
         console.error(err);
         setStatus('Could not read this file as an Excel workbook.', true);
@@ -4374,19 +4513,19 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
   });
 
   calcBtn.addEventListener('click', () => {
-    if (!parsedRows){
+    if (!parsedRecords){
       setStatus('Please choose a valid Story Stiffness .xlsx file first.', true);
       return;
     }
-    const stories = parsedRows.map(r => r.story);
-    const stiffX = parsedRows.map(r => r.stiffX);
-    const stiffY = parsedRows.map(r => r.stiffY);
 
-    renderDirectionTable(tableXEl, stories, stiffX, 'X-Direction');
-    renderDirectionTable(tableYEl, stories, stiffY, 'Y-Direction');
+    const groupsX = groupRecords(parsedRecords, 'X');
+    const groupsY = groupRecords(parsedRecords, 'Y');
+    const stories = masterStoryOrder([...groupsX, ...groupsY]);
+    renderDirectionTables(tablesXEl, groupsX, stories, 'X-Direction');
+    renderDirectionTables(tablesYEl, groupsY, stories, 'Y-Direction');
 
     resultWrap.style.display = 'block';
-    setStatus(`Soft-Storey check complete for ${stories.length} stories.`);
+    setStatus(`Step-wise Soft-Storey check complete: ${groupsX.length + groupsY.length} separate table(s), ${stories.length} storeys in the master order.`);
   });
 })();
 
