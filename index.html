@@ -1258,6 +1258,122 @@ body.brd-modal-open{overflow:hidden}
 }
 </style>
 
+<style id="avash-modern-polish-v3">
+  /* =====================================================================
+     AVASH Modern Polish v3 — refined depth, motion & micro-interactions
+     Layered on top of the existing design system; no IDs/classes removed.
+     ===================================================================== */
+
+  :root{
+    --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-xl:20px;
+    --ease:cubic-bezier(.22,.8,.28,1);
+    --ease-spring:cubic-bezier(.34,1.56,.64,1);
+    --ring:0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+    --elevate:0 10px 30px -12px rgba(15,23,42,.18), 0 2px 6px rgba(15,23,42,.06);
+    --elevate-hover:0 20px 45px -16px rgba(15,23,42,.24), 0 4px 10px rgba(15,23,42,.08);
+  }
+  html.dark{
+    --elevate:0 10px 30px -12px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.35);
+    --elevate-hover:0 20px 45px -16px rgba(0,0,0,.6), 0 4px 10px rgba(0,0,0,.4);
+  }
+
+  *{ scrollbar-width:thin; scrollbar-color:color-mix(in srgb, var(--accent) 45%, var(--card-border)) transparent; }
+  ::-webkit-scrollbar{ width:9px; height:9px; }
+  ::-webkit-scrollbar-track{ background:transparent; }
+  ::-webkit-scrollbar-thumb{ background:color-mix(in srgb, var(--accent) 40%, var(--card-border)); border-radius:999px; border:2px solid transparent; background-clip:padding-box; }
+  ::-webkit-scrollbar-thumb:hover{ background:color-mix(in srgb, var(--accent) 65%, var(--card-border)); background-clip:padding-box; }
+  ::selection{ background:color-mix(in srgb, var(--accent) 35%, transparent); color:var(--ink); }
+
+  html{ scroll-behavior:smooth; }
+  body{ letter-spacing:-.005em; }
+
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible{
+    outline:none; box-shadow:var(--ring); border-radius:var(--radius-sm);
+  }
+
+  #sidebar{ transition:background .25s var(--ease); }
+  .side-link{
+    position:relative; border-radius:10px;
+    transition:background .18s var(--ease), color .18s var(--ease), transform .12s var(--ease), padding-left .18s var(--ease);
+  }
+  .side-link:hover{ transform:translateX(2px); }
+  .side-link.active{
+    box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--accent) 28%, transparent);
+  }
+  .side-link.active::before{
+    content:""; position:absolute; left:-14px; top:50%; transform:translateY(-50%);
+    width:3px; height:60%; border-radius:0 3px 3px 0; background:var(--grad);
+  }
+  #darkToggle{ transition:color .18s var(--ease), border-color .18s var(--ease), transform .12s var(--ease); }
+  #darkToggle:active{ transform:scale(.94); }
+
+  .card{
+    border-radius:var(--radius-lg);
+    box-shadow:var(--elevate);
+    transition:box-shadow .28s var(--ease), transform .28s var(--ease), border-color .28s var(--ease);
+    animation:avashCardIn .5s var(--ease) both;
+  }
+  .card:hover{ box-shadow:var(--elevate-hover); transform:translateY(-3px); }
+  @keyframes avashCardIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+  .card-grid .card:nth-child(1){ animation-delay:.02s; }
+  .card-grid .card:nth-child(2){ animation-delay:.06s; }
+  .card-grid .card:nth-child(3){ animation-delay:.10s; }
+  .card-grid .card:nth-child(4){ animation-delay:.14s; }
+  .card-grid .card:nth-child(5){ animation-delay:.18s; }
+  .card-grid .card:nth-child(6){ animation-delay:.22s; }
+
+  button{
+    border-radius:var(--radius-md);
+    transition:filter .18s var(--ease), transform .12s var(--ease), box-shadow .22s var(--ease);
+  }
+  button:hover{ transform:translateY(-1px); }
+  button:active{ transform:translateY(0) scale(.98); }
+  button.ghost, #copyBtn{ transition:background .18s var(--ease), color .18s var(--ease), border-color .18s var(--ease), transform .12s var(--ease); }
+  button.ghost:hover, #copyBtn:hover{ transform:translateY(-1px); }
+
+  input[type="text"], input[type="number"], input[type="password"], select{
+    border-radius:var(--radius-sm);
+    transition:border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+  }
+  input:focus, select:focus{ box-shadow:var(--ring); }
+
+  .tab-btn{
+    border-radius:999px;
+    transition:background .2s var(--ease), color .2s var(--ease), box-shadow .2s var(--ease), transform .12s var(--ease);
+  }
+  .tab-btn:hover:not(.active){ transform:translateY(-1px); }
+  .tab-btn.active{ box-shadow:var(--shadow-md); }
+
+  .step-dot{ transition:background .25s var(--ease), color .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease); }
+  .step-line::after{ transition:transform .55s var(--ease); }
+
+  .ss-step-status, .mark-chip{ border-radius:999px; }
+  .ss-step-block{ border-radius:var(--radius-md); transition:box-shadow .22s var(--ease), border-color .22s var(--ease); }
+  .ss-step-block:hover{ box-shadow:var(--shadow-sm); }
+
+  #dropzone{ border-radius:var(--radius-md); transition:border-color .2s var(--ease), background .2s var(--ease), color .2s var(--ease), transform .15s var(--ease); }
+  #dropzone.drag{ transform:scale(1.01); }
+
+  #gateOverlay{ backdrop-filter:blur(6px) saturate(140%); -webkit-backdrop-filter:blur(6px) saturate(140%); }
+  #gateCard{ border-radius:var(--radius-xl); box-shadow:0 30px 80px -20px rgba(0,0,0,.5); animation:avashGateIn .5s var(--ease-spring) both; }
+  @keyframes avashGateIn{ from{ opacity:0; transform:translateY(14px) scale(.98); } to{ opacity:1; transform:none; } }
+  #gatePassword{ transition:border-color .18s var(--ease), box-shadow .18s var(--ease); }
+  #gateSubmitBtn{ transition:filter .18s var(--ease), transform .12s var(--ease), box-shadow .2s var(--ease); }
+  #gateSubmitBtn:hover{ transform:translateY(-1px); }
+
+  .reveal{ animation:avashFadeUp .42s var(--ease) both; }
+  @keyframes avashFadeUp{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
+
+  .out-item{ border-radius:var(--radius-sm); transition:transform .15s var(--ease), box-shadow .15s var(--ease); }
+  .out-item:hover{ transform:translateY(-1px); box-shadow:var(--shadow-sm); }
+
+  .brd-mobile-nav{ transition:box-shadow .2s var(--ease); }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+  }
+</style>
+
 </head>
 <body>
 
