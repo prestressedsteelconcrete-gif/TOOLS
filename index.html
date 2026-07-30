@@ -985,6 +985,57 @@
   }
 
 
+
+  /* ================================================================
+     ETABS SUBGRADE MODULUS / SOIL SPRING MODULE
+     ================================================================ */
+  #panelSubgrade{overflow:visible;}
+  .sg-hero{
+    display:grid;grid-template-columns:minmax(0,1.55fr) repeat(2,minmax(150px,.55fr));gap:12px;
+    padding:19px;border:1px solid var(--card-border);border-radius:17px;margin-bottom:16px;
+    background:linear-gradient(135deg,color-mix(in srgb,var(--card) 86%,transparent),color-mix(in srgb,var(--accent-soft) 58%,transparent));
+  }
+  .sg-hero-copy{min-width:0;}
+  .sg-eyebrow{display:block;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;}
+  .sg-hero h2{font-family:var(--display);font-size:clamp(21px,3vw,31px);line-height:1.05;margin:0 0 8px;color:var(--ink);}
+  .sg-hero p{font-size:12.5px;line-height:1.65;color:var(--muted);margin:0;max-width:680px;}
+  .sg-hero-stat{display:flex;flex-direction:column;justify-content:center;min-height:98px;padding:13px 14px;border-radius:14px;border:1px solid var(--card-border);background:color-mix(in srgb,var(--card) 84%,transparent);}
+  .sg-hero-stat strong{font-family:var(--mono);font-size:19px;line-height:1.25;color:var(--accent);overflow-wrap:anywhere;}
+  .sg-hero-stat span{font-size:10.5px;color:var(--muted);margin-top:5px;text-transform:uppercase;letter-spacing:.05em;}
+  .sg-layout{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr);gap:16px;align-items:start;}
+  .sg-input-card,.sg-output-card{padding:16px;border:1px solid var(--card-border);border-radius:15px;background:var(--card-soft);}
+  .sg-input-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(120px,.7fr);gap:10px;}
+  .sg-input-grid .field{margin-bottom:0;}
+  .sg-input-span{grid-column:1/-1;}
+  .sg-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px;}
+  .sg-actions button{margin:0;flex:1;min-width:130px;}
+  .sg-error{display:none;margin-top:12px;padding:10px 12px;border-radius:10px;border:1px solid color-mix(in srgb,#ef4444 35%,var(--card-border));background:color-mix(in srgb,#ef4444 10%,var(--card));color:#dc2626;font-size:12px;line-height:1.5;}
+  .sg-result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .sg-result-item{min-height:93px;padding:12px;border-radius:12px;border:1px solid var(--card-border);background:var(--card);display:flex;flex-direction:column;justify-content:center;}
+  .sg-result-item span{font-size:10px;text-transform:uppercase;letter-spacing:.055em;color:var(--muted);font-weight:700;}
+  .sg-result-item strong{font-family:var(--mono);font-size:17px;color:var(--ink);line-height:1.35;margin-top:5px;overflow-wrap:anywhere;}
+  .sg-result-item small{font-size:10.5px;color:var(--muted);line-height:1.45;margin-top:4px;}
+  .sg-result-item.primary{background:linear-gradient(135deg,var(--accent-soft),var(--card));border-color:color-mix(in srgb,var(--accent) 26%,var(--card-border));}
+  .sg-result-item.primary strong{color:var(--accent);font-size:19px;}
+  .sg-formula{margin-top:12px;padding:12px 13px;border:1px dashed color-mix(in srgb,var(--accent) 38%,var(--card-border));border-radius:11px;background:color-mix(in srgb,var(--accent-soft) 42%,var(--card));}
+  .sg-formula b{display:block;color:var(--ink);font-size:11.5px;margin-bottom:5px;}
+  .sg-formula code{display:block;white-space:normal;font-size:11px;line-height:1.6;color:var(--muted);font-family:var(--mono);overflow-wrap:anywhere;}
+  .sg-etabs-note{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px;}
+  .sg-etabs-note div{padding:11px 12px;border-radius:11px;border:1px solid var(--card-border);background:var(--card);font-size:11.5px;line-height:1.55;color:var(--muted);}
+  .sg-etabs-note strong{display:block;color:var(--ink);margin-bottom:3px;}
+  @media(max-width:820px){
+    .sg-hero{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .sg-hero-copy{grid-column:1/-1;}
+    .sg-layout{grid-template-columns:1fr;}
+  }
+  @media(max-width:560px){
+    .sg-hero{grid-template-columns:1fr;padding:15px;}
+    .sg-hero-copy{grid-column:auto;}
+    .sg-input-grid,.sg-result-grid,.sg-etabs-note{grid-template-columns:1fr;}
+    .sg-input-span{grid-column:auto;}
+    .sg-actions button{width:100%;}
+  }
+
   /* ================================================================
      ETABS BEAM REINFORCEMENT DESIGN MODULE
      ================================================================ */
@@ -1579,7 +1630,7 @@ body.brd-modal-open{overflow:hidden}
 
 
 <h1>BNBC 2020 ETABS Input Calculator</h1>
-<p class="sub">Earthquake (BNBC 2020) + Wind (BNBC 2020) — ETABS input parameter generator</p>
+<p class="sub">Earthquake, Wind, Soft Storey, Subgrade Modulus &amp; Beam Design — ETABS input parameter generator</p>
 
 <div class="smart-link-banner">
   <div class="smart-link-icon" aria-hidden="true">
@@ -1596,6 +1647,7 @@ body.brd-modal-open{overflow:hidden}
   <button class="tab-btn active" id="tabEqBtn">Earthquake</button>
   <button class="tab-btn" id="tabWindBtn">Wind</button>
   <button class="tab-btn" id="tabSoftBtn">Soft Storey Check</button>
+  <button class="tab-btn" id="tabSubgradeBtn">Subgrade Modulus</button>
   <button class="tab-btn" id="tabBeamBtn">Beam Reinforcement</button>
 </div>
 
@@ -1753,6 +1805,87 @@ body.brd-modal-open{overflow:hidden}
   </div>
 
   <div class="note">Every Output Case and Step Number is evaluated independently. A step is marked <strong>Pass</strong> only when all available storeys pass both checks. Ki/Ki+1 &gt; 0.7 (Soft-Storey) / &gt;= 0.6 (Extreme) checks stiffness against the storey immediately above. Ki/Kmi &gt;= 0.8 (Soft-Storey) / &gt;= 0.7 (Extreme) checks stiffness against the average of the 3 storeys above. Missing storey data remains blank and is not compared across a gap.</div>
+</div>
+
+<!-- ================= SUBGRADE MODULUS PANEL ================= -->
+<div class="card panel" id="panelSubgrade">
+  <div class="sg-hero">
+    <div class="sg-hero-copy">
+      <span class="sg-eyebrow">Soil spring input · ETABS</span>
+      <h2>Subgrade Modulus Calculator</h2>
+      <p>Allowable bearing pressure, factor of safety এবং allowable settlement থেকে vertical modulus of subgrade reaction বের করুন। Uploaded workbook-এর মূল formula ও default values অনুসরণ করা হয়েছে।</p>
+    </div>
+    <div class="sg-hero-stat"><strong id="sgHeroK">27.543 kip/ft³</strong><span>ETABS area spring</span></div>
+    <div class="sg-hero-stat"><strong id="sgHeroMetric">4,326.65 kN/m³</strong><span>Metric stiffness</span></div>
+  </div>
+
+  <div class="sg-layout">
+    <section class="sg-input-card" aria-labelledby="sgInputTitle">
+      <h2 class="section" id="sgInputTitle">Input Data</h2>
+      <div class="sg-input-grid">
+        <div class="field">
+          <label for="sgBearing">Allowable Bearing Pressure, q<sub>allow</sub></label>
+          <input type="number" id="sgBearing" value="0.82" min="0" step="0.01" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label for="sgBearingUnit">Pressure Unit</label>
+          <select id="sgBearingUnit">
+            <option value="tsf" selected>tsf (× 2.204 ksf)</option>
+            <option value="ksf">ksf</option>
+            <option value="psf">psf</option>
+            <option value="kpa">kPa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="sgFS">Factor of Safety, F.S</label>
+          <input type="number" id="sgFS" value="2.5" min="0" step="0.1" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label for="sgSettlement">Allowable Settlement</label>
+          <input type="number" id="sgSettlement" value="50" min="0" step="1" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label for="sgSettlementUnit">Settlement Unit</label>
+          <select id="sgSettlementUnit"><option value="mm" selected>mm</option><option value="in">in</option></select>
+        </div>
+        <div class="field">
+          <label for="sgArea">Tributary / Footing Area (optional)</label>
+          <input type="number" id="sgArea" value="0" min="0" step="0.01" inputmode="decimal" placeholder="For joint spring Kz">
+        </div>
+        <div class="field sg-input-span">
+          <label for="sgAreaUnit">Area Unit</label>
+          <select id="sgAreaUnit"><option value="ft2" selected>ft²</option><option value="m2">m²</option></select>
+        </div>
+      </div>
+      <div class="sg-actions">
+        <button type="button" id="calcSubgradeBtn">Calculate Subgrade Modulus</button>
+        <button type="button" id="resetSubgradeBtn" class="ghost">Reset Workbook Defaults</button>
+      </div>
+      <div class="sg-error" id="sgError" role="alert"></div>
+      <div class="note">Workbook convention: <strong>1 tsf = 2.204 ksf = 2204 psf</strong> (metric ton-force per square foot). Area spring assignment-এর জন্য ETABS unit set করার পর matching stiffness value ব্যবহার করুন।</div>
+    </section>
+
+    <section class="sg-output-card" aria-labelledby="sgOutputTitle">
+      <h2 class="section coral" id="sgOutputTitle">Calculated ETABS Values</h2>
+      <div class="sg-result-grid" id="sgResultGrid">
+        <div class="sg-result-item"><span>Allowable pressure</span><strong id="sgQAllowOut">1.807 ksf</strong><small id="sgQAllowSub">1,807.28 psf · 86.52 kPa</small></div>
+        <div class="sg-result-item"><span>Ultimate pressure</span><strong id="sgQUltOut">4.518 ksf</strong><small id="sgQUltSub">q<sub>allow</sub> × F.S</small></div>
+        <div class="sg-result-item"><span>Settlement</span><strong id="sgSettleOut">1.969 in</strong><small id="sgSettleSub">0.1640 ft</small></div>
+        <div class="sg-result-item primary"><span>Subgrade modulus</span><strong id="sgKipOut">27.543 kip/ft³</strong><small id="sgLbOut">27,542.95 lb/ft³</small></div>
+        <div class="sg-result-item primary"><span>Metric area spring</span><strong id="sgMetricOut">4,326.65 kN/m³</strong><small id="sgNmmOut">0.004327 N/mm³</small></div>
+        <div class="sg-result-item"><span>Joint spring Kz</span><strong id="sgJointOut">Enter footing area</strong><small id="sgJointSub">Kz = k<sub>s</sub> × tributary area</small></div>
+      </div>
+      <div class="sg-formula">
+        <b>Calculation trace</b>
+        <code id="sgFormulaOut">kₛ = (0.82 × 2204 × 2.5) ÷ (50 ÷ 304.8) = 27,542.95 lb/ft³</code>
+      </div>
+      <div class="sg-etabs-note">
+        <div><strong>ETABS Area Spring</strong>Area object-এর vertical spring stiffness হিসেবে <em>k<sub>s</sub></em> সরাসরি assign করুন (force/length³)।</div>
+        <div><strong>ETABS Joint Spring</strong>একটি joint-এর tributary area থাকলে <em>Kz = k<sub>s</sub> × area</em> ব্যবহার করুন (force/length)।</div>
+      </div>
+      <div class="sg-actions"><button type="button" id="copySubgradeBtn" class="ghost">Copy ETABS Values</button></div>
+    </section>
+  </div>
 </div>
 
 <!-- ================= ETABS BEAM REINFORCEMENT PANEL ================= -->
@@ -3348,7 +3481,7 @@ document.getElementById('rebuildStoriesBtn').addEventListener('click', buildStor
 
 /* ---- Tabs ---- */
 function activateEtabsTab(which){
-  const tabs = {eq:['tabEqBtn','panelEq'], wind:['tabWindBtn','panelWind'], soft:['tabSoftBtn','panelSoft'], beam:['tabBeamBtn','panelBeamDesign']};
+  const tabs = {eq:['tabEqBtn','panelEq'], wind:['tabWindBtn','panelWind'], soft:['tabSoftBtn','panelSoft'], subgrade:['tabSubgradeBtn','panelSubgrade'], beam:['tabBeamBtn','panelBeamDesign']};
   Object.keys(tabs).forEach(k=>{
     const [btnId, panelId] = tabs[k];
     document.getElementById(btnId).classList.toggle('active', k===which);
@@ -3365,9 +3498,144 @@ document.getElementById('tabWindBtn').addEventListener('click', ()=>{
 document.getElementById('tabSoftBtn').addEventListener('click', ()=>{
   activateEtabsTab('soft');
 });
+document.getElementById('tabSubgradeBtn').addEventListener('click', ()=>{
+  activateEtabsTab('subgrade');
+});
 document.getElementById('tabBeamBtn').addEventListener('click', ()=>{
   activateEtabsTab('beam');
 });
+
+/* ============== SUBGRADE MODULUS CALCULATION ============== */
+const SG_PSF_PER_KPA = 20.8854342331501;
+const SG_KNM3_PER_LBFT3 = 0.157087463846246;
+const SG_FT2_PER_M2 = 10.7639104167097;
+
+function sgNumber(value, decimals=3){
+  if(!Number.isFinite(value)) return '—';
+  return value.toLocaleString('en-US',{maximumFractionDigits:decimals});
+}
+
+function sgPressureToPsf(value, unit){
+  if(unit === 'tsf') return value * 2204;
+  if(unit === 'ksf') return value * 1000;
+  if(unit === 'kpa') return value * SG_PSF_PER_KPA;
+  return value;
+}
+
+function sgCopyText(text){
+  if(navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+  return new Promise((resolve,reject)=>{
+    const ta=document.createElement('textarea');
+    ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');resolve();}catch(err){reject(err);}
+    ta.remove();
+  });
+}
+
+let subgradeLastResult = null;
+function calcSubgradeModulus(){
+  const bearing = parseFloat(document.getElementById('sgBearing').value);
+  const bearingUnit = document.getElementById('sgBearingUnit').value;
+  const fs = parseFloat(document.getElementById('sgFS').value);
+  const settlement = parseFloat(document.getElementById('sgSettlement').value);
+  const settlementUnit = document.getElementById('sgSettlementUnit').value;
+  const areaRaw = parseFloat(document.getElementById('sgArea').value);
+  const areaUnit = document.getElementById('sgAreaUnit').value;
+  const error = document.getElementById('sgError');
+
+  if(!(bearing>0) || !(fs>0) || !(settlement>0)){
+    error.textContent='Allowable bearing pressure, factor of safety এবং settlement অবশ্যই zero-এর চেয়ে বেশি হতে হবে।';
+    error.style.display='block';
+    return null;
+  }
+  error.style.display='none';
+
+  const qAllowPsf = sgPressureToPsf(bearing,bearingUnit);
+  const qAllowKsf = qAllowPsf/1000;
+  const qAllowKpa = qAllowPsf/SG_PSF_PER_KPA;
+  const qUltPsf = qAllowPsf*fs;
+  const settlementIn = settlementUnit === 'mm' ? settlement/25.4 : settlement;
+  const settlementFt = settlementIn/12;
+  const kLbFt3 = qUltPsf/settlementFt;
+  const kKipFt3 = kLbFt3/1000;
+  const kKNm3 = kLbFt3*SG_KNM3_PER_LBFT3;
+  const kNmm3 = kKNm3/1000000;
+  const area = Number.isFinite(areaRaw) && areaRaw>0 ? areaRaw : 0;
+  const areaFt2 = area ? (areaUnit === 'm2' ? area*SG_FT2_PER_M2 : area) : 0;
+  const areaM2 = areaFt2/SG_FT2_PER_M2;
+  const jointKipFt = areaFt2 ? (kLbFt3*areaFt2/1000) : 0;
+  const jointKNm = areaM2 ? (kKNm3*areaM2) : 0;
+
+  document.getElementById('sgQAllowOut').textContent=`${sgNumber(qAllowKsf,3)} ksf`;
+  document.getElementById('sgQAllowSub').textContent=`${sgNumber(qAllowPsf,2)} psf · ${sgNumber(qAllowKpa,2)} kPa`;
+  document.getElementById('sgQUltOut').textContent=`${sgNumber(qUltPsf/1000,3)} ksf`;
+  document.getElementById('sgQUltSub').textContent=`${sgNumber(qUltPsf,2)} psf · qallow × F.S`;
+  document.getElementById('sgSettleOut').textContent=`${sgNumber(settlementIn,3)} in`;
+  document.getElementById('sgSettleSub').textContent=`${sgNumber(settlementFt,4)} ft · ${sgNumber(settlementIn*25.4,2)} mm`;
+  document.getElementById('sgKipOut').textContent=`${sgNumber(kKipFt3,3)} kip/ft³`;
+  document.getElementById('sgLbOut').textContent=`${sgNumber(kLbFt3,2)} lb/ft³`;
+  document.getElementById('sgMetricOut').textContent=`${sgNumber(kKNm3,2)} kN/m³`;
+  document.getElementById('sgNmmOut').textContent=`${sgNumber(kNmm3,6)} N/mm³`;
+  document.getElementById('sgHeroK').textContent=`${sgNumber(kKipFt3,3)} kip/ft³`;
+  document.getElementById('sgHeroMetric').textContent=`${sgNumber(kKNm3,2)} kN/m³`;
+
+  if(areaFt2){
+    document.getElementById('sgJointOut').textContent=`${sgNumber(jointKipFt,3)} kip/ft`;
+    document.getElementById('sgJointSub').textContent=`${sgNumber(jointKNm,2)} kN/m · area ${sgNumber(areaFt2,2)} ft²`;
+  }else{
+    document.getElementById('sgJointOut').textContent='Enter footing area';
+    document.getElementById('sgJointSub').innerHTML='Kz = k<sub>s</sub> × tributary area';
+  }
+
+  const pressureTrace = bearingUnit === 'tsf'
+    ? `${sgNumber(bearing,4)} × 2204`
+    : `${sgNumber(qAllowPsf,2)}`;
+  const settlementTrace = settlementUnit === 'mm'
+    ? `${sgNumber(settlement,3)} ÷ 304.8`
+    : `${sgNumber(settlement,3)} ÷ 12`;
+  document.getElementById('sgFormulaOut').textContent=`kₛ = (${pressureTrace} × ${sgNumber(fs,3)}) ÷ (${settlementTrace}) = ${sgNumber(kLbFt3,2)} lb/ft³`;
+
+  subgradeLastResult={qAllowKsf,qAllowPsf,qAllowKpa,qUltPsf,settlementIn,settlementFt,kLbFt3,kKipFt3,kKNm3,kNmm3,areaFt2,jointKipFt,jointKNm};
+  return subgradeLastResult;
+}
+
+const subgradeInputIds=['sgBearing','sgBearingUnit','sgFS','sgSettlement','sgSettlementUnit','sgArea','sgAreaUnit'];
+subgradeInputIds.forEach(id=>{
+  const node=document.getElementById(id);
+  node.addEventListener(node.tagName==='SELECT'?'change':'input',calcSubgradeModulus);
+});
+document.getElementById('calcSubgradeBtn').addEventListener('click',calcSubgradeModulus);
+document.getElementById('resetSubgradeBtn').addEventListener('click',()=>{
+  document.getElementById('sgBearing').value='0.82';
+  document.getElementById('sgBearingUnit').value='tsf';
+  document.getElementById('sgFS').value='2.5';
+  document.getElementById('sgSettlement').value='50';
+  document.getElementById('sgSettlementUnit').value='mm';
+  document.getElementById('sgArea').value='0';
+  document.getElementById('sgAreaUnit').value='ft2';
+  calcSubgradeModulus();
+});
+document.getElementById('copySubgradeBtn').addEventListener('click',()=>{
+  const r=calcSubgradeModulus();
+  if(!r) return;
+  const lines=[
+    'ETABS Subgrade Modulus',
+    `Area spring = ${sgNumber(r.kKipFt3,3)} kip/ft³`,
+    `Area spring = ${sgNumber(r.kKNm3,2)} kN/m³`,
+    `Area spring = ${sgNumber(r.kNmm3,6)} N/mm³`,
+    `Allowable pressure = ${sgNumber(r.qAllowKsf,3)} ksf`,
+    `Ultimate pressure = ${sgNumber(r.qUltPsf/1000,3)} ksf`,
+    `Settlement = ${sgNumber(r.settlementIn,3)} in`
+  ];
+  if(r.areaFt2) lines.push(`Joint spring Kz = ${sgNumber(r.jointKipFt,3)} kip/ft = ${sgNumber(r.jointKNm,2)} kN/m`);
+  const btn=document.getElementById('copySubgradeBtn');
+  sgCopyText(lines.join('\n')).then(()=>{
+    const old=btn.textContent;btn.textContent='Copied!';setTimeout(()=>btn.textContent=old,1400);
+  }).catch(()=>{
+    const old=btn.textContent;btn.textContent='Copy failed';setTimeout(()=>btn.textContent=old,1400);
+  });
+});
+calcSubgradeModulus();
 
 /* ============== EARTHQUAKE CALCULATION ============== */
 
