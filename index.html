@@ -1815,6 +1815,11 @@ html[data-lang="bn"] :is(h1,h2,h3,.brand,.side-link,.tab-btn,button,label){
   #page-etabsfailure .brd-upload-zone,#page-etabsfailure .efa-controls,#page-etabsfailure .brd-status{display:none!important}
   .efa-card{break-inside:avoid;box-shadow:none;margin-bottom:12px}
 }
+
+/* v4: practical stirrup notation + per-beam selector */
+.brd-transverse-card strong{font-size:15px;letter-spacing:-.015em}
+.brd-card-selects select:not(:disabled){border-color:color-mix(in srgb,var(--accent) 32%,var(--card-border));background:var(--card)}
+.brd-card-selects select:not(:disabled):focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent)}
 </style>
 
 </head>
@@ -5679,6 +5684,7 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
   const TORSION_DIAS = [12,16,20,25];
   const storageKeyDia = 'ssEtabsBeamDiaOverrides';
   const storageKeyExtra = 'ssEtabsBeamExtraOverrides';
+  const storageKeyStirrup = 'ssEtabsBeamStirrupOverrides';
 
   function loadJSON(key){ try{return JSON.parse(localStorage.getItem(key)||'{}')||{};}catch(_){return {};} }
   function saveJSON(key,value){ try{localStorage.setItem(key,JSON.stringify(value));}catch(_){} }
@@ -5686,7 +5692,7 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
   const state = {
     beams:[], search:'', storyFilter:'all', globalDia:16, extraPct:20, support:.25, minBars:2, cover:40,
     stirrupDia:10,stirrupLegs:2,torsionDia:16,
-    areaUnit:'auto', diaOverrides:loadJSON(storageKeyDia), extraOverrides:loadJSON(storageKeyExtra),
+    areaUnit:'auto', diaOverrides:loadJSON(storageKeyDia), extraOverrides:loadJSON(storageKeyExtra), stirrupOverrides:loadJSON(storageKeyStirrup),
     sourceSheets:[], sourceFile:'', rowCount:0, detectedUnits:[],
     filteredKeys:[], mobileIndex:0, modalKey:'',
     failureSearch:'',failureStoryFilter:'all',failureType:'all'
@@ -5890,6 +5896,29 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
   function fmt(n,d=0){return Number(n||0).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});}
   function beamDia(beam){const v=state.diaOverrides[keyOf(beam)];return DIAS.includes(Number(v))?Number(v):state.globalDia;}
   function beamExtra(beam){const v=state.extraOverrides[keyOf(beam)];return EXTRA_OPTIONS.includes(Number(v))?Number(v):state.extraPct;}
+  function beamStirrupDia(beam){const v=state.stirrupOverrides[keyOf(beam)];return STIRRUP_DIAS.includes(Number(v))?Number(v):state.stirrupDia;}
+  function currentUnitMode(){
+    try{return document.documentElement.dataset.unitMode||localStorage.getItem('structural-suite-unit-mode-v1')||'fps';}
+    catch(_){return document.documentElement.dataset.unitMode||'fps';}
+  }
+  function compactInches(mm){
+    const inch=mm/IN_TO_MM, rounded=Math.round(inch*4)/4, whole=Math.floor(rounded+1e-9), frac=Math.round((rounded-whole)*4);
+    if(!frac)return `${whole}`;
+    const map={1:'¼',2:'½',3:'¾'};
+    return whole?`${whole}${map[frac]}`:map[frac];
+  }
+  function spacingDisplay(mm){
+    const mode=currentUnitMode();
+    if(mode==='fps')return `${compactInches(mm)} in c/c`;
+    if(mode==='dual')return `${fmt(mm)} mm c/c (${compactInches(mm)} in)`;
+    return `${fmt(mm)} mm c/c`;
+  }
+  function tightSpacingDisplay(){
+    const mode=currentUnitMode();
+    if(mode==='fps')return '< 2 in c/c — review section';
+    if(mode==='dual')return '< 50 mm c/c (< 2 in) — review section';
+    return '< 50 mm c/c — review section';
+  }
 
   function zonesFor(beam){
     const sorted=beam.stations.slice().sort((a,b)=>a.station-b.station);
@@ -5918,9 +5947,9 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
     const botExtraMid=ceilBars(Math.max(0,e.bot.mid-botStraightArea),dia,0);
     return {env,e,a,topStraight,topExtraLeft,topExtraRight,botStraight,botExtraMid};
   }
-  function layerInfo(n,dia,bMm){
+  function layerInfo(n,dia,bMm,stirrupDia=state.stirrupDia){
     if(!bMm)return {text:'Section width unavailable — fit manually check করুন।',warn:true};
-    const stirrup=state.stirrupDia,clear=Math.max(25,dia),inside=Math.max(0,bMm-2*(state.cover+stirrup));
+    const stirrup=stirrupDia,clear=Math.max(25,dia),inside=Math.max(0,bMm-2*(state.cover+stirrup));
     const max=Math.max(1,Math.floor((inside+clear)/(dia+clear)));
     if(n<=max)return {text:`Approx. fit: ${n} bars in 1 layer (capacity ≈ ${max}/layer, ${stirrup} mm stirrup assumed).`,warn:false};
     let rem=n,layers=[];while(rem>0){const take=Math.min(max,rem);layers.push(take);rem-=take;}
@@ -5952,72 +5981,77 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
     const z=zonesFor(beam),get=arr=>Math.max(0,...arr.map(s=>toMm2PerMm(s,field)));
     return {left:get(z.left),mid:get(z.mid),right:get(z.right)};
   }
-  function effectiveDepth(beam,mainDia){
+  function effectiveDepth(beam,mainDia,stirrupDia){
     if(!beam.hMm)return 0;
-    return Math.max(50,beam.hMm-state.cover-state.stirrupDia-mainDia/2);
+    return Math.max(50,beam.hMm-state.cover-stirrupDia-mainDia/2);
   }
-  function stirrupPerimeter(beam){
+  function stirrupPerimeter(beam,stirrupDia){
     if(!beam.bMm||!beam.hMm)return 0;
-    const b=Math.max(40,beam.bMm-2*(state.cover+state.stirrupDia/2));
-    const h=Math.max(40,beam.hMm-2*(state.cover+state.stirrupDia/2));
+    const b=Math.max(40,beam.bMm-2*(state.cover+stirrupDia/2));
+    const h=Math.max(40,beam.hMm-2*(state.cover+stirrupDia/2));
     return 2*(b+h);
   }
   function standardSpacing(limit){
     if(!Number.isFinite(limit)||limit<=0)return 0;
+    const mode=currentUnitMode();
+    if(mode==='fps'){
+      const standards=[12,10,9,8,7,6,5,4,3.5,3,2.5,2].map(v=>v*IN_TO_MM);
+      return standards.find(v=>v<=limit+1e-6)||Math.max(IN_TO_MM,Math.floor((limit/IN_TO_MM)*4)/4*IN_TO_MM);
+    }
     const standards=[300,275,250,225,200,175,150,125,100,90,80,75,70,60,50];
     return standards.find(v=>v<=limit+1e-6)||Math.max(25,Math.floor(limit/5)*5);
   }
-  function stirrupRecommendation(beam,rate,mainDia,torsionRate=0){
-    const area=state.stirrupLegs*barArea(state.stirrupDia);
+  function stirrupRecommendation(beam,rate,mainDia,torsionRate=0,stirrupDia=state.stirrupDia){
+    const area=state.stirrupLegs*barArea(stirrupDia);
     const demandLimit=rate>1e-9?area/rate:Infinity;
-    const d=effectiveDepth(beam,mainDia);
+    const d=effectiveDepth(beam,mainDia,stirrupDia);
     const shearCap=d?Math.min(300,d/2):300;
-    const ph=stirrupPerimeter(beam);
+    const ph=stirrupPerimeter(beam,stirrupDia);
     const torsionCap=torsionRate>1e-9?(ph?Math.min(300,ph/8):300):Infinity;
     const governing=Math.min(demandLimit,shearCap,torsionCap);
     const spacing=standardSpacing(governing);
-    return {spacing,demandLimit,shearCap,torsionCap,tooTight:governing<50,rate};
+    return {spacing,demandLimit,shearCap,torsionCap,tooTight:governing<50,rate,stirrupDia};
   }
-  function torsionTransverseRecommendation(beam,rate){
-    const area=barArea(state.stirrupDia); // At is conventionally one stirrup leg area
+  function torsionTransverseRecommendation(beam,rate,stirrupDia=state.stirrupDia){
+    const area=barArea(stirrupDia); // At = area of one closed-stirrup leg
     const demandLimit=rate>1e-9?area/rate:Infinity;
-    const ph=stirrupPerimeter(beam);
+    const ph=stirrupPerimeter(beam,stirrupDia);
     const cap=ph?Math.min(300,ph/8):300;
     const governing=Math.min(demandLimit,cap);
-    return {spacing:standardSpacing(governing),demandLimit,cap,tooTight:governing<50,rate};
+    return {spacing:standardSpacing(governing),demandLimit,cap,tooTight:governing<50,rate,stirrupDia};
   }
-  function transverseData(beam,mainDia){
+  function transverseData(beam,mainDia,stirrupDia=beamStirrupDia(beam)){
     const total=maxZoneRate(beam,'transRaw'),tors=maxZoneRate(beam,'tTransRaw');
     return {
-      left:stirrupRecommendation(beam,total.left,mainDia,tors.left),
-      mid:stirrupRecommendation(beam,total.mid,mainDia,tors.mid),
-      right:stirrupRecommendation(beam,total.right,mainDia,tors.right),
-      torsionRate:Math.max(tors.left,tors.mid,tors.right)
+      left:stirrupRecommendation(beam,total.left,mainDia,tors.left,stirrupDia),
+      mid:stirrupRecommendation(beam,total.mid,mainDia,tors.mid,stirrupDia),
+      right:stirrupRecommendation(beam,total.right,mainDia,tors.right,stirrupDia),
+      torsionRate:Math.max(tors.left,tors.mid,tors.right),stirrupDia
     };
   }
-  function transverseCard(label,data){
-    const schedule=data.tooTight?`< 50 mm — review section`:`${state.stirrupLegs}L-${state.stirrupDia} @ ${data.spacing||300} mm`;
+  function transverseCard(label,data,stirrupDia=data.stirrupDia||state.stirrupDia){
+    const schedule=data.tooTight?tightSpacingDisplay():`${stirrupDia} mm @ ${spacingDisplay(data.spacing||300)}`;
     const note=data.rate>0?`ETABS total transverse demand ≈ ${fmt(data.rate,3)} mm²/mm`:'No numeric ATrnTotal demand found';
-    return `<div class="brd-transverse-card ${data.tooTight?'fail':''}"><small>${label}</small><strong>${schedule}</strong><span>${note}. Calculated spacing is rounded down; final code spacing and constructability must be checked.</span></div>`;
+    return `<div class="brd-transverse-card ${data.tooTight?'fail':''}"><small>${label}</small><strong>${schedule}</strong><span>${state.stirrupLegs}-leg closed stirrup. ${note}. Spacing is rounded down to a practical ${currentUnitMode()==='fps'?'inch':'metric'} increment; final code spacing and constructability must be checked.</span></div>`;
   }
-  function torsionDetail(beam,extraPct){
+  function torsionDetail(beam,extraPct,stirrupDia=beamStirrupDia(beam)){
     const factor=1+extraPct/100;
     const req=maxStationField(beam,'tLngRaw',toMm2)*factor;
     const tRate=maxStationField(beam,'tTransRaw',toMm2PerMm);
     let count=req>0?Math.max(4,Math.ceil(req/barArea(state.torsionDia))):0;
     if(count%2)count++;
-    const trans=torsionTransverseRecommendation(beam,tRate);
-    return {req,count,tRate,trans};
+    const trans=torsionTransverseRecommendation(beam,tRate,stirrupDia);
+    return {req,count,tRate,trans,stirrupDia};
   }
-  function torsionBlock(beam,extraPct){
-    const td=torsionDetail(beam,extraPct),torsionRelevant=td.req>0||td.tRate>0||hasTorsionMessage(beam);
+  function torsionBlock(beam,extraPct,stirrupDia=beamStirrupDia(beam)){
+    const td=torsionDetail(beam,extraPct,stirrupDia),torsionRelevant=td.req>0||td.tRate>0||hasTorsionMessage(beam);
     if(!torsionRelevant)return '';
     const countText=td.count?`${td.count}-${state.torsionDia} mm total perimeter bars`:'ETABS longitudinal torsion area not reported';
-    const transText=td.tRate>0?(td.trans.tooTight?`Closed ${state.stirrupDia} mm @ < 50 mm — section review`:`Closed ${state.stirrupDia} mm @ ${td.trans.spacing} mm`):'No separate TTrnRebar demand';
+    const transText=td.tRate>0?(td.trans.tooTight?`Closed ${stirrupDia} mm @ ${tightSpacingDisplay()}`:`Closed ${stirrupDia} mm @ ${spacingDisplay(td.trans.spacing)}`):'No separate TTrnRebar demand';
     return `<div class="brd-section-caption">Torsion reinforcement</div>
       <div class="brd-torsion-detail">
         <div class="brd-transverse-card torsion"><small>LONGITUDINAL TORSION STEEL</small><strong>${countText}</strong><span>Required A<sub>l</sub> ≈ ${fmt(td.req)} mm² after selected addition. Bars are distributed around the closed-stirrup perimeter.</span></div>
-        <div class="brd-transverse-card torsion"><small>TORSION CLOSED STIRRUP</small><strong>${transText}</strong><span>ETABS TTrn demand ≈ ${fmt(td.tRate,3)} mm²/mm. Final ACI/BNBC detailing governs.</span></div>
+        <div class="brd-transverse-card torsion"><small>TORSION CLOSED STIRRUP</small><strong>${transText}</strong><span>ETABS TTrn demand ≈ ${fmt(td.tRate,3)} mm²/mm. Selected stirrup: ${stirrupDia} mm, ${state.stirrupLegs}-leg closed link. Final ACI/BNBC detailing governs.</span></div>
       </div>
       <div class="brd-torsion-note"><b>Corner torsion bar বনাম flexural bar:</b> আলাদা physical location দরকার নেই। Continuous এবং properly anchored top/bottom corner flexural bars প্রয়োজনীয় torsion longitudinal area-এর অংশ হিসেবে গণ্য হতে পারে। এখানে দেখানো সংখ্যা হলো <b>total perimeter provision</b>, automatic “extra bar” নয়।</div>`;
   }
@@ -6101,20 +6135,25 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
     const token=encodeURIComponent(keyOf(beam)),override=state.extraOverrides[keyOf(beam)];
     return `<select onchange="ssSetBeamExtra('${token}',this.value)"><option value="global" ${override==null?'selected':''}>Global (+${state.extraPct}%)</option>${EXTRA_OPTIONS.map(v=>`<option value="${v}" ${Number(override)===v?'selected':''}>+${v}%</option>`).join('')}</select>`;
   }
+  function stirrupSelect(beam){
+    const token=encodeURIComponent(keyOf(beam)),override=state.stirrupOverrides[keyOf(beam)];
+    return `<select onchange="ssSetBeamStirrup('${token}',this.value)"><option value="global" ${override==null?'selected':''}>Global (${state.stirrupDia} mm)</option>${STIRRUP_DIAS.map(d=>`<option value="${d}" ${Number(override)===d?'selected':''}>${d} mm</option>`).join('')}</select>`;
+  }
   function beamCard(beam,index){
-    const dia=beamDia(beam),extra=beamExtra(beam),r=design(beam,dia,extra),raw=r.env.raw,adj=r.env.adjusted;
-    const maxLine=Math.max(r.topStraight+r.topExtraLeft,r.topStraight+r.topExtraRight,r.botStraight+r.botExtraMid),fit=layerInfo(maxLine,dia,beam.bMm);
+    const dia=beamDia(beam),extra=beamExtra(beam),stirrupDia=beamStirrupDia(beam),r=design(beam,dia,extra),raw=r.env.raw,adj=r.env.adjusted;
+    const maxLine=Math.max(r.topStraight+r.topExtraLeft,r.topStraight+r.topExtraRight,r.botStraight+r.botExtraMid),fit=layerInfo(maxLine,dia,beam.bMm,stirrupDia);
     const bad=beam.statuses.length||beam.warnings.length||beam.errors.length;
     const dims=beam.bMm&&beam.hMm?`${fmt(beam.bMm)} × ${fmt(beam.hMm)} mm`:'size not detected';
-    const token=encodeURIComponent(keyOf(beam)),tr=transverseData(beam,dia);
-    return `<article class="brd-card" data-beam-key="${token}" data-beam-index="${index}"><div class="brd-card-head"><div class="brd-title-wrap"><div class="brd-badge">${escapeHtml(niceLabel(beam.label)).replace('-','<br>')}</div><div class="brd-title"><h3>${escapeHtml(niceLabel(beam.label))}</h3><div class="brd-meta">${escapeHtml(beam.story)} · ETABS ${escapeHtml(beam.label)} · ${escapeHtml(beam.section)} (${dims}) · ID ${escapeHtml(beam.uniqueName)}</div>${bad?'<span class="brd-error-flag">Check ETABS message</span>':''}</div></div><div class="brd-card-selects"><div><label>Main bar</label>${diaSelect(beam,dia)}</div><div><label>Additional As</label>${extraSelect(beam,extra)}</div><div class="brd-wide-select"><label>Shear / torsion detailing basis</label><select disabled><option>${state.stirrupLegs}L-${state.stirrupDia} mm stirrup · ${state.torsionDia} mm torsion bar</option></select></div></div></div>
-      <div class="brd-card-body"><div class="brd-adjust-chip">ETABS demand ${extra?`+ ${extra}%`:'without addition'} · bar count rounded up</div><div class="brd-envelope">${envBox('LEFT SUPPORT',raw.top.left,adj.top.left,raw.bot.left,adj.bot.left,extra)}${envBox('MID-SPAN',raw.top.mid,adj.top.mid,raw.bot.mid,adj.bot.mid,extra)}${envBox('RIGHT SUPPORT',raw.top.right,adj.top.right,raw.bot.right,adj.bot.right,extra)}</div>
+    const token=encodeURIComponent(keyOf(beam)),tr=transverseData(beam,dia,stirrupDia);
+    return `<article class="brd-card" data-beam-key="${token}" data-beam-index="${index}"><div class="brd-card-head"><div class="brd-title-wrap"><div class="brd-badge">${escapeHtml(niceLabel(beam.label)).replace('-','<br>')}</div><div class="brd-title"><h3>${escapeHtml(niceLabel(beam.label))}</h3><div class="brd-meta">${escapeHtml(beam.story)} · ETABS ${escapeHtml(beam.label)} · ${escapeHtml(beam.section)} (${dims}) · ID ${escapeHtml(beam.uniqueName)}</div>${bad?'<span class="brd-error-flag">Check ETABS message</span>':''}</div></div><div class="brd-card-selects"><div><label>Main bar</label>${diaSelect(beam,dia)}</div><div><label>Additional As</label>${extraSelect(beam,extra)}</div><div><label>Stirrup bar</label>${stirrupSelect(beam)}</div><div><label>Stirrup legs</label><select disabled><option>${state.stirrupLegs}-leg closed</option></select></div><div class="brd-wide-select"><label>Torsion longitudinal bar</label><select disabled><option>${state.torsionDia} mm perimeter bar basis</option></select></div></div></div>
+      <div class="brd-card-body"><div class="brd-adjust-chip">ETABS demand ${extra?`+ ${extra}%`:'without addition'} · ${stirrupDia} mm stirrup selected · spacing shown in ${currentUnitMode()==='fps'?'inches':currentUnitMode()==='dual'?'mm + inches':'mm'}</div><div class="brd-envelope">${envBox('LEFT SUPPORT',raw.top.left,adj.top.left,raw.bot.left,adj.bot.left,extra)}${envBox('MID-SPAN',raw.top.mid,adj.top.mid,raw.bot.mid,adj.bot.mid,extra)}${envBox('RIGHT SUPPORT',raw.top.right,adj.top.right,raw.bot.right,adj.bot.right,extra)}</div>
       <div class="brd-section-caption">Flexural reinforcement</div>
       <div class="brd-schedule">${scheduleItem('Top straight — full length',r.topStraight,dia,adj.top.mid,'straight')}${scheduleItem('Top extra — left support',r.topExtraLeft,dia,Math.max(0,adj.top.left-r.topStraight*r.a),'extra')}${scheduleItem('Top extra — right support',r.topExtraRight,dia,Math.max(0,adj.top.right-r.topStraight*r.a),'extra')}${scheduleItem('Bottom straight — full length',r.botStraight,dia,Math.max(adj.bot.left,adj.bot.right),'straight')}${scheduleItem('Bottom extra — middle',r.botExtraMid,dia,Math.max(0,adj.bot.mid-r.botStraight*r.a),'extra')}</div>
-      <div class="brd-section-caption">Stirrup spacing from ETABS ATrnTotal</div>
-      <div class="brd-transverse-grid">${transverseCard('LEFT SUPPORT',tr.left)}${transverseCard('MID-SPAN',tr.mid)}${transverseCard('RIGHT SUPPORT',tr.right)}</div>
-      ${torsionBlock(beam,extra)}${limitAlert(beam)}${sketch(beam,dia,r)}<div class="brd-fit ${fit.warn?'warn':''}">${fit.text}</div>${warningBlock(beam)}${rawTable(beam,extra)}</div></article>`;
+      <div class="brd-section-caption">Stirrup schedule from ETABS ATrnTotal</div>
+      <div class="brd-transverse-grid">${transverseCard('LEFT SUPPORT',tr.left,stirrupDia)}${transverseCard('MID-SPAN',tr.mid,stirrupDia)}${transverseCard('RIGHT SUPPORT',tr.right,stirrupDia)}</div>
+      ${torsionBlock(beam,extra,stirrupDia)}${limitAlert(beam)}${sketch(beam,dia,r)}<div class="brd-fit ${fit.warn?'warn':''}">${fit.text}</div>${warningBlock(beam)}${rawTable(beam,extra)}</div></article>`;
   }
+
 
   function failureClass(beam){
     if(hasCombinedFailure(beam))return {key:'combined',label:'Combined shear + torsion',reason:'Support-এর কাছে shear এবং eccentric/cantilever load-এর torsion একসঙ্গে concrete section-এর maximum stress limit ছাড়িয়েছে।'};
@@ -6130,19 +6169,20 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
     return '<b>Priority:</b> Controlling combination ও exact ETABS message review করে সংশ্লিষ্ট flexure, reinforcement limit, geometry বা detailing check করুন।';
   }
   function failureCard(beam){
-    const cls=failureClass(beam),rows=failedStations(beam),dia=beamDia(beam),tr=transverseData(beam,dia),extra=beamExtra(beam);
+    const cls=failureClass(beam),rows=failedStations(beam),dia=beamDia(beam),stirrupDia=beamStirrupDia(beam),tr=transverseData(beam,dia,stirrupDia),extra=beamExtra(beam);
     const stationTags=rows.map(s=>`<span class="efa-station">Sta ${fmt(s.station,2)}</span>`).join('');
     const messages=[...new Set(rows.flatMap(s=>[s.status,s.warn,s.err]).filter(isMessage))];
     const dims=beam.bMm&&beam.hMm?`${fmt(beam.bMm)} × ${fmt(beam.hMm)} mm`:'size not detected';
     return `<article class="efa-card"><div class="efa-card-head"><div class="efa-title"><div class="efa-badge">${escapeHtml(niceLabel(beam.label)).replace('-','<br>')}</div><div><h3>${escapeHtml(niceLabel(beam.label))}</h3><div class="efa-meta">${escapeHtml(beam.story)} · ${escapeHtml(beam.section)} (${dims}) · ID ${escapeHtml(beam.uniqueName)}</div></div></div><span class="efa-kind">${cls.label}</span></div>
       <div class="efa-card-body"><div class="efa-failed-stations">${stationTags||'<span class="efa-station">Beam-level message</span>'}</div>
       <div class="efa-reason"><strong>কেন fail করেছে</strong>${cls.reason}</div>
-      <div class="brd-section-caption">Calculated transverse reinforcement</div>
-      <div class="brd-transverse-grid">${transverseCard('LEFT SUPPORT',tr.left)}${transverseCard('MID-SPAN',tr.mid)}${transverseCard('RIGHT SUPPORT',tr.right)}</div>
-      ${torsionBlock(beam,extra)}${limitAlert(beam)}
+      <div class="brd-section-caption">Calculated transverse reinforcement · selected ${stirrupDia} mm</div>
+      <div class="brd-transverse-grid">${transverseCard('LEFT SUPPORT',tr.left,stirrupDia)}${transverseCard('MID-SPAN',tr.mid,stirrupDia)}${transverseCard('RIGHT SUPPORT',tr.right,stirrupDia)}</div>
+      ${torsionBlock(beam,extra,stirrupDia)}${limitAlert(beam)}
       <div class="efa-solution">${solutionText(beam)}</div>
       <div class="efa-message"><b>ETABS:</b> ${messages.map(escapeHtml).join(' · ')||escapeHtml(messageText(beam))}</div></div></article>`;
   }
+
   function failureBeams(){
     return state.beams.filter(b=>allMessages(b).length);
   }
@@ -6205,17 +6245,19 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
     }
   }
   function modalSummary(r,dia,beam){
+    const stirrupDia=beamStirrupDia(beam);
     const bars=[
       ['Top straight',r.topStraight?`${r.topStraight}-${dia} mm`:'None'],['Left top extra',r.topExtraLeft?`${r.topExtraLeft}-${dia} mm`:'None'],['Right top extra',r.topExtraRight?`${r.topExtraRight}-${dia} mm`:'None'],
       ['Bottom straight',r.botStraight?`${r.botStraight}-${dia} mm`:'None'],['Mid bottom extra',r.botExtraMid?`${r.botExtraMid}-${dia} mm`:'None']
     ];
-    const tr=transverseData(beam,dia),td=torsionDetail(beam,beamExtra(beam));
-    bars.push(['Left stirrup',tr.left.tooTight?'<50 mm':`${state.stirrupLegs}L-${state.stirrupDia}@${tr.left.spacing} mm`]);
-    bars.push(['Mid stirrup',tr.mid.tooTight?'<50 mm':`${state.stirrupLegs}L-${state.stirrupDia}@${tr.mid.spacing} mm`]);
-    bars.push(['Right stirrup',tr.right.tooTight?'<50 mm':`${state.stirrupLegs}L-${state.stirrupDia}@${tr.right.spacing} mm`]);
+    const tr=transverseData(beam,dia,stirrupDia),td=torsionDetail(beam,beamExtra(beam),stirrupDia);
+    bars.push(['Left stirrup',tr.left.tooTight?tightSpacingDisplay():`${stirrupDia} mm @ ${spacingDisplay(tr.left.spacing)}`]);
+    bars.push(['Mid stirrup',tr.mid.tooTight?tightSpacingDisplay():`${stirrupDia} mm @ ${spacingDisplay(tr.mid.spacing)}`]);
+    bars.push(['Right stirrup',tr.right.tooTight?tightSpacingDisplay():`${stirrupDia} mm @ ${spacingDisplay(tr.right.spacing)}`]);
     if(td.count)bars.push(['Torsion perimeter',`${td.count}-${state.torsionDia} mm total`]);
     return `<div class="brd-diagram-modal-summary">${bars.map(([label,value])=>`<div class="brd-modal-bar"><small>${label}</small><strong>${value}</strong></div>`).join('')}</div>`;
   }
+
   function renderModal(){
     const modal=el('brdDiagramModal');
     if(!state.modalKey){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.classList.remove('brd-modal-open');return;}
@@ -6286,6 +6328,7 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
 
   window.ssSetBeamDia=function(token,value){const key=decodeURIComponent(token);if(value==='global')delete state.diaOverrides[key];else state.diaOverrides[key]=Number(value);saveJSON(storageKeyDia,state.diaOverrides);render();};
   window.ssSetBeamExtra=function(token,value){const key=decodeURIComponent(token);if(value==='global')delete state.extraOverrides[key];else state.extraOverrides[key]=Number(value);saveJSON(storageKeyExtra,state.extraOverrides);render();};
+  window.ssSetBeamStirrup=function(token,value){const key=decodeURIComponent(token);if(value==='global')delete state.stirrupOverrides[key];else state.stirrupOverrides[key]=Number(value);saveJSON(storageKeyStirrup,state.stirrupOverrides);render();};
   window.ssBeamNav=function(delta){if(!state.filteredKeys.length)return;state.mobileIndex=Math.max(0,Math.min(state.mobileIndex+Number(delta||0),state.filteredKeys.length-1));updateMobileUI(true);};
   window.ssOpenBeamDiagram=function(token){const key=decodeURIComponent(token);state.modalKey=key;const i=state.filteredKeys.indexOf(key);if(i>=0)state.mobileIndex=i;renderModal();};
   window.ssOpenCurrentBeamDiagram=function(){const beam=activeBeam();if(beam)window.ssOpenBeamDiagram(encodeURIComponent(keyOf(beam)));};
@@ -6306,7 +6349,7 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
   el('brdStirrupDia').addEventListener('change',e=>{state.stirrupDia=Number(e.target.value);render();});
   el('brdStirrupLegs').addEventListener('change',e=>{state.stirrupLegs=Number(e.target.value);render();});
   el('brdTorsionDia').addEventListener('change',e=>{state.torsionDia=Number(e.target.value);render();});
-  el('brdResetOverrides').addEventListener('click',()=>{state.diaOverrides={};state.extraOverrides={};saveJSON(storageKeyDia,{});saveJSON(storageKeyExtra,{});render();setStatus('সব beam এখন global main bar, stirrup এবং torsion setting ব্যবহার করছে।','ok');});
+  el('brdResetOverrides').addEventListener('click',()=>{state.diaOverrides={};state.extraOverrides={};state.stirrupOverrides={};saveJSON(storageKeyDia,{});saveJSON(storageKeyExtra,{});saveJSON(storageKeyStirrup,{});render();setStatus('সব beam এখন global main bar, stirrup এবং torsion setting ব্যবহার করছে।','ok');});
   el('brdClearFilters').addEventListener('click',()=>{state.search='';state.storyFilter='all';state.mobileIndex=0;el('brdSearch').value='';render();setStatus('Floor এবং beam-name filter clear করা হয়েছে।','ok');});
   el('brdPrintBtn').addEventListener('click',()=>window.print());
   if(el('efaPrintBtn'))el('efaPrintBtn').addEventListener('click',()=>window.print());
@@ -6349,6 +6392,7 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
     beamObserver.observe(etabsPage,{attributes:true,attributeFilter:['class','style']});
   }
   document.querySelectorAll('.page-tab-btn,.etabs-tabs .tab-btn').forEach(btn=>btn.addEventListener('click',()=>setTimeout(()=>{syncBeamPanelActive();renderFailure();},0)));
+  window.addEventListener('structuralSuiteUnitChange',()=>render());
   syncBeamPanelActive();
   render();
 })();
