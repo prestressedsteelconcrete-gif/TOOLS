@@ -1660,7 +1660,82 @@ html[data-lang="bn"] :is(h1,h2,h3,.brand,.side-link,.tab-btn,button,label){
 
 
 <style id="multi-estimator-style">
-.multi-est-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 12px}.multi-est-tab{width:auto!important;margin:0!important;padding:9px 14px!important;background:color-mix(in srgb,var(--panel) 82%,transparent)!important;color:var(--text)!important;border:1px solid var(--border)!important}.multi-est-tab.active{background:var(--accent)!important;color:white!important;border-color:transparent!important}.multi-est-pane{display:none}.multi-est-pane.active{display:block}.multi-schedule{min-width:1120px}.multi-schedule input,.multi-schedule select{min-width:72px}.multi-schedule .m-mark{min-width:64px}.multi-schedule .row-del-btn{min-width:38px}.building-cost-highlight{font-size:1.08em;font-weight:800}
+/* Estimate page: clear project flow, multi-mark schedules and transparent budget bridge */
+#page-estimate{align-items:stretch!important;gap:18px}
+#page-estimate>.estimate-hero{order:0}
+#page-estimate>#estimateRatesCard{order:1}
+#page-estimate>#buildingScheduleEstimator{order:2}
+#page-estimate>#individualEstimateCards{order:3}
+.estimate-hero{width:100%;position:relative;overflow:hidden;padding:25px;border:1px solid color-mix(in srgb,var(--accent) 25%,var(--card-border));border-radius:24px;background:radial-gradient(circle at 92% 12%,rgba(var(--accent-rgb),.2),transparent 34%),linear-gradient(145deg,color-mix(in srgb,var(--card) 96%,transparent),color-mix(in srgb,var(--card-soft) 90%,transparent));box-shadow:var(--shadow-md)}
+.estimate-hero:after{content:"";position:absolute;right:-58px;bottom:-78px;width:220px;height:220px;border:32px solid rgba(var(--accent-rgb),.08);border-radius:50%;pointer-events:none}
+.estimate-eyebrow{display:inline-flex;align-items:center;gap:7px;margin-bottom:8px;padding:6px 10px;border:1px solid rgba(var(--accent-rgb),.25);border-radius:999px;background:rgba(var(--accent-rgb),.08);font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.estimate-hero h1{margin:0;max-width:780px;font-size:clamp(25px,4vw,42px);line-height:1.08}
+.estimate-hero p{max-width:820px;margin:10px 0 0;color:var(--muted);font-size:13.5px;line-height:1.7}
+.estimate-hero-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:1}
+.estimate-hero-actions button{width:auto!important;margin:0!important;padding:10px 14px!important}
+#estimateRatesCard,#buildingScheduleEstimator,#individualEstimateCards{width:100%}
+#estimateRatesCard{border-color:color-mix(in srgb,var(--amber-solid,#f59e0b) 28%,var(--card-border));background:radial-gradient(circle at 100% 0,color-mix(in srgb,var(--amber-solid,#f59e0b) 10%,transparent),transparent 38%),var(--card)}
+#individualEstimateCards:before{content:"Quick Single-Element Calculators";grid-column:1/-1;display:block;margin:5px 0 -2px;font-size:12px;font-weight:850;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.building-est-head{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(120px,.45fr));gap:10px;align-items:stretch;margin-bottom:16px}
+.building-est-copy{padding:3px 4px}.building-est-copy h2{margin:0 0 7px;font-size:clamp(21px,3vw,31px)}.building-est-copy p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.65}
+.building-mini-stat{display:flex;flex-direction:column;justify-content:center;min-height:86px;padding:12px 13px;border:1px solid var(--card-border);border-radius:15px;background:color-mix(in srgb,var(--card-soft) 88%,transparent)}
+.building-mini-stat strong{font-size:21px;line-height:1.1;color:var(--accent)}.building-mini-stat span{margin-top:5px;font-size:10.5px;color:var(--muted)}
+.building-project-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 140px;gap:10px;padding:14px;border:1px solid var(--card-border);border-radius:17px;background:var(--card-soft)}
+.multi-est-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 12px;padding:6px;border:1px solid var(--card-border);border-radius:16px;background:var(--card-soft)}
+.multi-est-tab{display:inline-flex!important;align-items:center;gap:7px;width:auto!important;margin:0!important;padding:10px 14px!important;background:transparent!important;color:var(--text)!important;border:1px solid transparent!important;border-radius:11px!important}
+.multi-est-tab:hover{background:var(--card)!important;border-color:var(--card-border)!important}.multi-est-tab.active{background:var(--accent)!important;color:white!important;border-color:transparent!important;box-shadow:0 8px 20px rgba(var(--accent-rgb),.22)}
+.multi-tab-count{display:inline-grid;place-items:center;min-width:21px;height:21px;padding:0 6px;border-radius:999px;background:rgba(255,255,255,.18);font-size:10px;font-weight:850}.multi-est-tab:not(.active) .multi-tab-count{background:rgba(var(--accent-rgb),.1);color:var(--accent)}
+.multi-est-pane{display:none;padding:13px;border:1px solid var(--card-border);border-radius:17px;background:color-mix(in srgb,var(--card) 94%,transparent)}.multi-est-pane.active{display:block}
+.multi-pane-tip{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:0 0 10px;color:var(--muted);font-size:11.5px}.multi-pane-tip strong{color:var(--text)}
+.multi-schedule{min-width:1180px}.multi-column-schedule{min-width:1450px}.multi-beam-schedule{min-width:1840px}.multi-schedule input,.multi-schedule select{min-width:70px}.multi-schedule .m-mark{min-width:70px}.multi-schedule .row-del-btn{min-width:38px}
+.building-settings{margin-top:17px;padding:15px;border:1px solid var(--card-border);border-radius:18px;background:linear-gradient(145deg,color-mix(in srgb,var(--card-soft) 96%,transparent),color-mix(in srgb,var(--accent-soft) 24%,transparent))}
+.building-settings-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:11px}.building-settings-title strong{font-size:13px}.building-settings-title span{font-size:10.5px;color:var(--muted)}
+.building-control-grid{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:10px}.building-control-grid+.building-control-grid{margin-top:10px}
+.building-toggle{display:flex;align-items:center;gap:9px;min-height:43px;padding:8px 10px;border:1px solid var(--card-border);border-radius:11px;background:var(--card)}.building-toggle input{width:auto!important}.building-toggle span{font-size:11.5px;color:var(--text)}
+.building-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.building-actions button{width:auto!important;margin:0!important}.building-actions .primary-action{min-width:230px}
+.building-result-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}.building-result-head h3{margin:0;font-size:18px}.building-result-head p{margin:4px 0 0;font-size:11px;color:var(--muted)}
+.building-result-status{padding:7px 10px;border-radius:999px;background:rgba(var(--accent-rgb),.09);color:var(--accent);font-size:10.5px;font-weight:750;white-space:nowrap}
+.cost-bridge{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:14px 0}.cost-bridge-item{padding:12px;border:1px solid var(--card-border);border-radius:13px;background:var(--card-soft)}.cost-bridge-item span{display:block;font-size:10px;color:var(--muted)}.cost-bridge-item strong{display:block;margin-top:6px;font-size:15px}.cost-bridge-item.final{background:linear-gradient(135deg,rgba(var(--accent-rgb),.12),rgba(var(--accent-rgb),.04));border-color:rgba(var(--accent-rgb),.28)}.cost-bridge-item.final strong{color:var(--accent);font-size:18px}
+.segment-share-list{display:grid;gap:8px;margin-top:13px}.segment-share-row{display:grid;grid-template-columns:86px minmax(0,1fr) 110px;gap:9px;align-items:center;font-size:11px}.segment-share-track{height:8px;border-radius:999px;background:var(--card-soft);overflow:hidden}.segment-share-fill{display:block;height:100%;width:var(--share,0%);border-radius:inherit;background:linear-gradient(90deg,var(--accent),var(--accent-2))}.segment-share-row strong{text-align:right;font-size:11px}
+.building-table-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:17px 0 8px}.building-table-title strong{font-size:12px}.building-table-title span{font-size:10px;color:var(--muted)}
+.building-cost-highlight{font-size:1.08em;font-weight:800;color:var(--accent)}
+.building-scope-note{margin-top:14px;padding:12px 13px;border-left:3px solid var(--amber-solid,#f59e0b);border-radius:9px;background:color-mix(in srgb,var(--amber-solid,#f59e0b) 8%,var(--card));font-size:11.5px;line-height:1.6;color:var(--muted)}
+@media(max-width:980px){.building-est-head{grid-template-columns:repeat(3,1fr)}.building-est-copy{grid-column:1/-1}.building-project-grid{grid-template-columns:repeat(2,1fr)}.building-control-grid{grid-template-columns:repeat(2,1fr)}.cost-bridge{grid-template-columns:repeat(2,1fr)}.cost-bridge-item.final{grid-column:1/-1}}
+@media(max-width:620px){.estimate-hero{padding:19px 16px}.estimate-hero-actions button{flex:1 1 145px}.building-est-head{grid-template-columns:1fr}.building-est-copy{grid-column:auto}.building-project-grid,.building-control-grid{grid-template-columns:1fr}.multi-est-tabs{display:grid;grid-template-columns:1fr 1fr}.multi-est-tab{justify-content:center!important;padding:9px 8px!important}.building-actions button{flex:1 1 145px}.building-actions .primary-action{min-width:0;flex-basis:100%}.cost-bridge{grid-template-columns:1fr}.cost-bridge-item.final{grid-column:auto}.building-result-head{flex-direction:column}.segment-share-row{grid-template-columns:72px minmax(0,1fr);}.segment-share-row strong{grid-column:2;text-align:left;margin-top:-5px}}
+@media print{#page-estimate>.estimate-hero,#estimateRatesCard,#individualEstimateCards,.multi-est-tabs,.multi-est-pane,.building-settings,.building-actions,.building-scope-note,.side-nav,.topbar{display:none!important}#page-estimate>#buildingScheduleEstimator{display:block!important;box-shadow:none!important;border:0!important;padding:0!important}.buildingScheduleResult{display:block!important}.result-wrap{box-shadow:none!important}.segment-share-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+<style id="foundation-tank-estimator-styles">
+/* ===== Foundation subtype schedules + BNBC tank sizing ===== */
+.foundation-schedule-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:10px;padding:12px 14px;border:1px solid var(--card-border);border-radius:15px;background:var(--card-soft)}
+.foundation-schedule-head strong{display:block;font-size:14px;margin-bottom:4px}.foundation-schedule-head span{font-size:11.5px;color:var(--muted)}
+.foundation-quick-add{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.foundation-quick-add button{width:auto!important;flex:0 0 auto;padding:7px 10px!important;font-size:11px!important;border-radius:10px!important}
+.foundation-type-tabs{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:8px;margin:8px 0 12px}
+.foundation-type-tab{display:flex!important;align-items:center;gap:9px;text-align:left!important;padding:11px 12px!important;min-height:58px;border:1px solid var(--card-border)!important;border-radius:14px!important;background:var(--card)!important;color:var(--text)!important;box-shadow:none!important}
+.foundation-type-tab:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--card-border))!important}.foundation-type-tab.active{border-color:var(--accent)!important;background:color-mix(in srgb,var(--accent) 10%,var(--card))!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 12%,transparent)!important}
+.foundation-type-icon{display:grid;place-items:center;width:31px;height:31px;flex:0 0 31px;border-radius:10px;background:color-mix(in srgb,var(--accent) 12%,var(--card-soft));color:var(--accent);font-size:16px}.foundation-type-copy{min-width:0;flex:1}.foundation-type-copy strong{display:block;font-size:12px}.foundation-type-copy small{display:block;color:var(--muted);font-size:9.5px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.foundation-type-count{display:grid;place-items:center;min-width:23px;height:23px;padding:0 6px;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%,var(--card-soft));color:var(--accent);font-size:10px;font-weight:800}
+.foundation-type-pane{display:none}.foundation-type-pane.active{display:block}.foundation-method-note{margin-top:10px;padding:9px 11px;border-radius:11px;background:color-mix(in srgb,var(--accent) 7%,var(--card-soft));color:var(--muted);font-size:10.5px;line-height:1.45}.foundation-method-note strong{color:var(--text)}
+.foundation-schedule-table{min-width:1450px}.foundation-schedule-table.combined{min-width:1320px}.foundation-schedule-table.raft{min-width:1180px}.foundation-schedule-table.pile{min-width:1720px}
+.tank-module-intro{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:12px;padding:13px 14px;border:1px solid color-mix(in srgb,var(--accent) 24%,var(--card-border));border-radius:15px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 7%,var(--card)),var(--card))}.tank-module-intro strong{display:block;font-size:14px}.tank-module-intro p{margin:4px 0 0;color:var(--muted);font-size:11.5px;line-height:1.5}.bnbc-code-pill{white-space:nowrap;padding:6px 9px;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%,var(--card-soft));color:var(--accent);font-size:10px;font-weight:800}
+.tank-calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.tank-calc-card{padding:15px;border:1px solid var(--card-border);border-radius:16px;background:var(--card)}.tank-calc-card h3{margin:0 0 3px;font-size:15px}.tank-calc-card>p{margin:0 0 12px;color:var(--muted);font-size:10.5px;line-height:1.5}.tank-input-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.tank-input-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.tank-calc-card .field label{font-size:9.5px}.tank-calc-card button{margin-top:11px}.tank-result-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:12px}.tank-result-item{padding:9px 10px;border:1px solid var(--card-border);border-radius:11px;background:var(--card-soft);min-width:0}.tank-result-item span{display:block;color:var(--muted);font-size:8.5px;text-transform:uppercase;letter-spacing:.035em}.tank-result-item strong{display:block;margin-top:3px;font-size:12px;overflow-wrap:anywhere}.tank-result-item.hot{border-color:color-mix(in srgb,var(--accent) 40%,var(--card-border));background:color-mix(in srgb,var(--accent) 8%,var(--card-soft))}.tank-code-note{margin-top:10px;padding:9px 10px;border-left:3px solid var(--accent);border-radius:9px;background:color-mix(in srgb,var(--accent) 6%,var(--card-soft));font-size:9.8px;color:var(--muted);line-height:1.5}.tank-code-note strong{color:var(--text)}
+@media(max-width:1050px){.foundation-type-tabs{grid-template-columns:1fr 1fr}.tank-calc-grid{grid-template-columns:1fr}.tank-input-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.foundation-schedule-head{flex-direction:column}.foundation-quick-add{justify-content:flex-start}.foundation-type-tabs{grid-template-columns:1fr 1fr}.foundation-type-tab{padding:9px!important}.foundation-type-copy small{display:none}.tank-module-intro{flex-direction:column}.tank-input-grid,.tank-input-grid.two{grid-template-columns:1fr}.tank-result-grid{grid-template-columns:1fr 1fr}}
+
+
+</style>
+
+<style id="structural-suite-tanks-export-pro-v2">
+  #page-tanks{padding-bottom:38px}
+  .tank-page-hero{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:26px 28px;margin-bottom:16px;border:1px solid color-mix(in srgb,var(--accent) 26%,var(--border));border-radius:22px;background:linear-gradient(135deg,color-mix(in srgb,var(--card) 90%,transparent),color-mix(in srgb,var(--accent-soft) 48%,var(--card)));box-shadow:var(--shadow-md);overflow:hidden;position:relative}
+  .tank-page-hero:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-95px;top:-120px;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 25%,transparent),transparent 68%);pointer-events:none}
+  .tank-page-hero>div{position:relative;z-index:1}.tank-page-hero h1{margin:5px 0 7px;font-size:clamp(25px,3vw,40px);line-height:1.12}.tank-page-hero p{margin:0;max-width:820px;color:var(--muted);font-size:13px;line-height:1.7}
+  .tank-page-badges{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:300px}.tank-page-badges span{white-space:nowrap;padding:8px 11px;border-radius:999px;border:1px solid color-mix(in srgb,var(--accent) 25%,var(--border));background:color-mix(in srgb,var(--card) 86%,transparent);font-size:11px;font-weight:800;color:var(--ink);box-shadow:var(--shadow-sm)}
+  .tank-code-alert{margin:0 0 16px;padding:13px 15px;border:1px solid color-mix(in srgb,var(--amber-solid) 28%,var(--border));border-radius:14px;background:color-mix(in srgb,var(--amber-solid) 8%,var(--card));font-size:12px;color:var(--muted);line-height:1.65}.tank-code-alert strong{color:var(--ink)}
+  .tank-standalone-grid{align-items:start}.tank-standalone-grid .tank-calc-card{box-shadow:var(--shadow-md);border-radius:20px}.tank-card-kicker{display:inline-flex;padding:5px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font:800 10px/1.2 var(--mono);letter-spacing:.07em;margin-bottom:9px}.tank-main-action{width:100%;margin-top:15px;min-height:44px}
+  .export-action{display:inline-flex!important;align-items:center;gap:7px}.export-action span{display:grid;place-items:center;width:20px;height:20px;border-radius:6px;background:var(--accent-soft);font-weight:900;color:var(--accent)}
+  #suiteExportToast{position:fixed;right:24px;bottom:24px;z-index:99999;display:flex;align-items:center;gap:10px;max-width:min(390px,calc(100vw - 32px));padding:12px 14px;border:1px solid color-mix(in srgb,var(--accent) 28%,var(--border));border-radius:14px;background:color-mix(in srgb,var(--card) 94%,transparent);box-shadow:var(--shadow-lg);backdrop-filter:blur(14px);transform:translateY(24px);opacity:0;pointer-events:none;transition:.22s ease;color:var(--ink);font-size:12px;font-weight:700}#suiteExportToast.show{transform:none;opacity:1}#suiteExportToast.error{border-color:color-mix(in srgb,var(--danger) 45%,var(--border))}#suiteExportToast i{width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 5px color-mix(in srgb,var(--teal) 14%,transparent)}#suiteExportToast.error i{background:var(--danger);box-shadow:0 0 0 5px color-mix(in srgb,var(--danger) 14%,transparent)}
+  @media(max-width:820px){.tank-page-hero{align-items:flex-start;flex-direction:column;padding:20px}.tank-page-badges{justify-content:flex-start;max-width:none}.tank-input-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:540px){.tank-input-grid{grid-template-columns:1fr}.tank-page-hero h1{font-size:27px}}
+  @media print{#page-tanks .tank-page-hero,#page-tanks .tank-code-alert,#page-tanks .tank-calc-card{box-shadow:none!important}.tank-main-action{display:none!important}}
 </style>
 </head>
 <body>
@@ -1741,6 +1816,10 @@ html[data-lang="bn"] :is(h1,h2,h3,.brand,.side-link,.tab-btn,button,label){
       <button type="button" class="language-option active" data-language="bn" aria-pressed="true">বাংলা</button>
     </div>
   </div>
+  <button class="page-tab-btn side-link" data-page="tanks" title="BNBC 2020 septic tank and underground reservoir calculator">
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c3.5 4.1 6 7.1 6 10a6 6 0 11-12 0c0-2.9 2.5-5.9 6-10z"/><path d="M8.8 14.2a3.5 3.5 0 003.2 2.3"/></svg>
+    Septic &amp; UGR
+  </button>
   <button id="themePickerBtn" class="side-link theme-launcher" type="button" aria-haspopup="dialog" aria-controls="themeDialog">
     <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 100 18h1.5a1.5 1.5 0 000-3H12a2 2 0 010-4h3a6 6 0 000-12h-3z"/><circle cx="7.5" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="10" cy="6.5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
     <span class="theme-launch-label">Themes</span><span id="themeNameBadge">Aurora</span>
@@ -2289,10 +2368,18 @@ html[data-lang="bn"] :is(h1,h2,h3,.brand,.side-link,.tab-btn,button,label){
 <div id="page-estimate" class="page-panel">
 
 
-<h1>RCC Column &amp; Beam Material Estimator</h1>
-<p class="sub">Steel, cement, sand &amp; aggregate quantity + cost calculator &mdash; by Engr. Avash</p>
+<section class="estimate-hero" id="estimateOverview">
+  <span class="estimate-eyebrow">RCC Quantity &amp; Cost Workspace</span>
+  <h1>Building Structural Material &amp; Cost Estimator</h1>
+  <p>Footing, column, beam ও slab-এর একাধিক mark schedule আকারে input করে পুরো structural frame-এর concrete, cement, sand, chips, reinforcement এবং allowance-সহ budget এক জায়গায় হিসাব করুন। নিচের single-element calculators দ্রুত যাচাই বা আলাদা estimate-এর জন্য রাখা হয়েছে।</p>
+  <div class="estimate-hero-actions">
+    <button type="button" class="amberBtn" data-est-jump="buildingScheduleEstimator">Open Full Building Estimate</button>
+    <button type="button" class="ghost" data-est-jump="estimateRatesCard">Set Material Rates</button>
+    <button type="button" class="ghost" data-est-jump="individualEstimateCards">Single Element Calculators</button>
+  </div>
+</section>
 
-<div class="card-grid">
+<div class="card-grid" id="individualEstimateCards">
 
 <!-- ============ FOOTING CARD (pulled from Footing page) ============ -->
 <div class="card">
@@ -2518,60 +2605,168 @@ html[data-lang="bn"] :is(h1,h2,h3,.brand,.side-link,.tab-btn,button,label){
 
 <!-- ============ MULTI-ELEMENT BUILDING ESTIMATOR ============ -->
 <div class="card wide-card" id="buildingScheduleEstimator">
-  <h2 class="tag amber">Building Structural Schedule — Multi Entry</h2>
-  <p style="font-size:12.5px;color:var(--muted);margin-top:-6px;">একই project-এ যতগুলো footing, beam ও slab mark দরকার row আকারে যোগ করুন। প্রতিটি mark-এর quantity, size, thickness এবং reinforcement আলাদাভাবে input করা যাবে।</p>
+  <div class="building-est-head">
+    <div class="building-est-copy">
+      <span class="estimate-eyebrow">Primary Project Estimator</span>
+      <h2>Whole Building Structural Schedule</h2>
+      <p>Sloped isolated, combined, mat/raft, pile + pile cap, column, beam এবং slab—প্রতিটি element-এর যতগুলো mark প্রয়োজন row আকারে যোগ করুন। একই global material rate ও mix ratio ব্যবহার করে mark-wise quantity, segment cost এবং allowance-সহ final structural budget তৈরি হবে। Sidebar-এর “Septic & UGR” tab-এ BNBC septic tank ও underground reservoir sizing আলাদাভাবে দেওয়া আছে।</p>
+    </div>
+    <div class="building-mini-stat"><strong id="buildingStatMarks">0</strong><span>Valid marks</span></div>
+    <div class="building-mini-stat"><strong id="buildingStatUnits">0</strong><span>Total element units</span></div>
+    <div class="building-mini-stat"><strong id="buildingStatSaved">Not saved</strong><span>Schedule status</span></div>
+  </div>
 
-  <div class="multi-est-tabs" role="tablist">
-    <button type="button" class="multi-est-tab active" data-multi-tab="mf">Footing Schedule</button>
-    <button type="button" class="multi-est-tab" data-multi-tab="mb">Beam Schedule</button>
-    <button type="button" class="multi-est-tab" data-multi-tab="ms">Slab Schedule</button>
+  <div class="building-project-grid">
+    <div class="field"><label>Project Name</label><input type="text" id="multiProjectName" placeholder="e.g. Residential Building — Mirpur"></div>
+    <div class="field"><label>Location</label><input type="text" id="multiProjectLocation" placeholder="District / Area"></div>
+    <div class="field"><label>Prepared By</label><input type="text" id="multiPreparedBy" placeholder="Engineer / Estimator"></div>
+    <div class="field"><label>Estimate Date</label><input type="date" id="multiEstimateDate"></div>
+  </div>
+
+  <div class="multi-est-tabs" role="tablist" aria-label="Structural element schedules">
+    <button type="button" class="multi-est-tab active" data-multi-tab="mf">Foundation <span class="multi-tab-count" id="multiCountF">0</span></button>
+    <button type="button" class="multi-est-tab" data-multi-tab="mc">Column <span class="multi-tab-count" id="multiCountC">0</span></button>
+    <button type="button" class="multi-est-tab" data-multi-tab="mb">Beam <span class="multi-tab-count" id="multiCountB">0</span></button>
+    <button type="button" class="multi-est-tab" data-multi-tab="ms">Slab <span class="multi-tab-count" id="multiCountS">0</span></button>
   </div>
 
   <div class="multi-est-pane active" id="multi-pane-mf">
-    <div class="sched-wrap"><table class="sched-table multi-schedule"><thead><tr>
-      <th>Mark</th><th>Qty</th><th>L (ft)</th><th>W (ft)</th><th>Thk (in)</th><th>Cover (in)</th><th>Bar-L mm</th><th>Sp-L in</th><th>Bar-W mm</th><th>Sp-W in</th><th></th>
-    </tr></thead><tbody id="multiFootingBody"></tbody></table></div>
-    <button type="button" class="add-row-btn" id="addMultiFooting">+ Add Footing Mark</button>
+    <div class="foundation-schedule-head">
+      <div><strong>Foundation Schedule</strong><span>Sloped isolated, combined, mat/raft এবং pile + pile cap—প্রতিটি আলাদা schedule ও আলাদা cost segment.</span></div>
+      <div class="foundation-quick-add">
+        <button type="button" class="ghost" data-foundation-add="iso">+ Sloped Isolated</button>
+        <button type="button" class="ghost" data-foundation-add="comb">+ Combined</button>
+        <button type="button" class="ghost" data-foundation-add="raft">+ Mat / Raft</button>
+        <button type="button" class="ghost" data-foundation-add="pile">+ Pile Group</button>
+      </div>
+    </div>
+
+    <div class="foundation-type-tabs" role="tablist" aria-label="Foundation types">
+      <button type="button" class="foundation-type-tab active" data-foundation-tab="iso"><span class="foundation-type-icon">△</span><span class="foundation-type-copy"><strong>Isolated</strong><small>Flat or sloped footing</small></span><span class="foundation-type-count" id="foundationCountIso">0</span></button>
+      <button type="button" class="foundation-type-tab" data-foundation-tab="comb"><span class="foundation-type-icon">▥</span><span class="foundation-type-copy"><strong>Combined</strong><small>Rectangular / trapezoidal</small></span><span class="foundation-type-count" id="foundationCountComb">0</span></button>
+      <button type="button" class="foundation-type-tab" data-foundation-tab="raft"><span class="foundation-type-icon">▱</span><span class="foundation-type-copy"><strong>Mat / Raft</strong><small>Top and bottom mesh</small></span><span class="foundation-type-count" id="foundationCountRaft">0</span></button>
+      <button type="button" class="foundation-type-tab" data-foundation-tab="pile"><span class="foundation-type-icon">♜</span><span class="foundation-type-copy"><strong>Pile</strong><small>Pile + pile cap</small></span><span class="foundation-type-count" id="foundationCountPile">0</span></button>
+    </div>
+
+    <div class="foundation-type-pane active" id="foundation-pane-iso">
+      <div class="multi-pane-tip"><span><strong>Isolated footing:</strong> flat অথবা sloped profile; bottom plan, top pedestal-zone plan, edge thickness ও centre thickness আলাদা দিন।</span><span>Bottom mesh reinforcement</span></div>
+      <div class="sched-wrap"><table class="sched-table multi-schedule foundation-schedule-table"><thead><tr>
+        <th>Mark</th><th>Qty</th><th>Profile</th><th>Bottom L ft</th><th>Bottom W ft</th><th>Top L ft</th><th>Top W ft</th><th>Edge h in</th><th>Centre h in</th><th>Cover in</th><th>Bar-L mm</th><th>Sp-L in</th><th>Bar-W mm</th><th>Sp-W in</th><th></th>
+      </tr></thead><tbody id="multiIsolatedBody"></tbody></table></div>
+      <button type="button" class="add-row-btn" id="addMultiIsolated">+ Add Isolated / Sloped Footing</button>
+      <div class="foundation-method-note"><strong>Sloped volume method:</strong> full-plan edge slab + rectangular-frustum slope from bottom plan to top plan. Flat profile হলে centre thickness দিয়ে full prism ধরা হয়।</div>
+    </div>
+
+    <div class="foundation-type-pane" id="foundation-pane-comb">
+      <div class="multi-pane-tip"><span><strong>Combined footing:</strong> rectangular বা trapezoidal plan, দুই প্রান্তের width এবং two-way bottom reinforcement.</span><span>Average-width trapezoid method</span></div>
+      <div class="sched-wrap"><table class="sched-table multi-schedule foundation-schedule-table combined"><thead><tr>
+        <th>Mark</th><th>Qty</th><th>Shape</th><th>Length ft</th><th>Width-1 ft</th><th>Width-2 ft</th><th>Thk in</th><th>Cover in</th><th>Bar-L mm</th><th>Sp-L in</th><th>Bar-W mm</th><th>Sp-W in</th><th></th>
+      </tr></thead><tbody id="multiCombinedBody"></tbody></table></div>
+      <button type="button" class="add-row-btn" id="addMultiCombined">+ Add Combined Footing</button>
+      <div class="foundation-method-note"><strong>Quantity method:</strong> plan area = Length × average end width. Transverse bar length varies linearly; estimator uses average clear width.</div>
+    </div>
+
+    <div class="foundation-type-pane" id="foundation-pane-raft">
+      <div class="multi-pane-tip"><span><strong>Mat / raft:</strong> full plan and thickness with top ও bottom, two-direction reinforcement mesh.</span><span>Both layers included</span></div>
+      <div class="sched-wrap"><table class="sched-table multi-schedule foundation-schedule-table raft"><thead><tr>
+        <th>Mark</th><th>Qty</th><th>L ft</th><th>W ft</th><th>Thk in</th><th>Cover in</th><th>Top Ø mm</th><th>Top Sp in</th><th>Bottom Ø mm</th><th>Bottom Sp in</th><th></th>
+      </tr></thead><tbody id="multiRaftBody"></tbody></table></div>
+      <button type="button" class="add-row-btn" id="addMultiRaft">+ Add Mat / Raft</button>
+    </div>
+
+    <div class="foundation-type-pane" id="foundation-pane-pile">
+      <div class="multi-pane-tip"><span><strong>Pile group:</strong> pile cap concrete + cap mesh + circular pile concrete + main cage এবং circular ties.</span><span>Approximate procurement quantity</span></div>
+      <div class="sched-wrap"><table class="sched-table multi-schedule foundation-schedule-table pile"><thead><tr>
+        <th>Mark</th><th>Cap Qty</th><th>Cap L ft</th><th>Cap W ft</th><th>Cap Thk in</th><th>Cover in</th><th>Piles/Cap</th><th>Pile Ø in</th><th>Pile Len ft</th><th>Cap Mesh Ø</th><th>Mesh Sp in</th><th>Mesh Layers</th><th>Pile Main Bars</th><th>Main Ø</th><th>Tie Ø</th><th>Tie Sp in</th><th></th>
+      </tr></thead><tbody id="multiPileBody"></tbody></table></div>
+      <button type="button" class="add-row-btn" id="addMultiPile">+ Add Pile + Pile Cap</button>
+      <div class="foundation-method-note"><strong>Scope:</strong> circular cast-in-situ pile approximation. Pile main bars include pile length + cap embedment; circular tie length includes an approximate hook allowance.</div>
+    </div>
+  </div>
+
+  <div class="multi-est-pane" id="multi-pane-mc">
+    <div class="multi-pane-tip"><span><strong>Column schedule:</strong> storey-wise height, longitudinal bars and approximate closed ties.</span><span>Extra height can cover stair headroom / parapet column</span></div>
+    <div class="sched-wrap"><table class="sched-table multi-schedule multi-column-schedule"><thead><tr>
+      <th>Mark</th><th>Qty</th><th>B (in)</th><th>H (in)</th><th>Ht/Floor ft</th><th>Storey</th><th>Extra Ht ft</th><th>Main Bars</th><th>Main Ø</th><th>Tie Ø</th><th>Tie Sp in</th><th>Cover in</th><th></th>
+    </tr></thead><tbody id="multiColumnBody"></tbody></table></div>
+    <button type="button" class="add-row-btn" id="addMultiColumn">+ Add Column Mark</button>
   </div>
 
   <div class="multi-est-pane" id="multi-pane-mb">
-    <div class="sched-wrap"><table class="sched-table multi-schedule"><thead><tr>
-      <th>Mark</th><th>Qty</th><th>B (in)</th><th>H (in)</th><th>Length (ft)</th><th>Top Bars</th><th>Top Ø</th><th>Bottom Bars</th><th>Bottom Ø</th><th>Stirrup Ø</th><th>Spacing in</th><th></th>
+    <div class="multi-pane-tip"><span><strong>Beam schedule:</strong> section, length, straight top/bottom, extra top/bottom and approximate closed stirrups.</span><span><strong>Extra Top Bars</strong> = both supports combined; e.g. 2 bars at each end = 4 total.</span></div>
+    <div class="sched-wrap"><table class="sched-table multi-schedule multi-beam-schedule"><thead><tr>
+      <th>Mark</th><th>Qty</th><th>B (in)</th><th>H (in)</th><th>Length (ft)</th><th>Straight Top</th><th>Top Ø</th><th>Straight Bottom</th><th>Bottom Ø</th><th>Extra Top Bars<br><small>Total</small></th><th>Extra Top Ø</th><th>Extra Top Length</th><th>Extra Bottom Bars<br><small>Total</small></th><th>Extra Bottom Ø</th><th>Extra Bottom Length</th><th>Stirrup Ø</th><th>Spacing in</th><th></th>
     </tr></thead><tbody id="multiBeamBody"></tbody></table></div>
+    <div class="foundation-method-note"><strong>Beam steel rule:</strong> straight bars use full beam length. Extra top length defaults to L/4 per short bar (L/3 option for interior support detailing); extra bottom defaults to 72.5%L. Quantities entered are total short bars per beam. Development length, hooks and anchorage inside columns are not added automatically.</div>
     <button type="button" class="add-row-btn" id="addMultiBeam">+ Add Beam Mark</button>
   </div>
 
   <div class="multi-est-pane" id="multi-pane-ms">
+    <div class="multi-pane-tip"><span><strong>Slab schedule:</strong> panel size, thickness, cover and two-way reinforcement mesh.</span><span>Use one row per slab panel type</span></div>
     <div class="sched-wrap"><table class="sched-table multi-schedule"><thead><tr>
       <th>Mark</th><th>Qty</th><th>L (ft)</th><th>W (ft)</th><th>Thk (in)</th><th>Cover (in)</th><th>Main Ø</th><th>Main Sp in</th><th>Dist Ø</th><th>Dist Sp in</th><th></th>
     </tr></thead><tbody id="multiSlabBody"></tbody></table></div>
     <button type="button" class="add-row-btn" id="addMultiSlab">+ Add Slab Mark</button>
   </div>
 
-  <div class="grid4" style="margin-top:18px;">
-    <div class="field"><label>Chips Type</label><select id="multiChipsType"><option value="brick">Brick Chips</option><option value="stone">Stone Chips</option></select></div>
-    <div class="field"><label>Mix Cement</label><input type="number" id="multiRatioC" value="1" min="0" step="0.1"></div>
-    <div class="field"><label>Mix Sand</label><input type="number" id="multiRatioS" value="1.5" min="0" step="0.1"></div>
-    <div class="field"><label>Mix Chips</label><input type="number" id="multiRatioA" value="3" min="0" step="0.1"></div>
+
+
+
+  <div class="building-settings">
+    <div class="building-settings-title"><strong>Mix, procurement allowance &amp; budget settings</strong><span>Material rates are read from the rate card above</span></div>
+    <div class="building-control-grid">
+      <div class="field"><label>Chips Type</label><select id="multiChipsType"><option value="brick">Brick Chips</option><option value="stone">Stone Chips</option></select></div>
+      <div class="field"><label>Mix Cement</label><input type="number" id="multiRatioC" value="1" min="0" step="0.1"></div>
+      <div class="field"><label>Mix Sand</label><input type="number" id="multiRatioS" value="1.5" min="0" step="0.1"></div>
+      <div class="field"><label>Mix Chips</label><input type="number" id="multiRatioA" value="3" min="0" step="0.1"></div>
+    </div>
+    <div class="building-control-grid">
+      <div class="field"><label>Concrete Material Loss (%)</label><input type="number" id="multiConcreteWaste" value="3" min="0" step="0.5"></div>
+      <div class="field"><label>Steel Wastage / Lap (%)</label><input type="number" id="multiSteelWaste" value="5" min="0" step="0.5"></div>
+      <div class="field"><label>Labour &amp; Handling (% of materials)</label><input type="number" id="multiLaborPct" value="12" min="0" step="0.5"></div>
+      <div class="field"><label>Contingency (%)</label><input type="number" id="multiContingencyPct" value="5" min="0" step="0.5"></div>
+    </div>
+    <div class="building-control-grid">
+      <div class="field"><label>Other Fixed Cost (৳)</label><input type="number" id="multiOtherCost" value="0" min="0" step="1000"></div>
+      <div class="field"><label>Pile Execution / Direct Work (৳)</label><input type="number" id="multiPileDirectCost" value="0" min="0" step="1000"></div>
+      <label class="building-toggle"><input type="checkbox" id="multiAutoCalc" checked><span>Auto-calculate after input changes</span></label>
+      <label class="building-toggle"><input type="checkbox" id="multiIncludeEmpty" disabled><span>Invalid / empty rows are skipped</span></label>
+      <div class="building-toggle"><span id="multiRateSnapshot">Rates: not checked yet</span></div>
+    </div>
   </div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-    <button type="button" id="calcBuildingSchedule" class="amberBtn">Calculate Full Building Schedule</button>
+
+  <div class="building-actions">
+    <button type="button" id="calcBuildingSchedule" class="amberBtn primary-action">Calculate Full Structural Budget</button>
     <button type="button" id="saveBuildingSchedule" class="ghost">Save Schedule</button>
-    <button type="button" id="clearBuildingSchedule" class="ghost">Clear All Rows</button>
+    <button type="button" id="exportBuildingCSV" class="ghost export-action"><span aria-hidden="true">⇩</span> Export CSV</button>
+    <button type="button" id="copyBuildingSummary" class="ghost">Copy Summary</button>
+    <button type="button" id="printBuildingEstimate" class="ghost export-action"><span aria-hidden="true">▣</span> PDF Report</button>
+    <button type="button" id="clearBuildingSchedule" class="ghost">Reset Schedule</button>
   </div>
 
   <div class="result-wrap" id="buildingScheduleResult" style="display:none;">
-    <div class="subhead">Whole Building Structural Quantity</div>
+    <div class="building-result-head">
+      <div><h3 id="buildingResultTitle">Whole Building Structural Quantity</h3><p id="buildingResultMeta">Complete the schedules and calculate.</p></div>
+      <span class="building-result-status" id="buildingResultStatus">Ready</span>
+    </div>
     <div class="out-grid" id="buildingScheduleOut"></div>
-    <div class="sched-wrap" style="margin-top:14px;"><table class="sched-table"><thead><tr><th>Segment</th><th>Marks</th><th>Concrete cft</th><th>Cement bags</th><th>Sand cft</th><th>Chips cft</th><th>Steel kg</th><th>Cost</th></tr></thead><tbody id="buildingScheduleBreakdown"></tbody></table></div>
+    <div class="cost-bridge" id="buildingCostBridge"></div>
+
+    <div class="building-table-title"><strong>Segment-wise quantity &amp; procurement cost</strong><span>Includes selected material-loss allowances</span></div>
+    <div class="sched-wrap"><table class="sched-table"><thead><tr><th>Segment</th><th>Marks</th><th>Units</th><th>Concrete cft</th><th>Cement bags</th><th>Sand cft</th><th>Chips cft</th><th>Steel kg</th><th>Direct Work</th><th>Cost</th></tr></thead><tbody id="buildingScheduleBreakdown"></tbody></table></div>
+    <div class="segment-share-list" id="buildingSegmentShares"></div>
+
+    <div class="building-table-title"><strong>Mark-wise audit trail</strong><span>Base quantities before wastage; cost includes element-level procurement allowance</span></div>
+    <div class="sched-wrap"><table class="sched-table" style="min-width:980px"><thead><tr><th>Segment</th><th>Mark</th><th>Qty</th><th>Concrete cft</th><th>Cement bags</th><th>Sand cft</th><th>Chips cft</th><th>Steel kg</th><th>Direct Work</th><th>Cost</th></tr></thead><tbody id="buildingMarkBreakdown"></tbody></table></div>
   </div>
-  <div class="note">Footing/slab bar lengths are calculated inside cover. Beam steel includes top, bottom and closed stirrups with an approximate two-hook allowance. Lap, anchorage, wastage, chair, spacer and site variation are not automatically included; add an appropriate project allowance before procurement.</div>
+
+  <div class="building-scope-note"><strong>Scope note:</strong> এই total মূলত RCC structural frame-এর material, selected wastage/lap, labour allowance, contingency এবং আপনার দেওয়া fixed extra cost নিয়ে তৈরি। Pile boring, rig, casing, bentonite, testing ও execution rate শুধু “Pile Execution / Direct Work” ঘরে আপনার দেওয়া lump-sum হিসেবে যোগ হবে। Brickwork, plaster, doors/windows, finishes, plumbing, electrical, lift, fire protection, professional fees ও statutory charges অন্তর্ভুক্ত নয়। Tie/stirrup hook length এবং pile cage quantity approximate; final procurement-এর আগে structural drawing, geotechnical report ও bar bending schedule দিয়ে যাচাই করুন।</div>
 </div>
 
 <!-- ============ RATES CARD ============ -->
 
-<div class="card">
-  <h2 class="tag">Material Rates (Taka)</h2>
+<div class="card" id="estimateRatesCard">
+  <h2 class="tag">Material Rates &amp; Quick Grand Total (Taka)</h2>
   <p style="font-size:12px; color:var(--muted); margin-top:-6px;">Enter today's local rate manually, or tap "Check rate" to open a quick market-price search in a new tab.</p>
 
   <div class="rate-row">
@@ -2600,7 +2795,7 @@ html[data-lang="bn"] :is(h1,h2,h3,.brand,.side-link,.tab-btn,button,label){
     <button class="ghost" data-q="rod price per kg today Bangladesh 60 grade">Check rate</button>
   </div>
 
-  <button id="calcAllBtn" class="amberBtn">Calculate Total Cost (Column + Beam)</button>
+  <button id="calcAllBtn" class="amberBtn">Calculate Quick Total (Footing + Column + Beam + Slab)</button>
 
   <div class="result-wrap" id="totalResult">
     <h2 class="tag amber" style="margin-top:16px;">Grand Total</h2>
@@ -2618,6 +2813,67 @@ html[data-lang="bn"] :is(h1,h2,h3,.brand,.side-link,.tab-btn,button,label){
 </div>
 
 <!-- ============ COMPARE PAGE (2-column cost & strength comparison) ============ -->
+
+<div id="page-tanks" class="page-panel">
+  <section class="tank-page-hero">
+    <div>
+      <span class="estimate-eyebrow">BNBC 2020 • PART VIII</span>
+      <h1>Septic Tank &amp; Underground Water Reservoir</h1>
+      <p>BNBC 2020-এর septic tank এবং underground water reservoir (UGR) preliminary sizing—আলাদা workspace-এ। Input পরিবর্তন করলে ফল ও saved project data স্বয়ংক্রিয়ভাবে update হবে।</p>
+    </div>
+    <div class="tank-page-badges"><span>Appendix S</span><span>Sec. 5.9.1.2</span><span>Auto Save</span></div>
+  </section>
+
+  <div class="tank-code-alert">
+    <strong>Code scope:</strong> এটি capacity ও practical internal dimension-এর preliminary calculator। RCC wall/slab design, uplift, soil pressure, waterproofing, pipe sizing, fire-system approval এবং authority clearance licensed professionals দ্বারা project-specificভাবে করতে হবে।
+  </div>
+
+  <div class="tank-calc-grid tank-standalone-grid">
+    <section class="tank-calc-card">
+      <div class="tank-card-kicker">SANITATION • APPENDIX S</div>
+      <h3>Septic Tank — BNBC Equation 8.S.1</h3>
+      <p>V = PQt + Psv. Minimum capacity, geometry, clear space এবং chamber recommendation automatically applied.</p>
+      <div class="tank-input-grid">
+        <div class="field"><label>Population / design count</label><input type="number" id="septicPopulation" value="25" min="1" step="1"></div>
+        <div class="field"><label>Occupancy reduction factor</label><select id="septicFactor"><option value="1">Residential / resident — 1.00</option><option value="0.5">Office staff / hotel staff / factory 1 shift — 0.50</option><option value="0.25">School / market / community staff — 0.25</option><option value="0.20">Restaurant seating — 0.20</option><option value="0.08">Kindergarten — 0.08</option><option value="0.03">Cinema seats — 0.03</option><option value="0.01">Church / gathering seats — 0.01</option><option value="0.70">Hotel beds — 0.70</option><option value="1.75">Cooked-food stalls — 1.75</option></select></div>
+        <div class="field"><label>Wastewater flow Q (lpcd)</label><select id="septicFlow"><option value="120">City — 120</option><option value="50">District town — 50</option><option value="20">Thana / rural — 20</option><option value="10">Other occupancy — 10</option><option value="custom">Custom</option></select></div>
+        <div class="field"><label>Custom Q (lpcd)</label><input type="number" id="septicCustomFlow" value="120" min="1"></div>
+        <div class="field"><label>Retention t (day, min 1)</label><input type="number" id="septicRetention" value="1" min="1" step="0.25"></div>
+        <div class="field"><label>Desludging interval v (year)</label><input type="number" id="septicDesludge" value="1" min="0.5" max="1" step="0.5"></div>
+        <div class="field"><label>Sludge + scum s (m³/cap/year)</label><input type="number" id="septicSludgeRate" value="0.04" min="0" step="0.005"></div>
+        <div class="field"><label>Liquid depth (m, min 1)</label><input type="number" id="septicDepth" value="1.2" min="1" step="0.1"></div>
+        <div class="field"><label>Length : Width ratio (3–4)</label><input type="number" id="septicRatio" value="3" min="3" max="4" step="0.25"></div>
+      </div>
+      <button type="button" id="calcSepticTank" class="amberBtn tank-main-action">Calculate Septic Tank Size</button>
+      <div class="tank-result-grid" id="septicTankResults"></div>
+      <div class="tank-code-note"><strong>BNBC checks:</strong> minimum liquid capacity 2000 L; width ≥ 1 m; liquid depth ≥ 1 m; length ≥ 3W and recommended ≤ 4W; 300 mm clear space above liquid; two chambers recommended above 3000 L; residential users ≤ 300.</div>
+    </section>
+
+    <section class="tank-calc-card">
+      <div class="tank-card-kicker">WATER STORAGE • SEC. 5.9.1.2</div>
+      <h3>Underground Water Reservoir (UGR)</h3>
+      <p>BNBC domestic water demand, selected storage days এবং entered fire reserve থেকে UGR capacity ও practical internal dimension হিসাব করুন।</p>
+      <div class="tank-input-grid">
+        <div class="field"><label>Residential units / flats</label><input type="number" id="ohtUnits" value="5" min="0" step="1"></div>
+        <div class="field"><label>Persons per unit</label><input type="number" id="ohtPersonsPerUnit" value="5" min="0" step="1"></div>
+        <div class="field"><label>Extra occupants</label><input type="number" id="ohtExtraPersons" value="0" min="0" step="1"></div>
+        <div class="field"><label>BNBC demand preset</label><select id="ohtDemandPreset"><option value="260">City single family + garden/car — 260 lpcd</option><option value="200">City big apartment &gt;2500 sft — 200 lpcd</option><option value="180" selected>City moderate apartment &lt;2000 sft — 180 lpcd</option><option value="150">Town single family / city restricted high-income — 150 lpcd</option><option value="135">Town moderate apartment / city restricted moderate — 135 lpcd</option><option value="120">Small apartment &lt;1500 sft — 120 lpcd</option><option value="80">Low-income flat &lt;1000 sft — 80 lpcd</option><option value="50">Village/private source — 50 lpcd</option><option value="custom">Custom</option></select></div>
+        <div class="field"><label>Custom demand (lpcd)</label><input type="number" id="ohtCustomDemand" value="180" min="1"></div>
+        <div class="field"><label>UGR storage period</label><select id="ugrStorageDays"><option value="1" selected>1 day — BNBC normal basis</option><option value="2">2 days — emergency storage</option><option value="3">3 days — emergency storage</option></select></div>
+        <div class="field"><label>Fire-flow input (L/min)</label><input type="number" id="ohtFireFlow" value="0" min="0" step="10"></div>
+        <div class="field"><label>Fire reserve duration (min)</label><input type="number" id="ohtFireMinutes" value="60" min="0" step="5"></div>
+        <div class="field"><label>UGR usable water depth (m)</label><input type="number" id="ohtDepth" value="2.4" min="0.8" step="0.1"></div>
+        <div class="field"><label>UGR plan ratio L : W</label><input type="number" id="ohtRatio" value="2" min="1" step="0.1"></div>
+        <div class="field"><label>UGR freeboard allowance (m)</label><input type="number" id="ohtFreeboard" value="0.3" min="0" step="0.05"></div>
+        <div class="field"><label>Cleaning compartments / units</label><input type="number" id="ugrCompartments" value="2" min="2" step="1"></div>
+      </div>
+      <button type="button" id="calcOhtTank" class="amberBtn tank-main-action">Calculate UGR Capacity &amp; Size</button>
+      <div class="tank-result-grid" id="ohtTankResults"></div>
+      <div class="tank-code-note"><strong>BNBC basis:</strong> UGR = selected daily demand + entered 1-hour firefighting reserve for tall buildings. Normal code basis is 1 day; 2–3 days may be selected for emergency storage. Storage tanks should have at least two compartments/units for alternative cleaning. Roof tank reference = ½ daily demand + fire reserve.</div>
+    </section>
+  </div>
+</div>
+
 <div id="page-compare" class="page-panel">
 
 <h1>Column Cost &amp; Strength Comparison</h1>
@@ -2761,7 +3017,7 @@ document.querySelectorAll('.page-tab-btn').forEach(btn=>{
     document.querySelectorAll('.page-tab-btn').forEach(b=>b.classList.remove('active'));
     document.querySelectorAll('.page-panel').forEach(p=>p.classList.remove('active'));
     btn.classList.add('active');
-    document.getElementById('page-'+btn.dataset.page).classList.add('active');
+    const target=document.getElementById('page-'+btn.dataset.page);if(target)target.classList.add('active');if(btn.dataset.page==='tanks'){setTimeout(()=>{try{calcSepticTank();calcOhtTank()}catch(_){ }},0)}
   });
 });
 
@@ -4673,10 +4929,10 @@ document.getElementById('calcSlabBtn').addEventListener('click', ()=>{
 
 /* ============== GRAND TOTAL / COST ============== */
 document.getElementById('calcAllBtn').addEventListener('click', ()=>{
-  if (!lastColumn) lastColumn = calcColumn();
-  if (!lastBeam) lastBeam = calcBeam();
-  if (!lastSlab) lastSlab = calcSlab();
-  if (!lastFootingEst && loadedFootingMarks.length > 0) lastFootingEst = calcFootingEstimate();
+  lastColumn = calcColumn();
+  lastBeam = calcBeam();
+  lastSlab = calcSlab();
+  lastFootingEst = loadedFootingMarks.length > 0 ? calcFootingEstimate() : null;
   const footingSeg = lastFootingEst || { cementBags:0, sandCft:0, chipsCft:0, rodWeightKg:0, chipsType:'brick' };
 
   const rateCement = parseFloat(document.getElementById('rateCement').value) || 0;
@@ -6338,31 +6594,337 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
 <script id="multi-estimator-script">
 (function(){
 'use strict';
-const $=id=>document.getElementById(id), n=(v,d=0)=>{v=parseFloat(v);return Number.isFinite(v)?v:d;};
-const steelKgM=d=>d*d/162, ftm=ft=>ft*0.3048;
-const diaOptions=(selected)=>[8,10,12,16,20,22,25,28,32].map(d=>`<option value="${d}" ${d==selected?'selected':''}>${d}</option>`).join('');
-let counters={f:0,b:0,s:0};
-function addF(v={}){counters.f++;const tr=document.createElement('tr');tr.innerHTML=`<td><input class="m-mark" value="${v.mark||'F'+counters.f}"></td><td><input type="number" class="m-qty" value="${v.qty??1}" min="0"></td><td><input type="number" class="m-l" value="${v.l??6}" min="0" step="0.1"></td><td><input type="number" class="m-w" value="${v.w??6}" min="0" step="0.1"></td><td><input type="number" class="m-t" value="${v.t??18}" min="0" step="0.25"></td><td><input type="number" class="m-c" value="${v.c??3}" min="0" step="0.25"></td><td><select class="m-d1">${diaOptions(v.d1||16)}</select></td><td><input type="number" class="m-sp1" value="${v.sp1??6}" min="0.1"></td><td><select class="m-d2">${diaOptions(v.d2||16)}</select></td><td><input type="number" class="m-sp2" value="${v.sp2??6}" min="0.1"></td><td><button type="button" class="row-del-btn">✕</button></td>`;$('multiFootingBody').appendChild(tr)}
-function addB(v={}){counters.b++;const tr=document.createElement('tr');tr.innerHTML=`<td><input class="m-mark" value="${v.mark||'B'+counters.b}"></td><td><input type="number" class="m-qty" value="${v.qty??1}" min="0"></td><td><input type="number" class="m-b" value="${v.b??10}" min="0"></td><td><input type="number" class="m-h" value="${v.h??15}" min="0"></td><td><input type="number" class="m-len" value="${v.len??12}" min="0" step="0.1"></td><td><input type="number" class="m-nt" value="${v.nt??2}" min="0"></td><td><select class="m-dt">${diaOptions(v.dt||16)}</select></td><td><input type="number" class="m-nb" value="${v.nb??3}" min="0"></td><td><select class="m-db">${diaOptions(v.db||16)}</select></td><td><select class="m-dst">${diaOptions(v.dst||8)}</select></td><td><input type="number" class="m-sst" value="${v.sst??6}" min="0.1"></td><td><button type="button" class="row-del-btn">✕</button></td>`;$('multiBeamBody').appendChild(tr)}
-function addS(v={}){counters.s++;const tr=document.createElement('tr');tr.innerHTML=`<td><input class="m-mark" value="${v.mark||'S'+counters.s}"></td><td><input type="number" class="m-qty" value="${v.qty??1}" min="0"></td><td><input type="number" class="m-l" value="${v.l??12}" min="0" step="0.1"></td><td><input type="number" class="m-w" value="${v.w??10}" min="0" step="0.1"></td><td><input type="number" class="m-t" value="${v.t??5}" min="0" step="0.25"></td><td><input type="number" class="m-c" value="${v.c??0.75}" min="0" step="0.25"></td><td><select class="m-d1">${diaOptions(v.d1||10)}</select></td><td><input type="number" class="m-sp1" value="${v.sp1??6}" min="0.1"></td><td><select class="m-d2">${diaOptions(v.d2||10)}</select></td><td><input type="number" class="m-sp2" value="${v.sp2??6}" min="0.1"></td><td><button type="button" class="row-del-btn">✕</button></td>`;$('multiSlabBody').appendChild(tr)}
+const $=id=>document.getElementById(id);
+const n=(v,d=0)=>{v=parseFloat(v);return Number.isFinite(v)?v:d};
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const steelKgM=d=>d*d/162;
+const ftm=ft=>ft*0.3048;
+const ceilStep=(v,step=.1)=>Math.ceil((v-1e-9)/step)*step;
+const diaOptions=selected=>[8,10,12,16,20,22,25,28,32].map(d=>`<option value="${d}" ${d==selected?'selected':''}>${d}</option>`).join('');
+const beamTopLengthOptions=selected=>[[.25,'L/4'],[.3333,'L/3']].map(([v,label])=>`<option value="${v}" ${Math.abs(Number(selected)-v)<.0002?'selected':''}>${label}</option>`).join('');
+const beamBottomLengthOptions=selected=>[[.70,'70% L'],[.725,'72.5% L'],[.75,'75% L']].map(([v,label])=>`<option value="${v}" ${Math.abs(Number(selected)-v)<.0002?'selected':''}>${label}</option>`).join('');
+const fmt=(v,d=2)=>Number(v||0).toLocaleString('en-BD',{minimumFractionDigits:d,maximumFractionDigits:d});
+const money=v=>'৳ '+Number(v||0).toLocaleString('en-BD',{maximumFractionDigits:0});
+let counters={iso:0,comb:0,raft:0,pile:0,c:0,b:0,s:0};
+let autoTimer=null,tankTimer=null,lastReport=null,loading=true;
+
+function addIso(v={}){
+  counters.iso++;
+  const tr=document.createElement('tr');
+  const profile=v.profile||'slope';
+  tr.innerHTML=`<td><input class="m-mark" value="${esc(v.mark||'F'+counters.iso)}"></td><td><input type="number" class="m-qty" value="${v.qty??1}" min="0"></td><td><select class="m-profile"><option value="slope" ${profile==='slope'?'selected':''}>Sloped</option><option value="flat" ${profile==='flat'?'selected':''}>Flat</option></select></td><td><input type="number" class="m-l" value="${v.l??6}" min="0" step="0.1"></td><td><input type="number" class="m-w" value="${v.w??6}" min="0" step="0.1"></td><td><input type="number" class="m-tl" value="${v.tl??2}" min="0" step="0.1"></td><td><input type="number" class="m-tw" value="${v.tw??2}" min="0" step="0.1"></td><td><input type="number" class="m-he" value="${v.he??10}" min="0" step="0.25"></td><td><input type="number" class="m-hc" value="${v.hc??24}" min="0" step="0.25"></td><td><input type="number" class="m-c" value="${v.c??3}" min="0" step="0.25"></td><td><select class="m-d1">${diaOptions(v.d1||16)}</select></td><td><input type="number" class="m-sp1" value="${v.sp1??6}" min="0.1"></td><td><select class="m-d2">${diaOptions(v.d2||16)}</select></td><td><input type="number" class="m-sp2" value="${v.sp2??6}" min="0.1"></td><td><button type="button" class="row-del-btn" title="Remove row">✕</button></td>`;
+  $('multiIsolatedBody').appendChild(tr);afterRowChange();
+}
+function addComb(v={}){
+  counters.comb++;
+  const shape=v.shape||'rect';
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><input class="m-mark" value="${esc(v.mark||'CF'+counters.comb)}"></td><td><input type="number" class="m-qty" value="${v.qty??1}" min="0"></td><td><select class="m-shape"><option value="rect" ${shape==='rect'?'selected':''}>Rectangular</option><option value="trap" ${shape==='trap'?'selected':''}>Trapezoidal</option></select></td><td><input type="number" class="m-l" value="${v.l??10}" min="0" step="0.1"></td><td><input type="number" class="m-w1" value="${v.w1??4}" min="0" step="0.1"></td><td><input type="number" class="m-w2" value="${v.w2??4}" min="0" step="0.1"></td><td><input type="number" class="m-t" value="${v.t??18}" min="0" step="0.25"></td><td><input type="number" class="m-c" value="${v.c??3}" min="0" step="0.25"></td><td><select class="m-d1">${diaOptions(v.d1||16)}</select></td><td><input type="number" class="m-sp1" value="${v.sp1??6}" min="0.1"></td><td><select class="m-d2">${diaOptions(v.d2||16)}</select></td><td><input type="number" class="m-sp2" value="${v.sp2??6}" min="0.1"></td><td><button type="button" class="row-del-btn" title="Remove row">✕</button></td>`;
+  $('multiCombinedBody').appendChild(tr);afterRowChange();
+}
+function addRaft(v={}){
+  counters.raft++;
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><input class="m-mark" value="${esc(v.mark||'M'+counters.raft)}"></td><td><input type="number" class="m-qty" value="${v.qty??1}" min="0"></td><td><input type="number" class="m-l" value="${v.l??30}" min="0" step="0.1"></td><td><input type="number" class="m-w" value="${v.w??20}" min="0" step="0.1"></td><td><input type="number" class="m-t" value="${v.t??24}" min="0" step="0.25"></td><td><input type="number" class="m-c" value="${v.c??3}" min="0" step="0.25"></td><td><select class="m-dt">${diaOptions(v.dt||16)}</select></td><td><input type="number" class="m-spt" value="${v.spt??6}" min="0.1"></td><td><select class="m-db">${diaOptions(v.db||20)}</select></td><td><input type="number" class="m-spb" value="${v.spb??6}" min="0.1"></td><td><button type="button" class="row-del-btn" title="Remove row">✕</button></td>`;
+  $('multiRaftBody').appendChild(tr);afterRowChange();
+}
+function addPile(v={}){
+  counters.pile++;
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><input class="m-mark" value="${esc(v.mark||'P'+counters.pile)}"></td><td><input type="number" class="m-qty" value="${v.qty??1}" min="0"></td><td><input type="number" class="m-cl" value="${v.cl??6}" min="0" step="0.1"></td><td><input type="number" class="m-cw" value="${v.cw??6}" min="0" step="0.1"></td><td><input type="number" class="m-ct" value="${v.ct??24}" min="0" step="0.25"></td><td><input type="number" class="m-cov" value="${v.cov??3}" min="0" step="0.25"></td><td><input type="number" class="m-np" value="${v.np??4}" min="0" step="1"></td><td><input type="number" class="m-pd" value="${v.pd??18}" min="0" step="1"></td><td><input type="number" class="m-pl" value="${v.pl??30}" min="0" step="0.5"></td><td><select class="m-cd">${diaOptions(v.cd||16)}</select></td><td><input type="number" class="m-csp" value="${v.csp??6}" min="0.1"></td><td><input type="number" class="m-ml" value="${v.ml??2}" min="1" max="4" step="1"></td><td><input type="number" class="m-nm" value="${v.nm??6}" min="0" step="1"></td><td><select class="m-md">${diaOptions(v.md||16)}</select></td><td><select class="m-td">${diaOptions(v.td||8)}</select></td><td><input type="number" class="m-tsp" value="${v.tsp??6}" min="0.1"></td><td><button type="button" class="row-del-btn" title="Remove row">✕</button></td>`;
+  $('multiPileBody').appendChild(tr);afterRowChange();
+}
+function addC(v={}){
+  counters.c++;
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><input class="m-mark" value="${esc(v.mark||'C'+counters.c)}"></td><td><input type="number" class="m-qty" value="${v.qty??1}" min="0"></td><td><input type="number" class="m-b" value="${v.b??10}" min="0"></td><td><input type="number" class="m-h" value="${v.h??12}" min="0"></td><td><input type="number" class="m-fh" value="${v.fh??10}" min="0" step="0.1"></td><td><input type="number" class="m-st" value="${v.st??6}" min="0" step="1"></td><td><input type="number" class="m-ex" value="${v.ex??0}" min="0" step="0.5"></td><td><input type="number" class="m-nm" value="${v.nm??8}" min="0"></td><td><select class="m-dm">${diaOptions(v.dm||16)}</select></td><td><select class="m-dt">${diaOptions(v.dt||8)}</select></td><td><input type="number" class="m-s" value="${v.s??6}" min="0.1"></td><td><input type="number" class="m-cov" value="${v.cov??1.5}" min="0" step="0.25"></td><td><button type="button" class="row-del-btn" title="Remove row">✕</button></td>`;
+  $('multiColumnBody').appendChild(tr);afterRowChange();
+}
+function addB(v={}){
+  counters.b++;
+  const tr=document.createElement('tr');
+  const etf=v.etf??.25,ebf=v.ebf??.725;
+  tr.innerHTML=`<td><input class="m-mark" value="${esc(v.mark||'B'+counters.b)}"></td><td><input type="number" class="m-qty" value="${v.qty??1}" min="0"></td><td><input type="number" class="m-b" value="${v.b??10}" min="0"></td><td><input type="number" class="m-h" value="${v.h??15}" min="0"></td><td><input type="number" class="m-len" value="${v.len??12}" min="0" step="0.1"></td><td><input type="number" class="m-nt" value="${v.nt??2}" min="0" title="Straight top bars, full length"></td><td><select class="m-dtop">${diaOptions(v.dt||16)}</select></td><td><input type="number" class="m-nb" value="${v.nb??3}" min="0" title="Straight bottom bars, full length"></td><td><select class="m-db">${diaOptions(v.db||16)}</select></td><td><input type="number" class="m-net" value="${v.net??4}" min="0" title="Total extra top bars for both supports combined"></td><td><select class="m-det">${diaOptions(v.det||v.dt||16)}</select></td><td><select class="m-etf" title="Length of each extra top bar">${beamTopLengthOptions(etf)}</select></td><td><input type="number" class="m-neb" value="${v.neb??0}" min="0" title="Total extra bottom bars per beam"></td><td><select class="m-deb">${diaOptions(v.deb||v.db||16)}</select></td><td><select class="m-ebf" title="Length of each extra bottom bar">${beamBottomLengthOptions(ebf)}</select></td><td><select class="m-dst">${diaOptions(v.dst||8)}</select></td><td><input type="number" class="m-sst" value="${v.sst??6}" min="0.1"></td><td><button type="button" class="row-del-btn" title="Remove row">✕</button></td>`;
+  $('multiBeamBody').appendChild(tr);afterRowChange();
+}
+function addS(v={}){
+  counters.s++;
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><input class="m-mark" value="${esc(v.mark||'S'+counters.s)}"></td><td><input type="number" class="m-qty" value="${v.qty??1}" min="0"></td><td><input type="number" class="m-l" value="${v.l??12}" min="0" step="0.1"></td><td><input type="number" class="m-w" value="${v.w??10}" min="0" step="0.1"></td><td><input type="number" class="m-t" value="${v.t??5}" min="0" step="0.25"></td><td><input type="number" class="m-c" value="${v.c??0.75}" min="0" step="0.25"></td><td><select class="m-d1">${diaOptions(v.d1||10)}</select></td><td><input type="number" class="m-sp1" value="${v.sp1??6}" min="0.1"></td><td><select class="m-d2">${diaOptions(v.d2||10)}</select></td><td><input type="number" class="m-sp2" value="${v.sp2??6}" min="0.1"></td><td><button type="button" class="row-del-btn" title="Remove row">✕</button></td>`;
+  $('multiSlabBody').appendChild(tr);afterRowChange();
+}
+
 function rows(body,fn){return [...$(body).querySelectorAll('tr')].map(fn)}
-function data(){return {f:rows('multiFootingBody',tr=>({mark:tr.querySelector('.m-mark').value,qty:n(tr.querySelector('.m-qty').value),l:n(tr.querySelector('.m-l').value),w:n(tr.querySelector('.m-w').value),t:n(tr.querySelector('.m-t').value),c:n(tr.querySelector('.m-c').value),d1:n(tr.querySelector('.m-d1').value),sp1:n(tr.querySelector('.m-sp1').value),d2:n(tr.querySelector('.m-d2').value),sp2:n(tr.querySelector('.m-sp2').value)})),b:rows('multiBeamBody',tr=>({mark:tr.querySelector('.m-mark').value,qty:n(tr.querySelector('.m-qty').value),b:n(tr.querySelector('.m-b').value),h:n(tr.querySelector('.m-h').value),len:n(tr.querySelector('.m-len').value),nt:n(tr.querySelector('.m-nt').value),dt:n(tr.querySelector('.m-dt').value),nb:n(tr.querySelector('.m-nb').value),db:n(tr.querySelector('.m-db').value),dst:n(tr.querySelector('.m-dst').value),sst:n(tr.querySelector('.m-sst').value)})),s:rows('multiSlabBody',tr=>({mark:tr.querySelector('.m-mark').value,qty:n(tr.querySelector('.m-qty').value),l:n(tr.querySelector('.m-l').value),w:n(tr.querySelector('.m-w').value),t:n(tr.querySelector('.m-t').value),c:n(tr.querySelector('.m-c').value),d1:n(tr.querySelector('.m-d1').value),sp1:n(tr.querySelector('.m-sp1').value),d2:n(tr.querySelector('.m-d2').value),sp2:n(tr.querySelector('.m-sp2').value)}))}}
-function concrete(vol){const rc=n($('multiRatioC').value,1),rs=n($('multiRatioS').value,1.5),ra=n($('multiRatioA').value,3),sum=rc+rs+ra||1,dry=vol*1.54;return {cement:(dry*rc/sum)/1.25,sand:dry*rs/sum,chips:dry*ra/sum}}
-function calcF(list){let vol=0,steel=0;list.forEach(x=>{if(!(x.qty*x.l*x.w*x.t))return;vol+=x.l*x.w*x.t/12*x.qty;const li=Math.max(0,x.l-x.c*2/12),wi=Math.max(0,x.w-x.c*2/12),n1=Math.floor(wi*12/x.sp1)+1,n2=Math.floor(li*12/x.sp2)+1;steel+=(n1*ftm(li)*steelKgM(x.d1)+n2*ftm(wi)*steelKgM(x.d2))*x.qty});return {...concrete(vol),vol,steel,marks:list.filter(x=>x.qty>0).length}}
-function calcB(list){let vol=0,steel=0;list.forEach(x=>{if(!(x.qty*x.b*x.h*x.len))return;vol+=x.b/12*x.h/12*x.len*x.qty;let main=(x.nt*steeKg(x.dt,x.len)+x.nb*steeKg(x.db,x.len));let stirN=Math.floor(x.len*12/x.sst)+1,stirLenFt=(2*(Math.max(0,x.b-3)+Math.max(0,x.h-3))+12*x.dst/25.4)/12;steel+=(main+stirN*ftm(stirLenFt)*steelKgM(x.dst))*x.qty});return {...concrete(vol),vol,steel,marks:list.filter(x=>x.qty>0).length}}
-function steeKg(d,lft){return ftm(lft)*steelKgM(d)}
-function calcS(list){let vol=0,steel=0;list.forEach(x=>{if(!(x.qty*x.l*x.w*x.t))return;vol+=x.l*x.w*x.t/12*x.qty;const li=Math.max(0,x.l-x.c*2/12),wi=Math.max(0,x.w-x.c*2/12),n1=Math.floor(wi*12/x.sp1)+1,n2=Math.floor(li*12/x.sp2)+1;steel+=(n1*ftm(li)*steelKgM(x.d1)+n2*ftm(wi)*steelKgM(x.d2))*x.qty});return {...concrete(vol),vol,steel,marks:list.filter(x=>x.qty>0).length}}
-function cost(r){const chips=$('multiChipsType').value==='stone'?n($('rateStone')?.value):n($('rateBrick')?.value);return r.cement*n($('rateCement')?.value)+r.sand*n($('rateSand')?.value)+r.chips*chips+r.steel*n($('rateRod')?.value)}
-function calculate(){const d=data(), parts=[['Footing',calcF(d.f)],['Beam',calcB(d.b)],['Slab',calcS(d.s)]];let total={marks:0,vol:0,cement:0,sand:0,chips:0,steel:0,cost:0};parts.forEach(p=>{p[1].cost=cost(p[1]);Object.keys(total).forEach(k=>{if(k!=='cost')total[k]+=p[1][k]||0});total.cost+=p[1].cost});
- const out=$('buildingScheduleOut');out.innerHTML='';const add=(a,b,hot=false)=>{const e=document.createElement('div');e.className='out-item'+(hot?' hot':'');e.innerHTML=`<span>${a}</span><strong>${b}</strong>`;out.appendChild(e)};add('Total Marks',total.marks);add('Concrete Volume',total.vol.toFixed(2)+' cft');add('Cement',total.cement.toFixed(2)+' bags',true);add('Sand',total.sand.toFixed(2)+' cft');add(($('multiChipsType').value==='stone'?'Stone':'Brick')+' Chips',total.chips.toFixed(2)+' cft');add('Reinforcement Steel',total.steel.toFixed(2)+' kg',true);add('Estimated Structural Cost','৳ '+total.cost.toFixed(0),true);
- $('buildingScheduleBreakdown').innerHTML=parts.map(([name,r])=>`<tr><td><strong>${name}</strong></td><td>${r.marks}</td><td>${r.vol.toFixed(2)}</td><td>${r.cement.toFixed(2)}</td><td>${r.sand.toFixed(2)}</td><td>${r.chips.toFixed(2)}</td><td>${r.steel.toFixed(2)}</td><td class="building-cost-highlight">৳${r.cost.toFixed(0)}</td></tr>`).join('');$('buildingScheduleResult').style.display='block';window.__buildingScheduleTotal=total;save();}
-function save(){localStorage.setItem('structuralSuiteMultiSchedule',JSON.stringify({rows:data(),chips:$('multiChipsType').value,ratios:[$('multiRatioC').value,$('multiRatioS').value,$('multiRatioA').value]}))}
-function load(){let z;try{z=JSON.parse(localStorage.getItem('structuralSuiteMultiSchedule'))}catch(e){};if(z?.rows){z.rows.f.forEach(addF);z.rows.b.forEach(addB);z.rows.s.forEach(addS);$('multiChipsType').value=z.chips||'brick';if(z.ratios){$('multiRatioC').value=z.ratios[0];$('multiRatioS').value=z.ratios[1];$('multiRatioA').value=z.ratios[2]}}else{addF({mark:'F1'});addB({mark:'B1'});addS({mark:'S1'})}}
-$('addMultiFooting').onclick=()=>addF();$('addMultiBeam').onclick=()=>addB();$('addMultiSlab').onclick=()=>addS();$('calcBuildingSchedule').onclick=calculate;$('saveBuildingSchedule').onclick=save;$('clearBuildingSchedule').onclick=()=>{if(confirm('সব footing, beam ও slab row মুছে ফেলবেন?')){['multiFootingBody','multiBeamBody','multiSlabBody'].forEach(id=>$(id).innerHTML='');localStorage.removeItem('structuralSuiteMultiSchedule');$('buildingScheduleResult').style.display='none'}};
-['multiFootingBody','multiBeamBody','multiSlabBody'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target.classList.contains('row-del-btn'))e.target.closest('tr').remove()}));
+function data(){
+  return {
+    iso:rows('multiIsolatedBody',tr=>({mark:tr.querySelector('.m-mark').value.trim(),qty:n(tr.querySelector('.m-qty').value),profile:tr.querySelector('.m-profile').value,l:n(tr.querySelector('.m-l').value),w:n(tr.querySelector('.m-w').value),tl:n(tr.querySelector('.m-tl').value),tw:n(tr.querySelector('.m-tw').value),he:n(tr.querySelector('.m-he').value),hc:n(tr.querySelector('.m-hc').value),c:n(tr.querySelector('.m-c').value),d1:n(tr.querySelector('.m-d1').value),sp1:n(tr.querySelector('.m-sp1').value),d2:n(tr.querySelector('.m-d2').value),sp2:n(tr.querySelector('.m-sp2').value)})),
+    comb:rows('multiCombinedBody',tr=>({mark:tr.querySelector('.m-mark').value.trim(),qty:n(tr.querySelector('.m-qty').value),shape:tr.querySelector('.m-shape').value,l:n(tr.querySelector('.m-l').value),w1:n(tr.querySelector('.m-w1').value),w2:n(tr.querySelector('.m-w2').value),t:n(tr.querySelector('.m-t').value),c:n(tr.querySelector('.m-c').value),d1:n(tr.querySelector('.m-d1').value),sp1:n(tr.querySelector('.m-sp1').value),d2:n(tr.querySelector('.m-d2').value),sp2:n(tr.querySelector('.m-sp2').value)})),
+    raft:rows('multiRaftBody',tr=>({mark:tr.querySelector('.m-mark').value.trim(),qty:n(tr.querySelector('.m-qty').value),l:n(tr.querySelector('.m-l').value),w:n(tr.querySelector('.m-w').value),t:n(tr.querySelector('.m-t').value),c:n(tr.querySelector('.m-c').value),dt:n(tr.querySelector('.m-dt').value),spt:n(tr.querySelector('.m-spt').value),db:n(tr.querySelector('.m-db').value),spb:n(tr.querySelector('.m-spb').value)})),
+    pile:rows('multiPileBody',tr=>({mark:tr.querySelector('.m-mark').value.trim(),qty:n(tr.querySelector('.m-qty').value),cl:n(tr.querySelector('.m-cl').value),cw:n(tr.querySelector('.m-cw').value),ct:n(tr.querySelector('.m-ct').value),cov:n(tr.querySelector('.m-cov').value),np:n(tr.querySelector('.m-np').value),pd:n(tr.querySelector('.m-pd').value),pl:n(tr.querySelector('.m-pl').value),cd:n(tr.querySelector('.m-cd').value),csp:n(tr.querySelector('.m-csp').value),ml:n(tr.querySelector('.m-ml').value),nm:n(tr.querySelector('.m-nm').value),md:n(tr.querySelector('.m-md').value),td:n(tr.querySelector('.m-td').value),tsp:n(tr.querySelector('.m-tsp').value)})),
+    c:rows('multiColumnBody',tr=>({mark:tr.querySelector('.m-mark').value.trim(),qty:n(tr.querySelector('.m-qty').value),b:n(tr.querySelector('.m-b').value),h:n(tr.querySelector('.m-h').value),fh:n(tr.querySelector('.m-fh').value),st:n(tr.querySelector('.m-st').value),ex:n(tr.querySelector('.m-ex').value),nm:n(tr.querySelector('.m-nm').value),dm:n(tr.querySelector('.m-dm').value),dt:n(tr.querySelector('.m-dt').value),s:n(tr.querySelector('.m-s').value),cov:n(tr.querySelector('.m-cov').value)})),
+    b:rows('multiBeamBody',tr=>({mark:tr.querySelector('.m-mark').value.trim(),qty:n(tr.querySelector('.m-qty').value),b:n(tr.querySelector('.m-b').value),h:n(tr.querySelector('.m-h').value),len:n(tr.querySelector('.m-len').value),nt:n(tr.querySelector('.m-nt').value),dt:n(tr.querySelector('.m-dtop').value),nb:n(tr.querySelector('.m-nb').value),db:n(tr.querySelector('.m-db').value),net:n(tr.querySelector('.m-net').value),det:n(tr.querySelector('.m-det').value),etf:n(tr.querySelector('.m-etf').value,.25),neb:n(tr.querySelector('.m-neb').value),deb:n(tr.querySelector('.m-deb').value),ebf:n(tr.querySelector('.m-ebf').value,.725),dst:n(tr.querySelector('.m-dst').value),sst:n(tr.querySelector('.m-sst').value)})),
+    s:rows('multiSlabBody',tr=>({mark:tr.querySelector('.m-mark').value.trim(),qty:n(tr.querySelector('.m-qty').value),l:n(tr.querySelector('.m-l').value),w:n(tr.querySelector('.m-w').value),t:n(tr.querySelector('.m-t').value),c:n(tr.querySelector('.m-c').value),d1:n(tr.querySelector('.m-d1').value),sp1:n(tr.querySelector('.m-sp1').value),d2:n(tr.querySelector('.m-d2').value),sp2:n(tr.querySelector('.m-sp2').value)}))
+  };
+}
+
+function concrete(vol){
+  const rc=n($('multiRatioC').value,1),rs=n($('multiRatioS').value,1.5),ra=n($('multiRatioA').value,3),sum=rc+rs+ra||1,dry=vol*1.54;
+  return {cement:(dry*rc/sum)/1.25,sand:dry*rs/sum,chips:dry*ra/sum};
+}
+function item(segment,mark,qty,vol,steel){return {segment,mark:mark||'—',qty,vol,steel,...concrete(vol)}}
+function aggregate(items){return items.reduce((a,x)=>{a.marks++;a.units+=x.qty;a.vol+=x.vol;a.cement+=x.cement;a.sand+=x.sand;a.chips+=x.chips;a.steel+=x.steel;return a},{marks:0,units:0,vol:0,cement:0,sand:0,chips:0,steel:0,items})}
+function meshTwoWay(l,w,cover,d1,sp1,d2,sp2,layers=1){
+  if(!(l>0&&w>0&&sp1>0&&sp2>0&&layers>0))return 0;
+  const li=Math.max(0,l-cover*2/12),wi=Math.max(0,w-cover*2/12);
+  const n1=Math.floor(wi*12/sp1)+1,n2=Math.floor(li*12/sp2)+1;
+  return (n1*ftm(li)*steelKgM(d1)+n2*ftm(wi)*steelKgM(d2))*layers;
+}
+function calcIso(list){
+  const items=[];
+  list.forEach(x=>{
+    if(!(x.qty>0&&x.l>0&&x.w>0&&x.hc>0&&x.sp1>0&&x.sp2>0))return;
+    let oneVol=0;
+    if(x.profile==='slope'&&x.he>0&&x.hc>x.he&&x.tl>0&&x.tw>0){
+      const edge=x.he/12,slope=(x.hc-x.he)/12,a1=x.l*x.w,a2=Math.min(x.tl,x.l)*Math.min(x.tw,x.w);
+      oneVol=a1*edge+slope*(a1+a2+Math.sqrt(a1*a2))/3;
+    }else oneVol=x.l*x.w*x.hc/12;
+    const steel=meshTwoWay(x.l,x.w,x.c,x.d1,x.sp1,x.d2,x.sp2,1)*x.qty;
+    items.push(item('Isolated Footing',x.mark,x.qty,oneVol*x.qty,steel));
+  });
+  return aggregate(items);
+}
+function calcComb(list){
+  const items=[];
+  list.forEach(x=>{
+    const w2=x.shape==='rect'?x.w1:x.w2,avgW=(x.w1+w2)/2;
+    if(!(x.qty>0&&x.l>0&&x.w1>0&&w2>0&&x.t>0&&x.sp1>0&&x.sp2>0))return;
+    const vol=x.l*avgW*x.t/12*x.qty;
+    const clearL=Math.max(0,x.l-x.c*2/12),clearW=Math.max(0,avgW-x.c*2/12);
+    const nLong=Math.floor(clearW*12/x.sp1)+1,nTrans=Math.floor(clearL*12/x.sp2)+1;
+    const steel=(nLong*ftm(clearL)*steelKgM(x.d1)+nTrans*ftm(clearW)*steelKgM(x.d2))*x.qty;
+    items.push(item('Combined Footing',x.mark,x.qty,vol,steel));
+  });
+  return aggregate(items);
+}
+function calcRaft(list){
+  const items=[];
+  list.forEach(x=>{
+    if(!(x.qty>0&&x.l>0&&x.w>0&&x.t>0&&x.spt>0&&x.spb>0))return;
+    const vol=x.l*x.w*x.t/12*x.qty;
+    const top=meshTwoWay(x.l,x.w,x.c,x.dt,x.spt,x.dt,x.spt,1);
+    const bottom=meshTwoWay(x.l,x.w,x.c,x.db,x.spb,x.db,x.spb,1);
+    items.push(item('Mat / Raft',x.mark,x.qty,vol,(top+bottom)*x.qty));
+  });
+  return aggregate(items);
+}
+function calcPile(list){
+  const items=[];
+  list.forEach(x=>{
+    if(!(x.qty>0&&x.cl>0&&x.cw>0&&x.ct>0&&x.np>0&&x.pd>0&&x.pl>0&&x.csp>0&&x.tsp>0))return;
+    const capVol=x.cl*x.cw*x.ct/12;
+    const pileDiaFt=x.pd/12,pileVol=Math.PI*pileDiaFt*pileDiaFt/4*x.pl*x.np;
+    const capSteel=meshTwoWay(x.cl,x.cw,x.cov,x.cd,x.csp,x.cd,x.csp,Math.max(1,x.ml));
+    const mainLenFt=x.pl+x.ct/12;
+    const pileMain=x.np*x.nm*ftm(mainLenFt)*steelKgM(x.md);
+    const cageDiaIn=Math.max(0,x.pd-2*x.cov),tieN=Math.floor(x.pl*12/x.tsp)+1;
+    const tieHookFt=(20*x.td/25.4)/12,tieLenFt=Math.PI*cageDiaIn/12+tieHookFt;
+    const pileTies=x.np*tieN*ftm(tieLenFt)*steelKgM(x.td);
+    items.push(item('Pile + Pile Cap',x.mark,x.qty,(capVol+pileVol)*x.qty,(capSteel+pileMain+pileTies)*x.qty));
+  });
+  return aggregate(items);
+}
+function calcC(list){const items=[];list.forEach(x=>{const height=x.fh*x.st+x.ex;if(!(x.qty>0&&x.b>0&&x.h>0&&height>0&&x.s>0))return;const vol=x.b/12*x.h/12*height*x.qty,main=ftm(height)*x.nm*steelKgM(x.dm),ib=Math.max(0,x.b-2*x.cov),ih=Math.max(0,x.h-2*x.cov),tieN=Math.floor(height*12/x.s)+1,tieLenFt=(2*(ib+ih)+(20*x.dt/25.4))/12,ties=tieN*ftm(tieLenFt)*steelKgM(x.dt),steel=(main+ties)*x.qty;items.push(item('Column',x.mark,x.qty,vol,steel))});return aggregate(items)}
+function calcB(list){const items=[];list.forEach(x=>{if(!(x.qty>0&&x.b>0&&x.h>0&&x.len>0&&x.sst>0))return;const vol=x.b/12*x.h/12*x.len*x.qty,straight=x.nt*ftm(x.len)*steelKgM(x.dt)+x.nb*ftm(x.len)*steelKgM(x.db),extraTop=Math.max(0,x.net)*ftm(x.len*Math.max(0,x.etf||.25))*steelKgM(x.det||x.dt),extraBottom=Math.max(0,x.neb)*ftm(x.len*Math.max(0,x.ebf||.725))*steelKgM(x.deb||x.db),main=straight+extraTop+extraBottom,stirN=Math.floor(x.len*12/x.sst)+1,stirLenFt=(2*(Math.max(0,x.b-3)+Math.max(0,x.h-3))+12*x.dst/25.4)/12,steel=(main+stirN*ftm(stirLenFt)*steelKgM(x.dst))*x.qty;items.push(item('Beam',x.mark,x.qty,vol,steel))});return aggregate(items)}
+function calcS(list){const items=[];list.forEach(x=>{if(!(x.qty>0&&x.l>0&&x.w>0&&x.t>0&&x.sp1>0&&x.sp2>0))return;const vol=x.l*x.w*x.t/12*x.qty,steel=meshTwoWay(x.l,x.w,x.c,x.d1,x.sp1,x.d2,x.sp2,1)*x.qty;items.push(item('Slab',x.mark,x.qty,vol,steel))});return aggregate(items)}
+
+function rates(){return {cement:n($('rateCement')?.value),sand:n($('rateSand')?.value),brick:n($('rateBrick')?.value),stone:n($('rateStone')?.value),steel:n($('rateRod')?.value)}}
+function settings(){return {cw:n($('multiConcreteWaste').value),sw:n($('multiSteelWaste').value),lab:n($('multiLaborPct').value),cont:n($('multiContingencyPct').value),other:n($('multiOtherCost').value),pileDirect:n($('multiPileDirectCost')?.value),chips:$('multiChipsType').value}}
+function procurement(r,s){return {...r,pcement:r.cement*(1+s.cw/100),psand:r.sand*(1+s.cw/100),pchips:r.chips*(1+s.cw/100),psteel:r.steel*(1+s.sw/100)}}
+function materialCost(r,rate,s){const p=procurement(r,s),chipRate=s.chips==='stone'?rate.stone:rate.brick;return {p,cost:p.pcement*rate.cement+p.psand*rate.sand+p.pchips*chipRate+p.psteel*rate.steel,raw:r.cement*rate.cement+r.sand*rate.sand+r.chips*chipRate+r.steel*rate.steel}}
+function projectInfo(){return {name:$('multiProjectName').value.trim(),location:$('multiProjectLocation').value.trim(),prepared:$('multiPreparedBy').value.trim(),date:$('multiEstimateDate').value}}
+
+function calculate({silent=false}={}){
+  const d=data(),s=settings(),rate=rates();
+  const parts=[['Isolated Footing',calcIso(d.iso)],['Combined Footing',calcComb(d.comb)],['Mat / Raft',calcRaft(d.raft)],['Pile + Pile Cap',calcPile(d.pile)],['Column',calcC(d.c)],['Beam',calcB(d.b)],['Slab',calcS(d.s)]];
+  const total={marks:0,units:0,vol:0,cement:0,sand:0,chips:0,steel:0};
+  parts.forEach(([name,r])=>{Object.keys(total).forEach(k=>total[k]+=r[k]||0);const mc=materialCost(r,rate,s);r.materialCost=mc.cost;r.rawCost=mc.raw;r.procurement=mc.p;r.direct=name==='Pile + Pile Cap'?s.pileDirect:0;const unitSum=r.items.reduce((a,x)=>a+x.qty,0)||1;r.items.forEach(x=>{x.direct=r.direct*(x.qty/unitSum);x.cost=materialCost(x,rate,s).cost+x.direct});r.cost=r.materialCost+r.direct});
+  const totalMC=materialCost(total,rate,s),material=totalMC.cost,direct=s.pileDirect,wastage=Math.max(0,material-totalMC.raw),labour=material*s.lab/100,contingency=(material+direct+labour)*s.cont/100,grand=material+direct+labour+contingency+s.other;
+  const report={project:projectInfo(),data:d,settings:s,rates:rate,parts,total,procurement:totalMC.p,rawMaterial:totalMC.raw,material,direct,wastage,labour,contingency,other:s.other,grand,created:new Date()};
+  lastReport=report;render(report);save(false);if(!silent)flashStatus('Calculated & saved');return report;
+}
+function addOut(a,b,hot=false){const e=document.createElement('div');e.className='out-item'+(hot?' hot':'');e.innerHTML=`<span>${esc(a)}</span><strong>${esc(b)}</strong>`;$('buildingScheduleOut').appendChild(e)}
+function render(r){
+  $('buildingScheduleOut').innerHTML='';
+  addOut('Valid Marks',r.total.marks);addOut('Total Element Units',fmt(r.total.units,0));addOut('Concrete Volume',fmt(r.total.vol)+' cft');addOut('Cement for Procurement',fmt(r.procurement.pcement)+' bags',true);addOut('Sand for Procurement',fmt(r.procurement.psand)+' cft');addOut((r.settings.chips==='stone'?'Stone':'Brick')+' Chips for Procurement',fmt(r.procurement.pchips)+' cft');addOut('Steel for Procurement',fmt(r.procurement.psteel)+' kg',true);addOut('Final Structural Budget',money(r.grand),true);
+  $('buildingCostBridge').innerHTML=[['Raw materials',r.rawMaterial],['Loss / lap allowance',r.wastage],['Pile execution / direct',r.direct],['Labour & handling',r.labour],['Contingency',r.contingency],['Other fixed cost',r.other],['Final budget',r.grand,'final']].map(([a,b,c])=>`<div class="cost-bridge-item ${c||''}"><span>${esc(a)}</span><strong>${money(b)}</strong></div>`).join('');
+  $('buildingScheduleBreakdown').innerHTML=r.parts.map(([name,x])=>`<tr><td><strong>${name}</strong></td><td>${x.marks}</td><td>${fmt(x.units,0)}</td><td>${fmt(x.vol)}</td><td>${fmt(x.procurement.pcement)}</td><td>${fmt(x.procurement.psand)}</td><td>${fmt(x.procurement.pchips)}</td><td>${fmt(x.procurement.psteel)}</td><td>${money(x.direct)}</td><td class="building-cost-highlight">${money(x.cost)}</td></tr>`).join('')+`<tr class="grand"><td><strong>Structural Total</strong></td><td>${r.total.marks}</td><td>${fmt(r.total.units,0)}</td><td>${fmt(r.total.vol)}</td><td>${fmt(r.procurement.pcement)}</td><td>${fmt(r.procurement.psand)}</td><td>${fmt(r.procurement.pchips)}</td><td>${fmt(r.procurement.psteel)}</td><td>${money(r.direct)}</td><td class="building-cost-highlight">${money(r.material+r.direct)}</td></tr>`;
+  const max=Math.max(...r.parts.map(([,x])=>x.cost),1);$('buildingSegmentShares').innerHTML=r.parts.map(([name,x])=>`<div class="segment-share-row"><span>${name}</span><div class="segment-share-track"><span class="segment-share-fill" style="--share:${(x.cost/max*100).toFixed(1)}%"></span></div><strong>${money(x.cost)}</strong></div>`).join('');
+  const itemRows=r.parts.flatMap(([,x])=>x.items);$('buildingMarkBreakdown').innerHTML=itemRows.length?itemRows.map(x=>`<tr><td>${esc(x.segment)}</td><td><span class="mark-chip">${esc(x.mark)}</span></td><td>${fmt(x.qty,0)}</td><td>${fmt(x.vol)}</td><td>${fmt(x.cement)}</td><td>${fmt(x.sand)}</td><td>${fmt(x.chips)}</td><td>${fmt(x.steel)}</td><td>${money(x.direct)}</td><td class="building-cost-highlight">${money(x.cost)}</td></tr>`).join(''):'<tr><td colspan="10" style="text-align:center;color:var(--muted)">No valid schedule row found.</td></tr>';
+  const title=r.project.name||'Whole Building Structural Quantity';$('buildingResultTitle').textContent=title;$('buildingResultMeta').textContent=[r.project.location,r.project.prepared?`Prepared by ${r.project.prepared}`:'',r.project.date||new Date().toLocaleDateString('en-GB')].filter(Boolean).join(' • ');$('buildingResultStatus').textContent=`${r.total.marks} marks • ${fmt(r.total.units,0)} units`;$('buildingScheduleResult').style.display='block';window.__buildingScheduleTotal=r;updateStats(r);
+}
+
+function tankState(){
+  const ids=['septicPopulation','septicFactor','septicFlow','septicCustomFlow','septicRetention','septicDesludge','septicSludgeRate','septicDepth','septicRatio','ohtUnits','ohtPersonsPerUnit','ohtExtraPersons','ohtDemandPreset','ohtCustomDemand','ugrStorageDays','ohtFireFlow','ohtFireMinutes','ohtDepth','ohtRatio','ohtFreeboard','ugrCompartments'];
+  return Object.fromEntries(ids.map(id=>[id,$(id)?.value??'']));
+}
+function restoreTankState(state={}){Object.entries(state).forEach(([id,value])=>{if($(id))$(id).value=value})}
+function resetTankDefaults(){restoreTankState({septicPopulation:25,septicFactor:1,septicFlow:120,septicCustomFlow:120,septicRetention:1,septicDesludge:1,septicSludgeRate:.04,septicDepth:1.2,septicRatio:3,ohtUnits:5,ohtPersonsPerUnit:5,ohtExtraPersons:0,ohtDemandPreset:180,ohtCustomDemand:180,ugrStorageDays:1,ohtFireFlow:0,ohtFireMinutes:60,ohtDepth:2.4,ohtRatio:2,ohtFreeboard:.3,ugrCompartments:2})}
+function tankResultItem(label,value,hot=false){return `<div class="tank-result-item ${hot?'hot':''}"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`}
+function dimensionForVolume(volumeM3,depth,ratio,minWidth=.6){
+  if(!(volumeM3>0&&depth>0&&ratio>0))return {l:0,w:0,d:depth,provided:0};
+  let w=Math.max(minWidth,Math.sqrt(volumeM3/(depth*ratio)));w=ceilStep(w,.1);
+  let l=ceilStep(Math.max(ratio*w,volumeM3/(depth*w)),.1);
+  return {l,w,d:depth,provided:l*w*depth};
+}
+function calcSepticTank(renderResult=true){
+  const actualP=Math.max(0,n($('septicPopulation').value)),factor=Math.max(0,n($('septicFactor').value,1)),effectiveP=actualP*factor;
+  const q=$('septicFlow').value==='custom'?Math.max(0,n($('septicCustomFlow').value)):Math.max(0,n($('septicFlow').value));
+  const t=Math.max(1,n($('septicRetention').value,1)),v=Math.min(1,Math.max(.5,n($('septicDesludge').value,1))),s=Math.max(0,n($('septicSludgeRate').value,.04));
+  const liquidDepth=Math.max(1,n($('septicDepth').value,1)),ratio=Math.min(4,Math.max(3,n($('septicRatio').value,3)));
+  const hydraulicL=effectiveP*q*t,sludgeL=effectiveP*s*1000*v,formulaL=hydraulicL+sludgeL,requiredL=Math.max(2000,formulaL);
+  const dim=dimensionForVolume(requiredL/1000,liquidDepth,ratio,1),providedL=dim.provided*1000,two=requiredL>3000;
+  const warning=actualP>300&&factor===1?'Residential users exceed BNBC septic-tank limit (300). Use Imhoff/approved system.':(formulaL<2000?'BNBC minimum liquid capacity controls.':'Calculated capacity controls.');
+  const result={actualP,factor,effectiveP,q,t,v,s,hydraulicL,sludgeL,formulaL,requiredL,providedL,dim,two,warning};
+  if(renderResult){
+    $('septicTankResults').innerHTML=tankResultItem('Effective design population',`${fmt(effectiveP,2)} (${fmt(actualP,0)} × ${factor})`)+tankResultItem('Formula volume',`${fmt(formulaL,0)} L`)+tankResultItem('Required liquid capacity',`${fmt(requiredL,0)} L`,true)+tankResultItem('Suggested internal L × W × liquid D',`${fmt(dim.l,1)} × ${fmt(dim.w,1)} × ${fmt(dim.d,1)} m`,true)+tankResultItem('Provided liquid capacity',`${fmt(providedL,0)} L`)+tankResultItem('Total internal height',`${fmt(dim.d+.30,2)} m incl. 0.30 m clear`)+tankResultItem('Chamber arrangement',two?`Two chamber; inlet ≥ ${fmt(requiredL*2/3,0)} L`:'One chamber acceptable')+tankResultItem('Design note',warning,true);
+  }
+  return result;
+}
+function calcOhtTank(renderResult=true){
+  const units=Math.max(0,n($('ohtUnits').value)),ppu=Math.max(0,n($('ohtPersonsPerUnit').value)),extra=Math.max(0,n($('ohtExtraPersons').value)),people=units*ppu+extra;
+  const lpcd=$('ohtDemandPreset').value==='custom'?Math.max(0,n($('ohtCustomDemand').value)):Math.max(0,n($('ohtDemandPreset').value));
+  const storageDays=Math.min(3,Math.max(1,n($('ugrStorageDays')?.value,1))),compartments=Math.max(2,Math.round(n($('ugrCompartments')?.value,2)));
+  const dailyL=people*lpcd,dailyM3=dailyL/1000,fireM3=Math.max(0,n($('ohtFireFlow').value))*Math.max(0,n($('ohtFireMinutes').value))/1000;
+  const roofDomestic=.5*dailyM3,roofM3=roofDomestic+fireM3,ugrDomestic=dailyM3*storageDays,ugrM3=ugrDomestic+fireM3,depth=Math.max(.8,n($('ohtDepth').value,2.4)),ratio=Math.max(1,n($('ohtRatio').value,2)),free=Math.max(0,n($('ohtFreeboard').value,.3));
+  const roofDim=dimensionForVolume(roofM3,1.5,1.5,.6),ugrDim=dimensionForVolume(ugrM3,depth,ratio,.8),perCompM3=ugrM3/compartments;
+  const result={units,ppu,extra,people,lpcd,storageDays,compartments,dailyL,dailyM3,fireM3,roofDomestic,roofM3,ugrDomestic,ugrM3,depth,ratio,free,roofDim,ugrDim,perCompM3};
+  if(renderResult){
+    $('ohtTankResults').innerHTML=tankResultItem('Design population',`${fmt(people,0)} persons`)+tankResultItem('BNBC daily domestic demand',`${fmt(dailyL,0)} L/day`,true)+tankResultItem(`Domestic storage (${fmt(storageDays,0)} day${storageDays>1?'s':''})`,`${fmt(ugrDomestic*1000,0)} L`)+tankResultItem('Entered fire reserve',`${fmt(fireM3*1000,0)} L`)+tankResultItem('Required underground reservoir',`${fmt(ugrM3*1000,0)} L`,true)+tankResultItem('UGR internal L × W × water D',`${fmt(ugrDim.l,1)} × ${fmt(ugrDim.w,1)} × ${fmt(ugrDim.d,1)} m`,true)+tankResultItem('UGR total internal height',`${fmt(depth+free,2)} m incl. freeboard`)+tankResultItem('Cleaning compartments',`${compartments} units • approx. ${fmt(perCompM3*1000,0)} L each`)+tankResultItem('BNBC roof-tank reference',`${fmt(roofM3*1000,0)} L (½ day + fire reserve)`);
+  }
+  return result;
+}
+function queueTank(){clearTimeout(tankTimer);tankTimer=setTimeout(()=>{calcSepticTank();calcOhtTank();save(false)},220)}
+
+function foundationBodies(){return ['multiIsolatedBody','multiCombinedBody','multiRaftBody','multiPileBody']}
+function allScheduleBodies(){return [...foundationBodies(),'multiColumnBody','multiBeamBody','multiSlabBody']}
+function updateCounts(){
+  const foundationPairs=[['multiIsolatedBody','foundationCountIso'],['multiCombinedBody','foundationCountComb'],['multiRaftBody','foundationCountRaft'],['multiPileBody','foundationCountPile']];
+  let foundationRows=0,rowsCount=0,units=0;
+  foundationPairs.forEach(([body,badge])=>{const c=$(body).querySelectorAll('tr').length;$(badge).textContent=c;foundationRows+=c});
+  $('multiCountF').textContent=foundationRows;
+  [['multiColumnBody','multiCountC'],['multiBeamBody','multiCountB'],['multiSlabBody','multiCountS']].forEach(([body,badge])=>{$(badge).textContent=$(body).querySelectorAll('tr').length});
+  allScheduleBodies().forEach(body=>{const c=$(body).querySelectorAll('tr').length;rowsCount+=c;$(body).querySelectorAll('.m-qty').forEach(i=>units+=Math.max(0,n(i.value)))});
+  $('buildingStatMarks').textContent=rowsCount;$('buildingStatUnits').textContent=fmt(units,0);
+}
+function updateStats(r){$('buildingStatMarks').textContent=r.total.marks;$('buildingStatUnits').textContent=fmt(r.total.units,0);$('multiRateSnapshot').textContent=`Rates: Cement ${money(r.rates.cement)}/bag • Steel ${money(r.rates.steel)}/kg`}
+function flashStatus(msg){$('buildingStatSaved').textContent=msg;clearTimeout(flashStatus.t);flashStatus.t=setTimeout(()=>$('buildingStatSaved').textContent='Saved locally',1800)}
+function afterRowChange(){updateCounts();if(!loading)queueAuto()}
+function queueAuto(){if(loading)return;save(false);if(!$('multiAutoCalc')?.checked)return;clearTimeout(autoTimer);autoTimer=setTimeout(()=>calculate({silent:true}),420)}
+function save(show=true){
+  if(loading)return;
+  const payload={version:4,rows:data(),project:projectInfo(),chips:$('multiChipsType').value,ratios:[$('multiRatioC').value,$('multiRatioS').value,$('multiRatioA').value],allowances:[$('multiConcreteWaste').value,$('multiSteelWaste').value,$('multiLaborPct').value,$('multiContingencyPct').value,$('multiOtherCost').value,$('multiPileDirectCost')?.value??0],auto:$('multiAutoCalc').checked,tanks:tankState(),savedAt:new Date().toISOString()};
+  localStorage.setItem('structuralSuiteMultiSchedule',JSON.stringify(payload));if(show)flashStatus('Saved locally');
+}
+function seed(){
+  addIso({mark:'F1',qty:1,profile:'slope'});addComb({mark:'CF1',qty:0});addRaft({mark:'M1',qty:0});addPile({mark:'P1',qty:0});addC({mark:'C1',qty:10});addB({mark:'B1'});addS({mark:'S1'});
+}
+function ensureFoundationRows(){if(!$('multiIsolatedBody').children.length)addIso({mark:'F1',qty:0});if(!$('multiCombinedBody').children.length)addComb({mark:'CF1',qty:0});if(!$('multiRaftBody').children.length)addRaft({mark:'M1',qty:0});if(!$('multiPileBody').children.length)addPile({mark:'P1',qty:0})}
+function load(){
+  let z;try{z=JSON.parse(localStorage.getItem('structuralSuiteMultiSchedule'))}catch(e){}
+  if(z?.rows){
+    const r=z.rows;
+    if(Array.isArray(r.f))r.f.forEach(v=>addIso({mark:v.mark,qty:v.qty,profile:'flat',l:v.l,w:v.w,tl:2,tw:2,he:v.t,hc:v.t,c:v.c,d1:v.d1,sp1:v.sp1,d2:v.d2,sp2:v.sp2}));else (r.iso||[]).forEach(addIso);
+    (r.comb||[]).forEach(addComb);(r.raft||[]).forEach(addRaft);(r.pile||[]).forEach(addPile);(r.c||[]).forEach(addC);(r.b||[]).forEach(addB);(r.s||[]).forEach(addS);
+    ensureFoundationRows();if(!(r.c||[]).length)addC({mark:'C1',qty:10});if(!(r.b||[]).length)addB({mark:'B1'});if(!(r.s||[]).length)addS({mark:'S1'});
+    $('multiChipsType').value=z.chips||'brick';if(z.ratios){$('multiRatioC').value=z.ratios[0];$('multiRatioS').value=z.ratios[1];$('multiRatioA').value=z.ratios[2]}if(z.allowances){[$('multiConcreteWaste'),$('multiSteelWaste'),$('multiLaborPct'),$('multiContingencyPct'),$('multiOtherCost'),$('multiPileDirectCost')].forEach((el,i)=>{if(el)el.value=z.allowances[i]??el.value})}if(z.project){$('multiProjectName').value=z.project.name||'';$('multiProjectLocation').value=z.project.location||'';$('multiPreparedBy').value=z.project.prepared||'';$('multiEstimateDate').value=z.project.date||''}if(z.tanks)restoreTankState(z.tanks);$('multiAutoCalc').checked=z.auto!==false;$('buildingStatSaved').textContent=z.savedAt?'Loaded saved':'Loaded';
+  }else seed();
+  if(!$('multiEstimateDate').value)$('multiEstimateDate').value=new Date().toISOString().slice(0,10);
+  loading=false;updateCounts();calcSepticTank();calcOhtTank();setTimeout(()=>calculate({silent:true}),0);
+}
+function reset(){
+  if(!confirm('Foundation, column, beam, slab এবং BNBC tank inputs reset করবেন?'))return;
+  loading=true;allScheduleBodies().forEach(id=>$(id).innerHTML='');counters={iso:0,comb:0,raft:0,pile:0,c:0,b:0,s:0};localStorage.removeItem('structuralSuiteMultiSchedule');$('buildingScheduleResult').style.display='none';seed();resetTankDefaults();loading=false;updateCounts();calcSepticTank();calcOhtTank();calculate({silent:true});flashStatus('Schedule reset');
+}
+function summaryText(r=lastReport||calculate({silent:true})){return [`Project: ${r.project.name||'Untitled structural estimate'}`,r.project.location?`Location: ${r.project.location}`:'',`Valid marks: ${r.total.marks}; element units: ${fmt(r.total.units,0)}`,`Concrete: ${fmt(r.total.vol)} cft`,`Cement (with loss): ${fmt(r.procurement.pcement)} bags`,`Sand (with loss): ${fmt(r.procurement.psand)} cft`,`${r.settings.chips==='stone'?'Stone':'Brick'} chips (with loss): ${fmt(r.procurement.pchips)} cft`,`Steel (with wastage/lap): ${fmt(r.procurement.psteel)} kg`,`Material subtotal: ${money(r.material)}`,`Labour & handling: ${money(r.labour)}`,`Contingency: ${money(r.contingency)}`,`Pile execution / direct work: ${money(r.direct)}`,`Other fixed cost: ${money(r.other)}`,`Final structural budget: ${money(r.grand)}`].filter(Boolean).join('\n')}
+async function copySummary(){const t=summaryText();try{await navigator.clipboard.writeText(t);flashStatus('Summary copied')}catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();flashStatus('Summary copied')}}
+function exportToast(message,isError=false){
+  let toast=$('suiteExportToast');
+  if(!toast){toast=document.createElement('div');toast.id='suiteExportToast';toast.innerHTML='<i></i><span></span>';document.body.appendChild(toast)}
+  toast.querySelector('span').textContent=message;toast.classList.toggle('error',!!isError);toast.classList.add('show');clearTimeout(exportToast.t);exportToast.t=setTimeout(()=>toast.classList.remove('show'),3200);
+}
+function safeFileBase(value){
+  const normalized=String(value||'').normalize('NFKC').trim().replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-+|-+$/g,'').slice(0,90);
+  return normalized||'building-structural-estimate';
+}
+function csvCell(v){
+  let s=String(v??'').replace(/\r?\n/g,' ').trim();
+  if(/^[=+\-@]/.test(s))s="'"+s; // spreadsheet formula-injection protection
+  return `"${s.replace(/"/g,'""')}"`;
+}
+function downloadBlob(blob,filename){
+  if(window.navigator.msSaveOrOpenBlob){window.navigator.msSaveOrOpenBlob(blob,filename);return}
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=filename;a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),8000);
+}
+function exportCSV(){
+  try{
+    const r=calculate({silent:true}),septic=calcSepticTank(false),ugr=calcOhtTank(false),rows=[];
+    const push=(...cells)=>rows.push(cells.map(csvCell).join(',')),blank=()=>rows.push('');
+    push('STRUCTURAL SUITE — WHOLE BUILDING ESTIMATE');
+    push('Project',r.project.name||'Untitled structural estimate');push('Location',r.project.location);push('Prepared By',r.project.prepared);push('Estimate Date',r.project.date);push('Generated (ISO)',r.created.toISOString());push('Currency','BDT / Taka');blank();
+    push('EXECUTIVE SUMMARY','VALUE','UNIT');
+    [['Valid marks',r.total.marks,'No.'],['Total element units',fmt(r.total.units,0),'No.'],['Concrete volume',fmt(r.total.vol,3),'cft'],['Cement procurement',fmt(r.procurement.pcement,3),'bag'],['Sand procurement',fmt(r.procurement.psand,3),'cft'],['Chips procurement',fmt(r.procurement.pchips,3),'cft'],['Steel procurement',fmt(r.procurement.psteel,3),'kg'],['Raw material cost',r.rawMaterial.toFixed(0),'BDT'],['Loss / lap allowance',r.wastage.toFixed(0),'BDT'],['Pile execution / direct work',r.direct.toFixed(0),'BDT'],['Labour & handling',r.labour.toFixed(0),'BDT'],['Contingency',r.contingency.toFixed(0),'BDT'],['Other fixed cost',r.other.toFixed(0),'BDT'],['FINAL STRUCTURAL BUDGET',r.grand.toFixed(0),'BDT']].forEach(x=>push(...x));blank();
+    push('SEGMENT SUMMARY','MARKS','UNITS','CONCRETE CFT','CEMENT BAG','SAND CFT','CHIPS CFT','STEEL KG','DIRECT WORK BDT','COST BDT');
+    r.parts.forEach(([name,x])=>push(name,x.marks,fmt(x.units,0),x.vol.toFixed(3),x.procurement.pcement.toFixed(3),x.procurement.psand.toFixed(3),x.procurement.pchips.toFixed(3),x.procurement.psteel.toFixed(3),x.direct.toFixed(0),x.cost.toFixed(0)));blank();
+    push('MARK-WISE AUDIT','SEGMENT','MARK','QTY','CONCRETE CFT','CEMENT BAG','SAND CFT','CHIPS CFT','STEEL KG','DIRECT WORK BDT','COST BDT');
+    r.parts.flatMap(([,x])=>x.items).forEach(x=>push('ITEM',x.segment,x.mark,x.qty,x.vol.toFixed(3),x.cement.toFixed(3),x.sand.toFixed(3),x.chips.toFixed(3),x.steel.toFixed(3),x.direct.toFixed(0),x.cost.toFixed(0)));blank();
+    push('BNBC 2020 TANK SIZING','VALUE','UNIT / NOTE');
+    [['Septic design population',septic.effectiveP.toFixed(2),'persons (effective)'],['Septic formula volume',septic.formulaL.toFixed(0),'L'],['Septic required liquid capacity',septic.requiredL.toFixed(0),'L'],['Septic internal size',`${septic.dim.l.toFixed(1)} x ${septic.dim.w.toFixed(1)} x ${septic.dim.d.toFixed(1)}`,'m (L x W x liquid D)'],['UGR design population',ugr.people.toFixed(0),'persons'],['UGR daily demand',ugr.dailyL.toFixed(0),'L/day'],['UGR storage period',ugr.storageDays.toFixed(0),'day(s)'],['UGR fire reserve',(ugr.fireM3*1000).toFixed(0),'L'],['UGR required capacity',(ugr.ugrM3*1000).toFixed(0),'L'],['UGR internal size',`${ugr.ugrDim.l.toFixed(1)} x ${ugr.ugrDim.w.toFixed(1)} x ${ugr.ugrDim.d.toFixed(1)}`,'m (L x W x water D)'],['UGR compartments',ugr.compartments.toFixed(0),'minimum selected units'],['Roof tank reference',(ugr.roofM3*1000).toFixed(0),'L (half day + fire reserve)']].forEach(x=>push(...x));blank();
+    push('SCOPE NOTE','RCC frame quantities and selected allowances only. Verify against drawings, BBS, geotechnical data, plumbing/fire design and authority requirements.');
+    const csv='\ufeff'+rows.join('\r\n'),filename=`${safeFileBase(r.project.name)}-estimate-${new Date().toISOString().slice(0,10)}.csv`;
+    downloadBlob(new Blob([csv],{type:'text/csv;charset=utf-8'}),filename);exportToast(`CSV exported successfully • ${rows.length} rows`);
+  }catch(err){console.error(err);exportToast('CSV export failed. Please calculate again and retry.',true);alert('CSV export failed: '+(err?.message||err));}
+}
+function pdfEsc(value){return String(value??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]))}
+function pdfMoney(value){return '৳ '+Number(value||0).toLocaleString('en-BD',{maximumFractionDigits:0})}
+function buildPdfReportHtml(r,septic,ugr){
+  const summary=[['Concrete',`${fmt(r.total.vol)} cft`],['Cement',`${fmt(r.procurement.pcement)} bags`],['Sand',`${fmt(r.procurement.psand)} cft`],['Chips',`${fmt(r.procurement.pchips)} cft`],['Steel',`${fmt(r.procurement.psteel)} kg`],['Final Budget',pdfMoney(r.grand)]];
+  const segmentRows=r.parts.map(([name,x])=>`<tr><td><b>${pdfEsc(name)}</b></td><td>${x.marks}</td><td>${fmt(x.units,0)}</td><td>${fmt(x.vol)}</td><td>${fmt(x.procurement.pcement)}</td><td>${fmt(x.procurement.psand)}</td><td>${fmt(x.procurement.pchips)}</td><td>${fmt(x.procurement.psteel)}</td><td>${pdfMoney(x.direct)}</td><td>${pdfMoney(x.cost)}</td></tr>`).join('');
+  const markSections=r.parts.filter(([,x])=>x.items.length).map(([name,x])=>`<section class="report-section mark-section"><h2>${pdfEsc(name)} — Mark-wise Audit</h2><table class="data mark-table"><thead><tr><th>Mark</th><th>Qty</th><th>Concrete<br>cft</th><th>Cement<br>bag</th><th>Sand<br>cft</th><th>Chips<br>cft</th><th>Steel<br>kg</th><th>Direct<br>BDT</th><th>Cost<br>BDT</th></tr></thead><tbody>${x.items.map(i=>`<tr><td><b>${pdfEsc(i.mark)}</b></td><td>${fmt(i.qty,0)}</td><td>${fmt(i.vol)}</td><td>${fmt(i.cement)}</td><td>${fmt(i.sand)}</td><td>${fmt(i.chips)}</td><td>${fmt(i.steel)}</td><td>${Number(i.direct).toFixed(0)}</td><td>${Number(i.cost).toFixed(0)}</td></tr>`).join('')}</tbody></table></section>`).join('');
+  return `<!doctype html><html lang="bn"><head><meta charset="utf-8"><title>${pdfEsc(r.project.name||'Structural Estimate')} - PDF Report</title><style>
+  @page{size:A4 landscape;margin:10mm 9mm 12mm}*{box-sizing:border-box}html{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{margin:0;color:#172033;background:#fff;font-family:Arial,'Noto Sans Bengali','Segoe UI',sans-serif;font-size:9px;line-height:1.35}.toolbar{position:sticky;top:0;z-index:5;display:flex;gap:8px;justify-content:flex-end;padding:10px 14px;background:#111827}.toolbar button{border:0;border-radius:8px;padding:9px 13px;font-weight:700;cursor:pointer}.toolbar .primary{background:#6d5dfc;color:white}.report{max-width:1120px;margin:0 auto;padding:10px}.brand{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #6d5dfc;padding-bottom:9px;margin-bottom:10px}.brand h1{font-size:22px;margin:0 0 4px}.brand p{margin:1px 0;color:#64748b}.badge{padding:6px 9px;border-radius:999px;background:#eef2ff;color:#5145cd;font-weight:800}.summary-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:10px 0}.summary-card{border:1px solid #dbe2ea;border-radius:8px;padding:8px;background:#f8fafc}.summary-card span{display:block;color:#64748b;font-size:8px;text-transform:uppercase;letter-spacing:.04em}.summary-card b{display:block;margin-top:3px;font-size:12px}.budget-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:9px 0 12px}.budget-item{border:1px solid #e2e8f0;border-radius:7px;padding:6px}.budget-item.final{background:#eef2ff;border-color:#a5b4fc}.budget-item span{display:block;color:#64748b;font-size:7.7px}.budget-item b{font-size:10px}.report-section{margin:11px 0;break-inside:auto}.report-section h2{font-size:13px;margin:0 0 6px;padding-left:7px;border-left:3px solid #6d5dfc}.data{width:100%;border-collapse:collapse;table-layout:fixed}.data th,.data td{border:1px solid #d7dee8;padding:4px 4px;text-align:right;vertical-align:top;overflow-wrap:anywhere}.data th{background:#eef2ff;color:#303a55;font-size:7.7px;text-transform:uppercase;letter-spacing:.025em}.data td:first-child,.data th:first-child{text-align:left}.data tbody tr:nth-child(even){background:#f8fafc}.data tr{break-inside:avoid}.mark-section{break-before:auto}.mark-table th:nth-child(1){width:15%}.mark-table th:nth-child(2){width:7%}.tank-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tank-box{border:1px solid #dbe2ea;border-radius:9px;padding:9px;background:#fbfdff}.tank-box h3{margin:0 0 6px;font-size:12px}.tank-list{display:grid;grid-template-columns:1fr 1fr;gap:4px}.tank-list div{border-bottom:1px dotted #cbd5e1;padding:3px}.tank-list span{color:#64748b;display:block;font-size:7.5px}.tank-list b{font-size:9px}.scope{margin-top:12px;border:1px solid #f5d0a8;background:#fff7ed;border-radius:8px;padding:8px;color:#7c4a15}.footer{margin-top:10px;padding-top:6px;border-top:1px solid #dbe2ea;color:#64748b;display:flex;justify-content:space-between}.page-break{break-before:page}@media print{.toolbar{display:none}.report{padding:0}.brand{margin-top:0}}
+  </style></head><body><div class="toolbar"><button onclick="window.close()">Close</button><button class="primary" onclick="window.print()">Print / Save as PDF</button></div><main class="report">
+  <header class="brand"><div><span class="badge">STRUCTURAL SUITE</span><h1>${pdfEsc(r.project.name||'Whole Building Structural Estimate')}</h1><p>${pdfEsc(r.project.location||'Location not entered')}</p><p>Prepared by ${pdfEsc(r.project.prepared||'—')} • Estimate date ${pdfEsc(r.project.date||'—')}</p></div><div style="text-align:right"><b>Professional Estimate Report</b><p>Generated ${pdfEsc(r.created.toLocaleString('en-BD'))}</p><p>${r.total.marks} valid marks • ${fmt(r.total.units,0)} element units</p></div></header>
+  <section class="summary-grid">${summary.map(([a,b])=>`<div class="summary-card"><span>${pdfEsc(a)}</span><b>${pdfEsc(b)}</b></div>`).join('')}</section>
+  <section class="budget-grid">${[['Raw materials',r.rawMaterial],['Loss / lap',r.wastage],['Pile direct',r.direct],['Labour',r.labour],['Contingency',r.contingency],['Other cost',r.other],['Final budget',r.grand,'final']].map(([a,b,c])=>`<div class="budget-item ${c||''}"><span>${pdfEsc(a)}</span><b>${pdfMoney(b)}</b></div>`).join('')}</section>
+  <section class="report-section"><h2>Segment-wise Quantity & Cost</h2><table class="data"><thead><tr><th>Segment</th><th>Marks</th><th>Units</th><th>Concrete<br>cft</th><th>Cement<br>bag</th><th>Sand<br>cft</th><th>Chips<br>cft</th><th>Steel<br>kg</th><th>Direct Work</th><th>Cost</th></tr></thead><tbody>${segmentRows}</tbody></table></section>
+  <section class="report-section"><h2>BNBC 2020 Tank Sizing Summary</h2><div class="tank-grid"><div class="tank-box"><h3>Septic Tank — Appendix S</h3><div class="tank-list"><div><span>Effective population</span><b>${fmt(septic.effectiveP,2)}</b></div><div><span>Required liquid capacity</span><b>${fmt(septic.requiredL,0)} L</b></div><div><span>Internal size</span><b>${fmt(septic.dim.l,1)} × ${fmt(septic.dim.w,1)} × ${fmt(septic.dim.d,1)} m</b></div><div><span>Chamber</span><b>${septic.two?'Two chamber':'One chamber acceptable'}</b></div></div></div><div class="tank-box"><h3>Underground Water Reservoir — Sec. 5.9.1.2</h3><div class="tank-list"><div><span>Daily demand</span><b>${fmt(ugr.dailyL,0)} L/day</b></div><div><span>Storage period</span><b>${fmt(ugr.storageDays,0)} day(s)</b></div><div><span>Required UGR</span><b>${fmt(ugr.ugrM3*1000,0)} L</b></div><div><span>Internal size</span><b>${fmt(ugr.ugrDim.l,1)} × ${fmt(ugr.ugrDim.w,1)} × ${fmt(ugr.ugrDim.d,1)} m</b></div><div><span>Compartments</span><b>${ugr.compartments}</b></div><div><span>Roof tank reference</span><b>${fmt(ugr.roofM3*1000,0)} L</b></div></div></div></div></section>
+  ${markSections}
+  <section class="scope"><b>Scope & verification note:</b> RCC structural frame quantities, selected wastage/lap, labour allowance, contingency and entered fixed/direct costs are included. Brickwork, finishes, MEP, lift, fire protection, professional/statutory fees and unentered execution items are excluded. Final procurement and construction must be verified against approved drawings, geotechnical report, BBS, plumbing/fire design and current authority requirements.</section>
+  <footer class="footer"><span>Structural Suite — Engineering Workspace</span><span>${pdfEsc(r.project.name||'Untitled Project')}</span></footer></main><script>window.addEventListener('load',()=>setTimeout(()=>window.focus(),120));<\/script></body></html>`;
+}
+function exportPdfReport(){
+  try{
+    const r=calculate({silent:true}),septic=calcSepticTank(false),ugr=calcOhtTank(false),win=window.open('','_blank');
+    if(!win){exportToast('Popup blocked. Allow popups for the PDF report.',true);return}
+    win.document.open();win.document.write(buildPdfReportHtml(r,septic,ugr));win.document.close();exportToast('PDF report opened • use Print / Save as PDF');
+  }catch(err){console.error(err);exportToast('PDF report could not be generated.',true);alert('PDF report failed: '+(err?.message||err));}
+}
+
+$('addMultiIsolated').onclick=()=>addIso();$('addMultiCombined').onclick=()=>addComb();$('addMultiRaft').onclick=()=>addRaft();$('addMultiPile').onclick=()=>addPile();$('addMultiColumn').onclick=()=>addC();$('addMultiBeam').onclick=()=>addB();$('addMultiSlab').onclick=()=>addS();$('calcBuildingSchedule').onclick=()=>calculate();$('saveBuildingSchedule').onclick=()=>save();$('clearBuildingSchedule').onclick=reset;$('copyBuildingSummary').onclick=copySummary;$('exportBuildingCSV').onclick=exportCSV;$('printBuildingEstimate').onclick=exportPdfReport;$('calcSepticTank').onclick=()=>calcSepticTank();$('calcOhtTank').onclick=()=>calcOhtTank();
+allScheduleBodies().forEach(id=>$(id).addEventListener('click',e=>{if(e.target.classList.contains('row-del-btn')){e.target.closest('tr').remove();afterRowChange()}}));
+$('buildingScheduleEstimator').addEventListener('input',e=>{if(!e.target.matches('input,select'))return;updateCounts();queueAuto()});
+$('buildingScheduleEstimator').addEventListener('change',e=>{if(!e.target.matches('input,select'))return;queueAuto()});
+$('page-tanks').addEventListener('input',e=>{if(e.target.matches('input,select'))queueTank()});
+$('page-tanks').addEventListener('change',e=>{if(e.target.matches('input,select'))queueTank()});
+['rateCement','rateSand','rateBrick','rateStone','rateRod'].forEach(id=>$(id)?.addEventListener('input',queueAuto));
 document.querySelectorAll('.multi-est-tab').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.multi-est-tab').forEach(x=>x.classList.toggle('active',x===btn));document.querySelectorAll('.multi-est-pane').forEach(x=>x.classList.toggle('active',x.id==='multi-pane-'+btn.dataset.multiTab))});
+document.querySelectorAll('.foundation-type-tab').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.foundation-type-tab').forEach(x=>x.classList.toggle('active',x===btn));document.querySelectorAll('.foundation-type-pane').forEach(x=>x.classList.toggle('active',x.id==='foundation-pane-'+btn.dataset.foundationTab))});
+document.querySelectorAll('[data-foundation-add]').forEach(btn=>btn.onclick=()=>{const type=btn.dataset.foundationAdd;document.querySelector(`.foundation-type-tab[data-foundation-tab="${type}"]`)?.click();({iso:addIso,comb:addComb,raft:addRaft,pile:addPile}[type])()});
+document.querySelectorAll('[data-est-jump]').forEach(btn=>btn.addEventListener('click',()=>$(btn.dataset.estJump)?.scrollIntoView({behavior:'smooth',block:'start'})));
 load();
 })();
+
 </script>
 </body>
 </html>
