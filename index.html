@@ -16,6 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Hind+Siliguri:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
@@ -3519,41 +3520,78 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
       </div>
       <span id="glassTransparencyHelp" class="sr-only">Higher values make interface panels more transparent and reduce background blur.</span>
     </section>
-    <section class="theme-type-customizer" id="themeTypeCustomizer" data-i18n-skip aria-labelledby="themeTypeTitle">
+    <section class="theme-type-customizer type-studio-v2" id="themeTypeCustomizer" data-i18n-skip aria-labelledby="themeTypeTitle">
       <div class="theme-type-head">
         <div>
-          <strong id="themeTypeTitle">Text &amp; Font / টেক্সট ও ফন্ট</strong>
-          <span>Selected theme-এর text color ও UI font নিজের মতো customize করুন। Settings theme অনুযায়ী আলাদা করে save হবে।</span>
+          <span class="theme-type-kicker">TYPE STUDIO</span>
+          <strong id="themeTypeTitle">Typography &amp; Text Colors / টাইপ ও টেক্সট কালার</strong>
+          <span>Heading, body, muted, form, sidebar ও result text আলাদা করে control করুন। প্রতিটি theme-এর setting আলাদা save হবে।</span>
         </div>
-        <button type="button" id="themeTypeReset">Reset theme text</button>
+        <button type="button" id="themeTypeReset">Reset typography</button>
       </div>
-      <div class="theme-type-grid">
-        <label class="theme-type-color">
-          <span>Primary text</span>
-          <span class="theme-color-field"><input id="themeTextColor" type="color" value="#1d1d1f" aria-label="Primary text color"><code id="themeTextColorValue">#1D1D1F</code></span>
-        </label>
-        <label class="theme-type-color">
-          <span>Secondary text</span>
-          <span class="theme-color-field"><input id="themeMutedColor" type="color" value="#6e6e73" aria-label="Secondary text color"><code id="themeMutedColorValue">#6E6E73</code></span>
-        </label>
-        <label class="theme-type-color">
-          <span>Sidebar text</span>
-          <span class="theme-color-field"><input id="themeSidebarColor" type="color" value="#1d1d1f" aria-label="Sidebar text color"><code id="themeSidebarColorValue">#1D1D1F</code></span>
-        </label>
+
+      <div class="theme-type-section-head">
+        <div><strong>Text palette</strong><span>একটা color বদলালে আর অন্য text color বদলাবে না।</span></div>
+        <button type="button" class="theme-mini-action" id="themeTextDefaults">Theme colors</button>
+      </div>
+      <div class="theme-color-grid-v2">
+        <label class="theme-type-color"><span>Heading</span><span class="theme-color-field"><input id="themeHeadingColor" type="color" value="#1d1d1f" aria-label="Heading text color"><code id="themeHeadingColorValue">#1D1D1F</code></span></label>
+        <label class="theme-type-color"><span>Body text</span><span class="theme-color-field"><input id="themeBodyColor" type="color" value="#1d1d1f" aria-label="Body text color"><code id="themeBodyColorValue">#1D1D1F</code></span></label>
+        <label class="theme-type-color"><span>Secondary / muted</span><span class="theme-color-field"><input id="themeMutedColor" type="color" value="#6e6e73" aria-label="Secondary text color"><code id="themeMutedColorValue">#6E6E73</code></span></label>
+        <label class="theme-type-color"><span>Labels &amp; helper</span><span class="theme-color-field"><input id="themeLabelColor" type="color" value="#6e6e73" aria-label="Label and helper text color"><code id="themeLabelColorValue">#6E6E73</code></span></label>
+        <label class="theme-type-color"><span>Inputs &amp; values</span><span class="theme-color-field"><input id="themeInputColor" type="color" value="#1d1d1f" aria-label="Input text color"><code id="themeInputColorValue">#1D1D1F</code></span></label>
+        <label class="theme-type-color"><span>Result / number</span><span class="theme-color-field"><input id="themeResultColor" type="color" value="#007aff" aria-label="Result and number text color"><code id="themeResultColorValue">#007AFF</code></span></label>
+        <label class="theme-type-color"><span>Sidebar main</span><span class="theme-color-field"><input id="themeSidebarColor" type="color" value="#ffffff" aria-label="Sidebar main text color"><code id="themeSidebarColorValue">#FFFFFF</code></span></label>
+        <label class="theme-type-color"><span>Sidebar secondary</span><span class="theme-color-field"><input id="themeSidebarMutedColor" type="color" value="#a8a8b3" aria-label="Sidebar secondary text color"><code id="themeSidebarMutedColorValue">#A8A8B3</code></span></label>
+        <label class="theme-type-color"><span>Active nav text</span><span class="theme-color-field"><input id="themeActiveNavColor" type="color" value="#ffffff" aria-label="Active navigation text color"><code id="themeActiveNavColorValue">#FFFFFF</code></span></label>
+        <label class="theme-type-color"><span>Button text</span><span class="theme-color-field"><input id="themeButtonColor" type="color" value="#ffffff" aria-label="Button text color"><code id="themeButtonColorValue">#FFFFFF</code></span></label>
+      </div>
+
+      <div class="theme-type-section-head typography-head-v2">
+        <div><strong>Font system</strong><span>Modern Latin + Bengali font pairing, weight, spacing ও custom font upload.</span></div>
+      </div>
+      <div class="theme-font-grid-v2">
         <label class="theme-type-font">
-          <span>UI font</span>
-          <select id="themeFontFamily" aria-label="UI font family">
+          <span>Body / UI font</span>
+          <select id="themeBodyFont" aria-label="Body UI font family">
             <option value="theme">Theme default</option>
-            <option value="apple">Apple System / SF Pro</option>
-            <option value="inter">Inter</option>
-            <option value="jakarta">Plus Jakarta Sans</option>
-            <option value="noto-bn">Noto Sans Bengali</option>
-            <option value="segoe">Segoe UI</option>
-            <option value="serif">Classic Serif</option>
+            <optgroup label="Modern">
+              <option value="apple">Apple System / SF Pro</option><option value="inter">Inter</option><option value="manrope">Manrope</option><option value="dm-sans">DM Sans</option><option value="outfit">Outfit</option><option value="sora">Sora</option><option value="urbanist">Urbanist</option><option value="space-grotesk">Space Grotesk</option><option value="jakarta">Plus Jakarta Sans</option><option value="ibm-plex">IBM Plex Sans</option><option value="source-sans">Source Sans 3</option>
+            </optgroup>
+            <optgroup label="Bangla">
+              <option value="noto-bn">Noto Sans Bengali</option><option value="hind-siliguri">Hind Siliguri</option><option value="anek-bangla">Anek Bangla</option>
+            </optgroup>
+            <optgroup label="Classic">
+              <option value="segoe">Segoe UI</option><option value="serif">Classic Serif</option>
+            </optgroup>
+            <option value="custom" id="themeBodyCustomFontOption" disabled>Uploaded custom font</option>
           </select>
         </label>
+        <label class="theme-type-font">
+          <span>Heading / display font</span>
+          <select id="themeHeadingFont" aria-label="Heading font family">
+            <option value="theme">Theme default</option><option value="apple">Apple System / SF Pro</option><option value="inter">Inter</option><option value="manrope">Manrope</option><option value="dm-sans">DM Sans</option><option value="outfit">Outfit</option><option value="sora">Sora</option><option value="urbanist">Urbanist</option><option value="space-grotesk">Space Grotesk</option><option value="jakarta">Plus Jakarta Sans</option><option value="ibm-plex">IBM Plex Sans</option><option value="source-sans">Source Sans 3</option><option value="noto-bn">Noto Sans Bengali</option><option value="hind-siliguri">Hind Siliguri</option><option value="anek-bangla">Anek Bangla</option><option value="segoe">Segoe UI</option><option value="serif">Classic Serif</option><option value="custom" id="themeHeadingCustomFontOption" disabled>Uploaded custom font</option>
+          </select>
+        </label>
+        <label class="theme-type-font"><span>Body weight</span><select id="themeBodyWeight"><option value="400">Regular 400</option><option value="500" selected>Medium 500</option><option value="600">Semibold 600</option><option value="700">Bold 700</option></select></label>
+        <label class="theme-type-font"><span>Heading weight</span><select id="themeHeadingWeight"><option value="600">Semibold 600</option><option value="700" selected>Bold 700</option><option value="800">Extra bold 800</option><option value="900">Black 900</option></select></label>
+        <label class="theme-type-font"><span>Letter spacing</span><select id="themeLetterSpacing"><option value="-0.03em">Tight −3%</option><option value="-0.015em" selected>Modern −1.5%</option><option value="0em">Normal</option><option value="0.015em">Open +1.5%</option><option value="0.03em">Wide +3%</option></select></label>
+        <label class="theme-type-font"><span>Line height</span><select id="themeLineHeight"><option value="1.35">Compact 1.35</option><option value="1.5" selected>Balanced 1.50</option><option value="1.62">Comfortable 1.62</option><option value="1.75">Airy 1.75</option></select></label>
       </div>
-      <div class="theme-type-status" id="themeTypeStatus" role="status" aria-live="polite">Using theme defaults</div>
+
+      <div class="theme-font-upload-v2">
+        <div class="theme-upload-copy">
+          <span class="theme-upload-icon" aria-hidden="true">Aa</span>
+          <div><strong>Upload your own font</strong><span>.woff, .woff2, .ttf বা .otf — browser-এর ভিতরেই রাখা হবে, server-এ upload হবে না।</span></div>
+        </div>
+        <div class="theme-upload-actions">
+          <label class="theme-font-upload-btn" for="themeCustomFontFile">Choose font<input id="themeCustomFontFile" type="file" accept=".woff,.woff2,.ttf,.otf,font/woff,font/woff2,font/ttf,font/otf" hidden></label>
+          <button type="button" class="theme-mini-action" id="themeCustomFontClear">Remove</button>
+        </div>
+        <div class="theme-custom-font-status" id="themeCustomFontStatus">No custom font saved for this theme</div>
+      </div>
+
+      <div class="theme-type-status" id="themeTypeStatus" role="status" aria-live="polite">Using theme typography defaults</div>
     </section>
     <div id="themeGrid"></div>
   </div>
@@ -11087,148 +11125,406 @@ html[data-user-text-custom="true"] #sidebar .page-tab-btn.side-link.active,
 html[data-user-text-custom="true"] #sidebar .side-link:hover{color:var(--sidebar-ink)!important;}
 </style>
 
-<script id="theme-text-font-customizer-v1">
+<script id="theme-text-font-customizer-v1" type="application/x-disabled">/* superseded by typography-studio-v2 */</script>
+
+<style id="typography-studio-mobile-ui-v2">
+/* ================================
+   Typography Studio v2
+   Independent text-color channels + richer font controls
+   ================================ */
+.type-studio-v2{padding:16px!important;border-radius:20px!important}
+.theme-type-kicker{display:inline-flex!important;width:max-content!important;margin:0 0 5px!important;padding:4px 7px!important;border-radius:999px!important;background:rgba(var(--accent-rgb),.10)!important;color:var(--accent)!important;font:800 8px/1 var(--mono)!important;letter-spacing:.10em!important}
+.theme-type-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0 9px}
+.theme-type-section-head>div{display:grid;gap:2px}
+.theme-type-section-head strong{font:750 11.5px/1.25 var(--display);color:var(--ink)}
+.theme-type-section-head span{font:600 9.5px/1.45 var(--sans);color:var(--muted)}
+.theme-mini-action{width:auto!important;min-height:30px!important;margin:0!important;padding:6px 9px!important;border-radius:9px!important;background:var(--ui-control,var(--card-soft))!important;color:var(--accent)!important;border:1px solid var(--ui-border,var(--card-border))!important;box-shadow:none!important;font-size:9px!important;font-weight:800!important;white-space:nowrap}
+.theme-color-grid-v2{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.theme-font-grid-v2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.theme-color-grid-v2>label,.theme-font-grid-v2>label{display:grid;gap:5px;min-width:0;margin:0!important;color:var(--muted)!important;font-size:9.5px!important;font-weight:760!important}
+.theme-color-grid-v2 .theme-color-field{min-height:39px;padding:4px 6px;border-radius:11px}
+.theme-color-grid-v2 .theme-color-field input[type="color"]{width:29px!important;height:29px!important;min-height:29px!important;flex:0 0 29px;border-radius:8px!important}
+.theme-color-grid-v2 .theme-color-field code{font-size:8.5px!important}
+.theme-font-grid-v2 select{width:100%;min-height:40px!important;margin:0!important;padding-right:28px!important;border-radius:11px!important;font-size:10px!important}
+.typography-head-v2{margin-top:18px}
+.theme-font-upload-v2{margin-top:10px;padding:11px;border:1px dashed color-mix(in srgb,var(--accent) 34%,var(--ui-border,var(--card-border)));border-radius:14px;background:color-mix(in srgb,var(--accent-soft) 36%,transparent);display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
+.theme-upload-copy{display:flex;align-items:center;gap:9px;min-width:0}
+.theme-upload-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:10px;background:var(--grad);color:#fff;font:800 11px/1 var(--display);box-shadow:0 7px 18px rgba(var(--accent-rgb),.18)}
+.theme-upload-copy div{display:grid;gap:2px;min-width:0}
+.theme-upload-copy strong{font:760 10.5px/1.25 var(--display);color:var(--ink)}
+.theme-upload-copy span:not(.theme-upload-icon){font:560 9px/1.45 var(--sans);color:var(--muted)}
+.theme-upload-actions{display:flex;align-items:center;gap:6px}
+.theme-font-upload-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:32px!important;margin:0!important;padding:6px 10px!important;border-radius:9px!important;background:var(--grad)!important;color:#fff!important;border:0!important;box-shadow:0 6px 16px rgba(var(--accent-rgb),.18)!important;font:800 9px/1 var(--sans)!important;cursor:pointer!important;white-space:nowrap}
+.theme-custom-font-status{grid-column:1/-1;color:var(--muted);font:700 8.5px/1.4 var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Independent channels. These do NOT overwrite --ink / --muted, so changing one control cannot move another. */
+html[data-user-type-custom="true"] body{font-family:var(--user-body-font,var(--sans))!important;letter-spacing:var(--user-letter-spacing,-.015em)}
+html[data-user-type-custom="true"] :is(.page-panel.active,.card,.brd-card,.sg-input-card,.sg-output-card,.theme-option,td,.note,.result-wrap,.compare-card,.metric,.out-item){color:var(--user-body-color,var(--ink))!important}
+html[data-user-type-custom="true"] :is(.page-panel h1,.page-panel h2,.page-panel h3,.page-panel h4,.page-panel h5,.page-panel h6,.compare-card-head h2,.sg-hero h2,.theme-dialog-head h2,.glass-quick-head strong,.theme-type-head strong,.theme-type-section-head strong){
+  color:var(--user-heading-color,var(--ink))!important;font-family:var(--user-heading-font,var(--display))!important;font-weight:var(--user-heading-weight,700)!important;letter-spacing:var(--user-heading-letter-spacing,-.025em)!important
+}
+html[data-user-type-custom="true"] :is(p:not(.sub),.card p,.theme-option-name,.compare-verdict,.brd-method-content,.sg-formula){color:var(--user-body-color,var(--ink))}
+html[data-user-type-custom="true"] :is(.page-panel>p.sub,.muted,.hint,.theme-dialog-head p,.theme-source,.chart-caption,.theme-type-status,.theme-custom-font-status,.theme-upload-copy span:not(.theme-upload-icon)){color:var(--user-muted-color,var(--muted))!important}
+html[data-user-type-custom="true"] :is(label,.field>label,.compare-helper,.compare-mode-btn small,.compare-rate-note,.theme-type-grid>label,.theme-color-grid-v2>label,.theme-font-grid-v2>label,.side-section-title){color:var(--user-label-color,var(--muted))!important}
+html[data-user-type-custom="true"] :is(input:not([type="color"]):not([type="range"]),select,textarea,code:not(.theme-color-field code)){color:var(--user-input-color,var(--ink))!important}
+html[data-user-type-custom="true"] :is(.out-item .v,.count,.metric strong,.sg-hero-stat strong,.sg-result-item strong,.brd-stat strong,.brd-item-v,.subhead){color:var(--user-result-color,var(--accent))!important}
+html[data-user-type-custom="true"] #sidebar :is(.side-link-label,.nav-label,.brand,.theme-launch-label){color:var(--user-sidebar-color,var(--sidebar-ink))!important}
+html[data-user-type-custom="true"] #sidebar :is(.side-section-title,#themeNameBadge,.language-switcher-label){color:var(--user-sidebar-muted-color,var(--sidebar-muted))!important}
+html[data-user-type-custom="true"] #sidebar .page-tab-btn.side-link.active :is(.side-link-label,.nav-label),
+html[data-user-type-custom="true"] #mobileDock .mobile-dock-btn.active,
+html[data-user-type-custom="true"] #mobileNavSheet .mobile-sheet-tool.active{color:var(--user-active-nav-color,#fff)!important}
+html[data-user-type-custom="true"] button:not(.ghost):not(.side-link):not(.theme-option):not(.theme-filter):not(.unit-mode-btn):not(.language-option):not(#themeCloseBtn):not(.theme-mini-action):not(.mobile-top-action):not(.mobile-sheet-action):not(.mobile-sheet-close){color:var(--user-button-color,#fff)!important}
+html[data-user-type-custom="true"] :is(body,input,select,textarea,button,label,.side-link,.theme-option){font-family:var(--user-body-font,var(--sans))!important}
+html[data-user-type-custom="true"] :is(p,label,input,select,textarea,button,.side-link,.theme-option,td,th){font-weight:var(--user-body-weight,500)}
+html[data-user-type-custom="true"] :is(p,.muted,.hint,.compare-helper,.theme-upload-copy span){line-height:var(--user-line-height,1.5)!important}
+
+/* Better icon treatment on desktop sidebar */
+@media(min-width:901px){
+  #sidebar .side-link .ic{width:28px!important;height:28px!important;padding:5px!important;box-sizing:border-box!important;border-radius:9px!important;background:color-mix(in srgb,var(--accent) 8%,transparent)!important;border:1px solid color-mix(in srgb,var(--accent) 10%,transparent)!important;stroke-linecap:round!important;stroke-linejoin:round!important;transition:background .18s ease,color .18s ease,transform .18s ease!important}
+  #sidebar .side-link:hover .ic{background:color-mix(in srgb,var(--accent) 14%,transparent)!important;transform:translateY(-1px)}
+  #sidebar .page-tab-btn.side-link.active .ic{background:color-mix(in srgb,var(--accent) 22%,rgba(255,255,255,.06))!important;color:var(--accent)!important;border-color:color-mix(in srgb,var(--accent) 24%,transparent)!important}
+}
+
+/* Compact, modern transparency bubble instead of the large 10%/34% pill. */
+#glassQuickToggle{position:relative!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important;display:grid!important;place-items:center!important;border-radius:14px!important}
+#glassQuickToggle .glass-quick-icon{font-size:18px!important}
+#glassQuickToggle .glass-quick-badge{position:absolute!important;right:-7px!important;top:-7px!important;min-width:28px!important;padding:4px 5px!important;border-radius:999px!important;text-align:center!important;background:var(--card)!important;border:1px solid var(--card-border)!important;color:var(--accent)!important;font:850 8px/1 var(--mono)!important;box-shadow:0 4px 12px rgba(0,0,0,.14)!important}
+.glass-quick-panel{border-radius:20px!important}
+
+/* ================================
+   Modern mobile shell
+   Clean top bar + 5-item floating dock + More sheet
+   ================================ */
+#mobileTopBar,#mobileDock,#mobileNavOverlay{display:none}
+@media(max-width:900px){
+  body{padding:8px 8px calc(92px + env(safe-area-inset-bottom))!important}
+  #appRoot{display:block!important;min-height:auto!important}
+  #sidebar,html[data-theme] #sidebar{display:none!important}
+  #mainContent{min-height:calc(100dvh - 88px)!important;padding:14px 10px 30px!important;border-radius:22px!important}
+  #mobileTopBar{position:sticky;top:7px;z-index:1150;height:54px;margin:0 0 8px;padding:6px 7px 6px 8px;display:flex;align-items:center;gap:9px;border:1px solid var(--ui-border,var(--card-border));border-radius:18px;background:color-mix(in srgb,var(--card) 78%,transparent);box-shadow:0 10px 28px rgba(0,0,0,.11),inset 0 1px 0 rgba(255,255,255,.22);backdrop-filter:blur(22px) saturate(145%);-webkit-backdrop-filter:blur(22px) saturate(145%)}
+  .mobile-top-brand{width:36px;height:36px;border-radius:11px;overflow:hidden;display:grid;place-items:center;flex:0 0 36px;background:linear-gradient(145deg,#101827,#1e293b);box-shadow:0 5px 14px rgba(0,0,0,.15)}
+  .mobile-top-brand img{width:100%;height:100%;object-fit:cover}
+  .mobile-top-copy{min-width:0;display:grid;gap:1px;flex:1}
+  .mobile-top-copy strong{font:780 11.5px/1.2 var(--user-heading-font,var(--display));color:var(--user-heading-color,var(--ink));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mobile-top-copy span{font:650 8.5px/1.2 var(--user-body-font,var(--sans));color:var(--user-muted-color,var(--muted));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mobile-top-action{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;margin:0!important;padding:0!important;display:grid!important;place-items:center!important;border-radius:11px!important;background:var(--ui-control,var(--card-soft))!important;color:var(--accent)!important;border:1px solid var(--ui-border,var(--card-border))!important;box-shadow:none!important}
+  .mobile-top-action svg{width:18px;height:18px;stroke-linecap:round;stroke-linejoin:round}
+
+  #mobileDock{position:fixed;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));z-index:1300;height:68px;padding:6px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;border:1px solid rgba(255,255,255,.18);border-radius:22px;background:color-mix(in srgb,var(--sidebar-modern,#10152b) 86%,transparent);box-shadow:0 18px 46px rgba(2,6,23,.28),inset 0 1px 0 rgba(255,255,255,.10);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%)}
+  .mobile-dock-btn{position:relative;min-width:0!important;min-height:54px!important;margin:0!important;padding:5px 3px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;border:0!important;border-radius:16px!important;background:transparent!important;color:color-mix(in srgb,var(--sidebar-muted,#c5cada) 82%,transparent)!important;box-shadow:none!important;font:720 8px/1.05 var(--sans)!important;white-space:nowrap!important;overflow:hidden!important;transform:none!important}
+  .mobile-dock-btn .dock-icon{width:28px;height:28px;display:grid;place-items:center;border-radius:10px;background:rgba(255,255,255,.055);transition:background .18s ease,transform .18s ease}
+  .mobile-dock-btn svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .mobile-dock-btn span:last-child{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+  .mobile-dock-btn.active{color:#fff!important;background:linear-gradient(145deg,rgba(var(--accent-rgb),.22),rgba(255,255,255,.07))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important}
+  .mobile-dock-btn.active .dock-icon{background:rgba(var(--accent-rgb),.18);color:color-mix(in srgb,var(--accent) 74%,#fff);transform:translateY(-1px)}
+  .mobile-dock-btn.more-active::after{content:"";position:absolute;top:6px;right:13px;width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.16)}
+
+  #mobileNavOverlay{position:fixed;inset:0;z-index:1400;display:block;pointer-events:none;background:rgba(3,7,18,0);transition:background .22s ease}
+  #mobileNavOverlay.open{pointer-events:auto;background:rgba(3,7,18,.38)}
+  #mobileNavSheet{position:absolute;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));max-height:min(72dvh,620px);padding:10px 10px 14px;border:1px solid var(--ui-border,var(--card-border));border-radius:26px;background:color-mix(in srgb,var(--card) 94%,transparent);box-shadow:0 30px 90px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.24);backdrop-filter:blur(30px) saturate(155%);-webkit-backdrop-filter:blur(30px) saturate(155%);transform:translateY(calc(100% + 20px));opacity:0;transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .18s ease;overflow:auto}
+  #mobileNavOverlay.open #mobileNavSheet{transform:none;opacity:1}
+  .mobile-sheet-handle{width:38px;height:4px;margin:0 auto 9px;border-radius:999px;background:color-mix(in srgb,var(--muted) 35%,transparent)}
+  .mobile-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 2px 10px}
+  .mobile-sheet-head div{display:grid;gap:2px}
+  .mobile-sheet-head strong{font:780 15px/1.2 var(--display);color:var(--ink)}
+  .mobile-sheet-head span{font:600 9px/1.35 var(--sans);color:var(--muted)}
+  .mobile-sheet-close{width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;padding:0!important;margin:0!important;border-radius:50%!important;background:var(--ui-control,var(--card-soft))!important;color:var(--ink)!important;border:1px solid var(--ui-border,var(--card-border))!important;box-shadow:none!important;font-size:18px!important}
+  .mobile-sheet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .mobile-sheet-tool{min-width:0!important;min-height:72px!important;margin:0!important;padding:8px 5px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px!important;border:1px solid var(--ui-border,var(--card-border))!important;border-radius:16px!important;background:var(--ui-card-soft,var(--card-soft))!important;color:var(--ink)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)!important;font:720 8.8px/1.15 var(--sans)!important;text-align:center!important;transform:none!important}
+  .mobile-sheet-tool .sheet-icon{width:31px;height:31px;display:grid;place-items:center;border-radius:10px;background:rgba(var(--accent-rgb),.08);color:var(--accent)}
+  .mobile-sheet-tool svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .mobile-sheet-tool.active{border-color:rgba(var(--accent-rgb),.32)!important;background:rgba(var(--accent-rgb),.10)!important;color:var(--accent)!important}
+  .mobile-sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}
+  .mobile-sheet-action{min-height:42px!important;margin:0!important;padding:8px 10px!important;border-radius:13px!important;background:var(--ui-control,var(--card-soft))!important;color:var(--ink)!important;border:1px solid var(--ui-border,var(--card-border))!important;box-shadow:none!important;font:760 10px/1 var(--sans)!important}
+  .mobile-sheet-language{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px;border:1px solid var(--ui-border,var(--card-border));border-radius:13px;background:var(--ui-card-soft,var(--card-soft))}
+  .mobile-sheet-language button{min-height:34px!important;margin:0!important;padding:0 8px!important;border-radius:10px!important;background:transparent!important;color:var(--muted)!important;border:0!important;box-shadow:none!important;font:800 9px/1 var(--sans)!important}
+  .mobile-sheet-language button.active{background:var(--grad)!important;color:#fff!important}
+  .glass-quick-access{display:none!important}
+}
+@media(max-width:520px){
+  .theme-color-grid-v2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .theme-font-grid-v2{grid-template-columns:1fr 1fr}
+  .theme-font-upload-v2{grid-template-columns:1fr}
+  .theme-upload-actions{justify-content:flex-start}
+  .mobile-sheet-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:390px){
+  .theme-color-grid-v2,.theme-font-grid-v2{grid-template-columns:1fr}
+  .mobile-sheet-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+
+<script id="typography-studio-v2">
 (function(){
+  'use strict';
   const root=document.documentElement;
   const q=id=>document.getElementById(id);
-  const textInput=q('themeTextColor');
-  const mutedInput=q('themeMutedColor');
-  const sidebarInput=q('themeSidebarColor');
-  const fontSelect=q('themeFontFamily');
-  const resetBtn=q('themeTypeReset');
-  const status=q('themeTypeStatus');
-  if(!textInput||!mutedInput||!sidebarInput||!fontSelect||!resetBtn)return;
+  const currentTheme=()=>root.dataset.theme||'avash';
+  const key=id=>`structuralSuiteTypographyV2:${id}`;
+  const legacyKey=id=>`structuralSuiteThemeTypeV1:${id}`;
+  const safeGet=k=>{try{return localStorage.getItem(k)}catch(_){return null}};
+  const safeSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}};
+  const safeRemove=k=>{try{localStorage.removeItem(k)}catch(_){}};
 
   const FONT_MAP={
-    apple:{sans:'-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif',display:'-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Arial,sans-serif'},
-    inter:{sans:'"Inter","Noto Sans Bengali","Segoe UI",sans-serif',display:'"Inter","Noto Sans Bengali","Segoe UI",sans-serif'},
-    jakarta:{sans:'"Plus Jakarta Sans","Noto Sans Bengali","Inter",sans-serif',display:'"Plus Jakarta Sans","Noto Sans Bengali","Inter",sans-serif'},
-    'noto-bn':{sans:'"Noto Sans Bengali","Inter","Segoe UI",sans-serif',display:'"Noto Sans Bengali","Plus Jakarta Sans","Inter",sans-serif'},
-    segoe:{sans:'"Segoe UI","Noto Sans Bengali",Arial,sans-serif',display:'"Segoe UI","Noto Sans Bengali",Arial,sans-serif'},
-    serif:{sans:'Georgia,"Noto Serif Bengali","Times New Roman",serif',display:'Georgia,"Noto Serif Bengali","Times New Roman",serif'}
+    apple:'-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif',
+    inter:'"Inter","Noto Sans Bengali","Segoe UI",sans-serif',
+    manrope:'"Manrope","Noto Sans Bengali","Segoe UI",sans-serif',
+    'dm-sans':'"DM Sans","Noto Sans Bengali","Segoe UI",sans-serif',
+    outfit:'"Outfit","Noto Sans Bengali","Segoe UI",sans-serif',
+    sora:'"Sora","Noto Sans Bengali","Segoe UI",sans-serif',
+    urbanist:'"Urbanist","Noto Sans Bengali","Segoe UI",sans-serif',
+    'space-grotesk':'"Space Grotesk","Noto Sans Bengali","Segoe UI",sans-serif',
+    jakarta:'"Plus Jakarta Sans","Noto Sans Bengali","Inter",sans-serif',
+    'ibm-plex':'"IBM Plex Sans","Noto Sans Bengali","Segoe UI",sans-serif',
+    'source-sans':'"Source Sans 3","Noto Sans Bengali","Segoe UI",sans-serif',
+    'noto-bn':'"Noto Sans Bengali","Inter","Segoe UI",sans-serif',
+    'hind-siliguri':'"Hind Siliguri","Inter","Segoe UI",sans-serif',
+    'anek-bangla':'"Anek Bangla","Inter","Segoe UI",sans-serif',
+    segoe:'"Segoe UI","Noto Sans Bengali",Arial,sans-serif',
+    serif:'Georgia,"Noto Serif Bengali","Times New Roman",serif',
+    custom:'"StructuralSuiteCustomFont","Noto Sans Bengali","Inter",sans-serif'
   };
-  const COLOR_KEYS={text:'--ink',muted:'--muted',sidebar:'--sidebar-ink'};
-  const storageKey=themeId=>`structuralSuiteThemeTypeV1:${themeId}`;
-  const safeGet=key=>{try{return localStorage.getItem(key)}catch(_){return null}};
-  const safeSet=(key,val)=>{try{localStorage.setItem(key,val)}catch(_){}};
-  const safeRemove=key=>{try{localStorage.removeItem(key)}catch(_){}};
-  const currentTheme=()=>root.dataset.theme||'avash';
+
+  const colorDefs=[
+    ['heading','themeHeadingColor','--user-heading-color','--ink','#1D1D1F'],
+    ['body','themeBodyColor','--user-body-color','--ink','#1D1D1F'],
+    ['muted','themeMutedColor','--user-muted-color','--muted','#6E6E73'],
+    ['label','themeLabelColor','--user-label-color','--muted','#6E6E73'],
+    ['input','themeInputColor','--user-input-color','--ink','#1D1D1F'],
+    ['result','themeResultColor','--user-result-color','--accent','#007AFF'],
+    ['sidebar','themeSidebarColor','--user-sidebar-color','--sidebar-ink','#FFFFFF'],
+    ['sidebarMuted','themeSidebarMutedColor','--user-sidebar-muted-color','--sidebar-muted','#A8A8B3'],
+    ['activeNav','themeActiveNavColor','--user-active-nav-color','--__fixed-white','#FFFFFF'],
+    ['button','themeButtonColor','--user-button-color','--__fixed-white','#FFFFFF']
+  ];
+
+  const controls={
+    bodyFont:q('themeBodyFont'),headingFont:q('themeHeadingFont'),bodyWeight:q('themeBodyWeight'),
+    headingWeight:q('themeHeadingWeight'),letterSpacing:q('themeLetterSpacing'),lineHeight:q('themeLineHeight'),
+    reset:q('themeTypeReset'),defaults:q('themeTextDefaults'),status:q('themeTypeStatus'),
+    upload:q('themeCustomFontFile'),clearFont:q('themeCustomFontClear'),fontStatus:q('themeCustomFontStatus')
+  };
+  if(!controls.bodyFont||!controls.headingFont||!controls.reset)return;
 
   function normalizeHex(value,fallback){
     value=(value||'').trim();
     if(/^#[0-9a-f]{6}$/i.test(value))return value.toUpperCase();
     if(/^#[0-9a-f]{3}$/i.test(value))return ('#'+value.slice(1).split('').map(x=>x+x).join('')).toUpperCase();
     const m=value.match(/rgba?\(\s*(\d+(?:\.\d+)?)\s*[, ]\s*(\d+(?:\.\d+)?)\s*[, ]\s*(\d+(?:\.\d+)?)/i);
-    if(m){return '#'+[m[1],m[2],m[3]].map(n=>Math.max(0,Math.min(255,Math.round(+n))).toString(16).padStart(2,'0')).join('').toUpperCase();}
+    if(m)return '#'+[m[1],m[2],m[3]].map(n=>Math.max(0,Math.min(255,Math.round(+n))).toString(16).padStart(2,'0')).join('').toUpperCase();
     return fallback;
   }
-  function themeColor(varName,fallback){
-    const raw=getComputedStyle(root).getPropertyValue(varName).trim();
-    return normalizeHex(raw,fallback);
+  function themeColor(cssVar,fallback){
+    if(cssVar==='--__fixed-white')return fallback;
+    return normalizeHex(getComputedStyle(root).getPropertyValue(cssVar),fallback);
   }
-  function setSwatch(input,valueEl,value){
-    const hex=normalizeHex(value,input.value||'#000000');
-    input.value=hex.toLowerCase();
-    if(valueEl)valueEl.textContent=hex;
+  function getPrefs(id=currentTheme()){
+    try{
+      const modern=JSON.parse(safeGet(key(id))||'null');
+      if(modern)return modern;
+      const old=JSON.parse(safeGet(legacyKey(id))||'null');
+      if(old){
+        return {body:old.text,heading:old.text,muted:old.muted,label:old.muted,input:old.text,sidebar:old.sidebar,
+          sidebarMuted:old.muted||old.sidebar,activeNav:old.sidebar,button:'#FFFFFF',
+          bodyFont:old.font||'theme',headingFont:old.font||'theme',bodyWeight:'500',headingWeight:'700',letterSpacing:'-0.015em',lineHeight:'1.5'};
+      }
+    }catch(_){}
+    return {};
   }
-  function readPrefs(themeId){
-    try{return JSON.parse(safeGet(storageKey(themeId))||'{}')||{}}catch(_){return {}}
+  function savePrefs(p){safeSet(key(currentTheme()),JSON.stringify(p))}
+  function fullPrefs(){
+    const p=getPrefs();
+    colorDefs.forEach(([name,id,,themeVar,fallback])=>{p[name]=normalizeHex(q(id)?.value,themeColor(themeVar,fallback))});
+    p.bodyFont=controls.bodyFont.value;p.headingFont=controls.headingFont.value;p.bodyWeight=controls.bodyWeight.value;
+    p.headingWeight=controls.headingWeight.value;p.letterSpacing=controls.letterSpacing.value;p.lineHeight=controls.lineHeight.value;
+    return p;
   }
-  function writePrefs(prefs){
-    const cleaned={};
-    if(prefs.text)cleaned.text=prefs.text;
-    if(prefs.muted)cleaned.muted=prefs.muted;
-    if(prefs.sidebar)cleaned.sidebar=prefs.sidebar;
-    if(prefs.font&&prefs.font!=='theme')cleaned.font=prefs.font;
-    if(Object.keys(cleaned).length)safeSet(storageKey(currentTheme()),JSON.stringify(cleaned));
-    else safeRemove(storageKey(currentTheme()));
+  function setColorControl(id,value){
+    const el=q(id); if(!el)return;
+    const hex=normalizeHex(value,el.value||'#000000');el.value=hex.toLowerCase();
+    const out=q(id+'Value');if(out)out.textContent=hex;
   }
-  function clearOverrides(){
-    root.style.removeProperty('--ink');
-    root.style.removeProperty('--muted');
-    root.style.removeProperty('--sidebar-ink');
-    root.style.removeProperty('--sidebar-muted');
-    root.style.removeProperty('--sans');
-    root.style.removeProperty('--display');
-    root.removeAttribute('data-font-choice');
-  }
-  function applyPrefs(themeId,announce=false){
-    /* applyTheme() has already restored the selected theme's own variables; only layer saved user preferences now. */
-    const prefs=readPrefs(themeId);
-    const hasCustomText=Boolean(prefs.text||prefs.muted||prefs.sidebar);
-    if(hasCustomText)root.dataset.userTextCustom='true'; else root.removeAttribute('data-user-text-custom');
-    if(prefs.text)root.style.setProperty('--ink',prefs.text);
-    if(prefs.muted)root.style.setProperty('--muted',prefs.muted);
-    if(prefs.sidebar){root.style.setProperty('--sidebar-ink',prefs.sidebar);root.style.setProperty('--sidebar-muted',prefs.muted||prefs.sidebar);}
-    if(prefs.font&&FONT_MAP[prefs.font]){
-      root.style.setProperty('--sans',FONT_MAP[prefs.font].sans);
-      root.style.setProperty('--display',FONT_MAP[prefs.font].display);
-      root.dataset.fontChoice=prefs.font;
-    }else root.removeAttribute('data-font-choice');
-    syncControls(themeId,prefs);
-    if(announce&&status)status.textContent=Object.keys(prefs).length?'Custom text style applied':'Using theme defaults';
-  }
-  function syncControls(themeId,prefs=readPrefs(themeId)){
-    setSwatch(textInput,q('themeTextColorValue'),prefs.text||themeColor('--ink','#1D1D1F'));
-    setSwatch(mutedInput,q('themeMutedColorValue'),prefs.muted||themeColor('--muted','#6E6E73'));
-    setSwatch(sidebarInput,q('themeSidebarColorValue'),prefs.sidebar||themeColor('--sidebar-ink','#1D1D1F'));
-    fontSelect.value=(prefs.font&&FONT_MAP[prefs.font])?prefs.font:'theme';
-    if(status)status.textContent=Object.keys(prefs).length?`Custom style saved for ${themeId}`:'Using theme defaults';
-  }
-  function saveFromControls(){
-    const prefs={
-      text:textInput.value.toUpperCase(),
-      muted:mutedInput.value.toUpperCase(),
-      sidebar:sidebarInput.value.toUpperCase(),
-      font:fontSelect.value
-    };
-    writePrefs(prefs);
-    root.style.setProperty('--ink',prefs.text);
-    root.style.setProperty('--muted',prefs.muted);
-    root.style.setProperty('--sidebar-ink',prefs.sidebar);
-    root.style.setProperty('--sidebar-muted',prefs.muted);
-    if(prefs.font!=='theme'&&FONT_MAP[prefs.font]){
-      root.style.setProperty('--sans',FONT_MAP[prefs.font].sans);
-      root.style.setProperty('--display',FONT_MAP[prefs.font].display);
-      root.dataset.fontChoice=prefs.font;
-    }else{
-      /* Rebuild the active theme so its default typography is restored without losing current page state. */
-      if(typeof applyTheme==='function')applyTheme(currentTheme(),false);
-      applyPrefs(currentTheme(),false);
-    }
-    syncControls(currentTheme(),readPrefs(currentTheme()));
-  }
-  [textInput,mutedInput,sidebarInput].forEach(input=>{
-    input.addEventListener('input',()=>{
-      const map={themeTextColor:'--ink',themeMutedColor:'--muted',themeSidebarColor:'--sidebar-ink'};
-      root.dataset.userTextCustom='true';
-      root.style.setProperty(map[input.id],input.value.toUpperCase());
-      if(input.id==='themeMutedColor')root.style.setProperty('--sidebar-muted',input.value.toUpperCase());
-      if(input.id==='themeSidebarColor')root.style.setProperty('--sidebar-ink',input.value.toUpperCase());
-      const out=q(input.id+'Value');if(out)out.textContent=input.value.toUpperCase();
+  function applyPrefs(id=currentTheme(),announce=false){
+    const p=getPrefs(id);
+    const hasAny=Object.keys(p).length>0;
+    if(hasAny)root.dataset.userTypeCustom='true'; else root.removeAttribute('data-user-type-custom');
+    colorDefs.forEach(([name,inputId,userVar,themeVar,fallback])=>{
+      const value=p[name]||themeColor(themeVar,fallback);
+      setColorControl(inputId,value);
+      if(p[name])root.style.setProperty(userVar,p[name]); else root.style.removeProperty(userVar);
     });
-    input.addEventListener('change',saveFromControls);
+    const bodyFont=p.bodyFont||'theme', headingFont=p.headingFont||'theme';
+    controls.bodyFont.value=(FONT_MAP[bodyFont]||bodyFont==='theme')?bodyFont:'theme';
+    controls.headingFont.value=(FONT_MAP[headingFont]||headingFont==='theme')?headingFont:'theme';
+    root.style.setProperty('--user-body-font',bodyFont==='theme'?'var(--sans)':FONT_MAP[bodyFont]);
+    root.style.setProperty('--user-heading-font',headingFont==='theme'?'var(--display)':FONT_MAP[headingFont]);
+    root.style.setProperty('--user-body-weight',p.bodyWeight||'500');
+    root.style.setProperty('--user-heading-weight',p.headingWeight||'700');
+    root.style.setProperty('--user-letter-spacing',p.letterSpacing||'-0.015em');
+    root.style.setProperty('--user-line-height',p.lineHeight||'1.5');
+    controls.bodyWeight.value=p.bodyWeight||'500';controls.headingWeight.value=p.headingWeight||'700';
+    controls.letterSpacing.value=p.letterSpacing||'-0.015em';controls.lineHeight.value=p.lineHeight||'1.5';
+    if(announce&&controls.status)controls.status.textContent=hasAny?`Typography saved for ${id}`:'Using theme typography defaults';
+    updateCustomFontAvailability(id,p);
+  }
+  function saveAndApply(){
+    const p=fullPrefs();savePrefs(p);root.dataset.userTypeCustom='true';applyPrefs(currentTheme(),true);
+  }
+
+  colorDefs.forEach(([name,id,userVar])=>{
+    const el=q(id);if(!el)return;
+    el.addEventListener('input',()=>{
+      root.dataset.userTypeCustom='true';const v=el.value.toUpperCase();root.style.setProperty(userVar,v);
+      const out=q(id+'Value');if(out)out.textContent=v;
+    });
+    el.addEventListener('change',saveAndApply);
   });
-  fontSelect.addEventListener('change',saveFromControls);
-  resetBtn.addEventListener('click',()=>{
-    const id=currentTheme();
-    safeRemove(storageKey(id));
-    root.removeAttribute('data-user-text-custom');
-    if(typeof applyTheme==='function')applyTheme(id,false);
-    syncControls(id,{});
-    if(status)status.textContent='Theme text & font reset';
+  [controls.bodyFont,controls.headingFont,controls.bodyWeight,controls.headingWeight,controls.letterSpacing,controls.lineHeight].forEach(el=>el.addEventListener('change',saveAndApply));
+
+  controls.defaults?.addEventListener('click',()=>{
+    colorDefs.forEach(([,id,,themeVar,fallback])=>setColorControl(id,themeColor(themeVar,fallback)));
+    saveAndApply();
+    if(controls.status)controls.status.textContent='Text colors restored from current theme';
   });
 
-  window.addEventListener('structural-theme-change',e=>{
-    const id=(e.detail&&e.detail.themeId)||currentTheme();
-    /* applyTheme removes inline text/font vars first; now layer this theme's saved user preferences. */
-    window.setTimeout(()=>applyPrefs(id,true),0);
+  controls.reset.addEventListener('click',()=>{
+    const id=currentTheme();safeRemove(key(id));root.removeAttribute('data-user-type-custom');
+    colorDefs.forEach(([, ,userVar])=>root.style.removeProperty(userVar));
+    ['--user-body-font','--user-heading-font','--user-body-weight','--user-heading-weight','--user-letter-spacing','--user-line-height'].forEach(v=>root.style.removeProperty(v));
+    applyPrefs(id,false);
+    if(controls.status)controls.status.textContent='Typography reset to theme defaults';
   });
 
-  /* Initial load happens after the original theme initializer. */
+  // IndexedDB: one optional custom font per theme, stored locally in the browser.
+  const DB_NAME='StructuralSuiteLocalFontsV1', STORE='fonts';
+  function openDB(){return new Promise((resolve,reject)=>{try{const req=indexedDB.open(DB_NAME,1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains(STORE))req.result.createObjectStore(STORE)};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)}catch(e){reject(e)}})}
+  async function dbGet(id){try{const db=await openDB();return await new Promise((res,rej)=>{const r=db.transaction(STORE,'readonly').objectStore(STORE).get(id);r.onsuccess=()=>res(r.result||null);r.onerror=()=>rej(r.error)})}catch(_){return null}}
+  async function dbPut(id,value){const db=await openDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(value,id);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
+  async function dbDelete(id){try{const db=await openDB();return await new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(id);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}catch(_){}}
+  let customFontFace=null;
+  async function loadFontRecord(rec){
+    if(!rec||!rec.blob)return false;
+    try{
+      if(customFontFace)document.fonts.delete(customFontFace);
+      const buf=await rec.blob.arrayBuffer();
+      customFontFace=new FontFace('StructuralSuiteCustomFont',buf);
+      await customFontFace.load();document.fonts.add(customFontFace);return true;
+    }catch(_){return false}
+  }
+  async function updateCustomFontAvailability(id=currentTheme(),prefs=getPrefs(id)){
+    const rec=await dbGet(id);const ok=rec?await loadFontRecord(rec):false;
+    [q('themeBodyCustomFontOption'),q('themeHeadingCustomFontOption')].forEach(opt=>{if(opt){opt.disabled=!ok;opt.textContent=ok?`Uploaded — ${rec.name}`:'Uploaded custom font'}});
+    if(controls.fontStatus)controls.fontStatus.textContent=ok?`Saved locally: ${rec.name}`:'No custom font saved for this theme';
+    if(!ok&&(prefs.bodyFont==='custom'||prefs.headingFont==='custom')){
+      prefs.bodyFont=prefs.bodyFont==='custom'?'theme':prefs.bodyFont;prefs.headingFont=prefs.headingFont==='custom'?'theme':prefs.headingFont;savePrefs(prefs);applyPrefs(id,false);
+    }else if(ok){
+      if(prefs.bodyFont==='custom')root.style.setProperty('--user-body-font',FONT_MAP.custom);
+      if(prefs.headingFont==='custom')root.style.setProperty('--user-heading-font',FONT_MAP.custom);
+    }
+  }
+  controls.upload?.addEventListener('change',async()=>{
+    const file=controls.upload.files?.[0];if(!file)return;
+    if(file.size>8*1024*1024){if(controls.fontStatus)controls.fontStatus.textContent='Font is too large. Please use a file under 8 MB.';controls.upload.value='';return}
+    if(controls.fontStatus)controls.fontStatus.textContent='Loading custom font…';
+    try{
+      const rec={name:file.name,blob:file,lastModified:file.lastModified||Date.now()};
+      const loaded=await loadFontRecord(rec);if(!loaded)throw new Error('Unsupported font');
+      let persisted=true;try{await dbPut(currentTheme(),rec)}catch(_){persisted=false}
+      [q('themeBodyCustomFontOption'),q('themeHeadingCustomFontOption')].forEach(opt=>{if(opt){opt.disabled=false;opt.textContent=`Uploaded — ${file.name}`}});
+      controls.bodyFont.value='custom';controls.headingFont.value='custom';saveAndApply();
+      if(controls.fontStatus)controls.fontStatus.textContent=persisted?`Saved locally: ${file.name} · applied to body + headings`:`Applied for this session: ${file.name}`;
+    }catch(_){if(controls.fontStatus)controls.fontStatus.textContent='Could not load this font. Try WOFF2, WOFF, TTF or OTF.'}
+    controls.upload.value='';
+  });
+  controls.clearFont?.addEventListener('click',async()=>{
+    const id=currentTheme();await dbDelete(id);if(customFontFace){try{document.fonts.delete(customFontFace)}catch(_){}customFontFace=null}
+    const p=getPrefs(id);if(p.bodyFont==='custom')p.bodyFont='theme';if(p.headingFont==='custom')p.headingFont='theme';savePrefs(p);applyPrefs(id,true);
+    if(controls.fontStatus)controls.fontStatus.textContent='Custom font removed from this theme';
+  });
+
+  window.addEventListener('structural-theme-change',e=>setTimeout(()=>applyPrefs((e.detail&&e.detail.themeId)||currentTheme(),true),0));
   applyPrefs(currentTheme(),false);
 })();
 </script>
 
+<script id="modern-mobile-navigation-v2">
+(function(){
+  'use strict';
+  const q=s=>document.querySelector(s), qa=s=>[...document.querySelectorAll(s)];
+  const sidebar=document.getElementById('sidebar'), app=document.getElementById('appRoot');
+  if(!sidebar||!app)return;
+
+  const pageButtons=qa('#sidebar .page-tab-btn.side-link');
+  pageButtons.forEach(btn=>{
+    if(!btn.dataset.mobileLabel){
+      const label=btn.querySelector('.side-link-label,.nav-label');
+      btn.dataset.mobileLabel=(label?.textContent||btn.title||btn.dataset.page||'Tool').trim();
+    }
+  });
+  const byPage=id=>pageButtons.find(b=>b.dataset.page===id);
+  const iconHTML=btn=>{
+    const svg=btn?.querySelector('svg.ic');return svg?svg.outerHTML:'<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></svg>';
+  };
+  const currentBtn=()=>pageButtons.find(b=>b.classList.contains('active'))||pageButtons[0];
+  const primary=['footing','etabs','estimate','compare'];
+
+  const top=document.createElement('div');top.id='mobileTopBar';top.setAttribute('data-i18n-skip','');
+  const brandImg=document.querySelector('#sidebarBrand img, #sidebar img');
+  top.innerHTML=`<span class="mobile-top-brand">${brandImg?brandImg.outerHTML:'<span style="color:#ffd166;font-weight:900">A</span>'}</span>
+    <span class="mobile-top-copy"><strong id="mobileCurrentPage">Structural Suite</strong><span>Engineering workspace</span></span>
+    <button class="mobile-top-action" id="mobileThemeQuick" type="button" aria-label="Open themes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 100 18h1.2a1.8 1.8 0 001.8-1.8c0-.7-.4-1.2-.4-1.8 0-1 .8-1.8 1.8-1.8h1.1A4.5 4.5 0 0021 11.1 8.1 8.1 0 0012 3z"/><circle cx="7.5" cy="10" r=".8"/><circle cx="10" cy="6.8" r=".8"/><circle cx="14.2" cy="6.8" r=".8"/></svg></button>`;
+  app.parentNode.insertBefore(top,app);
+
+  const dock=document.createElement('nav');dock.id='mobileDock';dock.setAttribute('aria-label','Mobile navigation');dock.setAttribute('data-i18n-skip','');
+  primary.forEach(id=>{
+    const src=byPage(id);if(!src)return;
+    const b=document.createElement('button');b.type='button';b.className='mobile-dock-btn';b.dataset.page=id;
+    b.innerHTML=`<span class="dock-icon">${iconHTML(src)}</span><span>${src.dataset.mobileLabel.replace(' Calculator','').replace(' Studio','')}</span>`;
+    b.addEventListener('click',()=>src.click());dock.appendChild(b);
+  });
+  const more=document.createElement('button');more.type='button';more.id='mobileMoreBtn';more.className='mobile-dock-btn';more.innerHTML='<span class="dock-icon"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg></span><span>More</span>';dock.appendChild(more);
+  document.body.appendChild(dock);
+
+  const overlay=document.createElement('div');overlay.id='mobileNavOverlay';overlay.setAttribute('aria-hidden','true');overlay.setAttribute('data-i18n-skip','');
+  overlay.innerHTML='<div id="mobileNavSheet" role="dialog" aria-modal="true" aria-label="All tools"><div class="mobile-sheet-handle"></div><div class="mobile-sheet-head"><div><strong>All tools</strong><span>Choose a workspace or app setting</span></div><button class="mobile-sheet-close" type="button" aria-label="Close">×</button></div><div class="mobile-sheet-grid" id="mobileSheetGrid"></div><div class="mobile-sheet-actions"><button class="mobile-sheet-action" id="mobileSheetThemes" type="button">Themes & Typography</button><button class="mobile-sheet-action" id="mobileSheetGlass" type="button">Transparency</button><div class="mobile-sheet-language"><button type="button" data-mobile-lang="en">EN · English</button><button type="button" data-mobile-lang="bn">বাংলা</button></div></div></div>';
+  document.body.appendChild(overlay);
+  const grid=overlay.querySelector('#mobileSheetGrid');
+  pageButtons.forEach(src=>{
+    const b=document.createElement('button');b.type='button';b.className='mobile-sheet-tool';b.dataset.page=src.dataset.page;
+    b.innerHTML=`<span class="sheet-icon">${iconHTML(src)}</span><span>${src.dataset.mobileLabel}</span>`;
+    b.addEventListener('click',()=>{src.click();closeSheet()});grid.appendChild(b);
+  });
+
+  function openSheet(){overlay.classList.add('open');overlay.setAttribute('aria-hidden','false')}
+  function closeSheet(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true')}
+  more.addEventListener('click',openSheet);overlay.querySelector('.mobile-sheet-close').addEventListener('click',closeSheet);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeSheet()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))closeSheet()});
+  document.getElementById('mobileThemeQuick').addEventListener('click',()=>document.getElementById('themePickerBtn')?.click());
+  overlay.querySelector('#mobileSheetThemes').addEventListener('click',()=>{closeSheet();document.getElementById('themePickerBtn')?.click()});
+  overlay.querySelector('#mobileSheetGlass').addEventListener('click',()=>{closeSheet();document.getElementById('themePickerBtn')?.click();setTimeout(()=>{const range=document.getElementById('glassTransparencyRange');range?.scrollIntoView({behavior:'smooth',block:'center'});range?.focus()},120)});
+
+  overlay.querySelectorAll('[data-mobile-lang]').forEach(b=>b.addEventListener('click',()=>{
+    const lang=b.dataset.mobileLang;
+    const original=[...document.querySelectorAll('#sidebar .language-option')].find(x=>(x.dataset.lang||x.textContent.trim().toLowerCase().slice(0,2))===lang);
+    original?.click();sync();
+  }));
+
+  function sync(){
+    const active=currentBtn(), page=active?.dataset.page, label=active?.dataset.mobileLabel||'Structural Suite';
+    const title=document.getElementById('mobileCurrentPage');if(title)title.textContent=label;
+    dock.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+    grid.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+    const isPrimary=primary.includes(page);more.classList.toggle('active',!isPrimary);more.classList.toggle('more-active',!isPrimary);
+    const lang=document.documentElement.dataset.lang||document.documentElement.lang||'bn';
+    overlay.querySelectorAll('[data-mobile-lang]').forEach(b=>b.classList.toggle('active',b.dataset.mobileLang===lang));
+  }
+  pageButtons.forEach(b=>b.addEventListener('click',()=>setTimeout(sync,0)));
+  new MutationObserver(sync).observe(sidebar,{subtree:true,attributes:true,attributeFilter:['class']});
+  window.addEventListener('structural-theme-change',sync);
+  sync();
+})();
+</script>
 </body>
 </html>
