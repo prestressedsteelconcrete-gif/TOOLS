@@ -1975,6 +1975,76 @@ html[data-theme="glass-frost"] :is(.swx-frame-toolbar,.result-box,.summary-box,.
 html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.78)!important;color:#eef4ff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important}
 </style>
 
+
+<style id="soilModuleStyles">
+/* ===== Soil module — inherits every Structural Suite theme through shared CSS variables ===== */
+#page-soil{align-items:stretch}
+#page-soil>h1,#page-soil>p.sub{width:100%;max-width:1200px;margin-left:auto;margin-right:auto}
+#page-soil .soil-tabs{width:100%;max-width:1200px;margin:0 auto 16px;display:flex;gap:8px;flex-wrap:wrap}
+#page-soil .soil-tabbtn{width:auto;margin:0;padding:8px 14px;background:var(--card);color:var(--muted);border:1px solid var(--card-border);box-shadow:none;border-radius:10px}
+#page-soil .soil-tabbtn:hover{background:var(--accent-soft);color:var(--accent);filter:none;box-shadow:none}
+#page-soil .soil-tabbtn.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 15%,transparent)}
+#page-soil .soil-subpage{display:none;width:100%;max-width:1200px;margin:0 auto}
+#page-soil .soil-subpage.active{display:block}
+#page-soil .card{max-width:none;margin-bottom:16px;background:var(--card);border-color:var(--card-border);color:var(--ink)}
+#page-soil .card h2{font-family:var(--display);font-size:15px;line-height:1.25;margin:0 0 14px;color:var(--ink);text-transform:none;letter-spacing:0;background:none;padding:0;border-radius:0;display:block}
+#page-soil .card h3{font-family:var(--display);font-size:13px;margin:16px 0 7px;color:var(--ink)}
+#page-soil .notice{margin:0 0 16px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,var(--card-border));color:var(--ink)}
+#page-soil .notice strong{color:var(--accent)}
+#page-soil .grid{display:grid;gap:12px}
+#page-soil .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+#page-soil .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+#page-soil .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+#page-soil .hint{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45}
+#page-soil .small{font-size:12px}
+#page-soil .muted{color:var(--muted)}
+#page-soil .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+#page-soil .toolbar button,#page-soil .soil-bhhead button{width:auto;margin-top:0}
+#page-soil button.secondary{background:var(--card-soft);color:var(--ink);border:1px solid var(--card-border);box-shadow:none}
+#page-soil button.secondary:hover{background:var(--accent-soft);color:var(--accent);filter:none}
+#page-soil button.good{background:var(--grad);color:#fff}
+#page-soil button.danger{background:color-mix(in srgb,var(--danger) 10%,var(--card));color:var(--danger);border:1px solid color-mix(in srgb,var(--danger) 35%,var(--card-border));box-shadow:none}
+#page-soil .soil-bh{border:1px solid var(--card-border);border-radius:14px;margin-top:14px;overflow:hidden;background:var(--card)}
+#page-soil .soil-bhhead{display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--card-soft);border-bottom:1px solid var(--card-border)}
+#page-soil .soil-bhhead input{max-width:190px;padding:7px 9px}
+#page-soil .soil-bhhead .spacer{flex:1}
+#page-soil .tablewrap{overflow:auto;border:1px solid var(--card-border);border-radius:12px}
+#page-soil table{width:100%;border-collapse:collapse;min-width:860px;margin:0;color:var(--ink)}
+#page-soil th,#page-soil td{padding:9px;border-bottom:1px solid var(--card-border);text-align:left;vertical-align:middle}
+#page-soil th{background:var(--card-soft);font-size:11.5px;color:var(--muted);position:sticky;top:0;z-index:1;white-space:nowrap}
+#page-soil td input,#page-soil td select{padding:7px 8px;border-radius:8px}
+#page-soil .num{text-align:right;font-variant-numeric:tabular-nums}
+#page-soil .badge{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;line-height:1.2}
+#page-soil .badge.ok{background:rgba(34,197,94,.14);color:#16a34a}
+#page-soil .badge.mid{background:rgba(245,158,11,.16);color:#d97706}
+#page-soil .badge.bad{background:rgba(239,68,68,.14);color:#dc2626}
+#page-soil .badge.info{background:var(--accent-soft);color:var(--accent)}
+#page-soil .resultbox{border:1px solid var(--card-border);border-radius:13px;padding:15px;background:var(--card-soft);min-height:112px}
+#page-soil .kpi{font-family:var(--display);font-size:30px;font-weight:800;margin:2px 0;color:var(--ink)}
+#page-soil .kpi small{font-family:var(--sans);font-size:12px;font-weight:600;color:var(--muted)}
+#page-soil .statusline{padding:11px 12px;border-radius:10px;background:var(--card-soft);border:1px dashed var(--card-border);margin-top:10px;color:var(--ink)}
+#page-soil .note{background:var(--card-soft);border-left:3px solid var(--accent);padding:12px 14px;border-radius:9px;margin:10px 0;color:var(--ink)}
+#page-soil .bn{font-family:var(--sans)}
+#page-soil .formula{font-family:var(--mono);background:var(--card-soft);border:1px solid var(--card-border);border-radius:10px;padding:10px;font-size:12px;overflow:auto}
+#page-soil .soil-footer{width:100%;max-width:1200px;margin:4px auto 0;font-size:11.5px;color:var(--muted);text-align:center;padding:8px 0 20px}
+@media(max-width:900px){
+  #page-soil .g2,#page-soil .g3,#page-soil .g4{grid-template-columns:1fr}
+  #page-soil .soil-bhhead{align-items:flex-start;flex-wrap:wrap}
+  #page-soil .soil-bhhead input{max-width:none;flex:1 1 180px}
+  #page-soil .soil-bhhead .spacer{display:none}
+}
+@media(max-width:600px){
+  #page-soil .grid,#page-soil .g2,#page-soil .g3,#page-soil .g4{grid-template-columns:1fr}
+  #page-soil .soil-tabs{display:grid;grid-template-columns:1fr}
+  #page-soil .soil-tabbtn{width:100%}
+}
+@media print{
+  #page-soil .soil-tabs,#page-soil .no-print{display:none!important}
+  #page-soil .soil-subpage{display:block!important}
+  #page-soil .card{break-inside:avoid;box-shadow:none}
+}
+</style>
+
 </head>
 <body>
 
@@ -2025,6 +2095,7 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
   <nav class="sidebar-nav" aria-label="Structural Suite navigation" data-i18n-skip>
     <div class="side-section-title">Workspace</div>
     <button type="button" class="page-tab-btn side-link active" data-page="footing" data-i18n-skip><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M6 20V8h12v12M9 8V4h6v4M9 12h6M9 16h6"/></svg><span class="side-link-label">Footing Design</span></button>
+    <button type="button" class="page-tab-btn side-link" data-page="soil" data-i18n-skip title="Multi-borehole SPT bearing capacity and soil screening"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18M5 11h14M7 15h10M9 19h6"/><path d="M4 4h16"/></svg><span class="side-link-label">Soil</span></button>
 
     <section class="side-group open" data-side-group="etabs">
       <button type="button" class="side-link side-group-toggle" aria-expanded="true">
@@ -2229,6 +2300,117 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
   </div>
 </div>
 
+</div>
+
+
+
+<div id="page-soil" class="page-panel" data-i18n-skip>
+  <h1>Soil</h1>
+  <p class="sub">Multi-borehole SPT bearing capacity + Bangladesh-context sand pile screening</p>
+  <div class="soil-tabs no-print">
+    <button type="button" class="soil-tabbtn active" onclick="soil_showPage('soil_calc',this)">Calculator</button>
+    <button type="button" class="soil-tabbtn" onclick="soil_showPage('soil_notes',this)">বাংলা Notes + BNBC-aligned Thumb Rules</button>
+  </div>
+  <div id="soil_calc" class="soil-subpage active">
+<div class="notice"><strong>Engineering notice:</strong> This is a preliminary screening tool. Final foundation selection and allowable pressure must be checked for settlement, structural loads, footing dimensions, groundwater, liquefaction/seismic issues and project-specific geotechnical testing. Values shown as “thumb rule” are not BNBC-prescribed fixed design values.</div>
+
+<section class="card">
+<h2>1) Project + Global Settings</h2>
+<div class="grid g4">
+  <div><label>Project / Site</label><input id="soil_project" placeholder="e.g., Kushtia, Bangladesh"></div>
+  <div><label>Building storeys</label><input id="soil_storeys" type="number" min="1" step="1" value="3"></div>
+  <div><label>Foundation evaluation depth</label><input id="soil_evalDepth" type="number" step="0.1" value="1.5"><div class="hint">Nearest SPT point from each borehole will be used.</div></div>
+  <div><label>Depth unit</label><select id="soil_depthUnit"><option value="m">meter (m)</option><option value="ft">feet (ft)</option></select></div>
+</div>
+<div class="grid g4" style="margin-top:12px">
+  <div><label>Footing shape</label><select id="soil_shape"><option value="square">Square footing</option><option value="strip">Strip footing</option><option value="circular">Circular footing</option></select></div>
+  <div><label>Footing width / diameter B (ft)</label><input id="soil_Bft" type="number" step="0.1" value="5"></div>
+  <div><label>Factor of Safety (FS)</label><input id="soil_fs" type="number" step="0.1" min="1" value="3.0"><div class="hint">Used only for preliminary qallow = qult / FS.</div></div>
+  <div><label>Groundwater depth below EGL</label><input id="soil_gwt" type="number" step="0.1" placeholder="blank = deep"></div>
+</div>
+<div class="grid g4" style="margin-top:12px">
+  <div><label>Moist unit weight γ (pcf)</label><input id="soil_gammaPcf" type="number" step="1" value="115"></div>
+  <div><label>Saturated unit weight γsat (pcf)</label><input id="soil_gammaSatPcf" type="number" step="1" value="120"></div>
+  <div><label>SPT hammer energy ratio ER (%)</label><input id="soil_er" type="number" step="1" value="60"><div class="hint">N60 = (ER / 60) × Nfield</div></div>
+  <div><label>Clay Su factor (kPa per N60)</label><input id="soil_suFactor" type="number" step="0.25" value="6.25"><div class="hint">Screening only; measured Su overrides this.</div></div>
+</div>
+<div class="toolbar no-print"><button class="secondary" onclick="soil_loadExample()">Load 2-Borehole Example</button><button class="secondary" onclick="soil_clearAll()">Clear All</button></div>
+</section>
+
+<section class="card">
+<h2>2) Borehole / SPT Input</h2>
+<p class="small muted">Add as many boreholes as needed. For the final site TSF, the tool finds the nearest SPT row to the selected foundation evaluation depth in each borehole, calculates the preliminary allowable bearing pressure, then reports the <b>lowest valid borehole value</b> as the conservative Site TSF.</p>
+<div id="soil_boreholes"></div>
+<div class="toolbar no-print"><button onclick="soil_addBorehole()">+ Add Borehole</button><button class="good" onclick="soil_calculateSite()">Calculate Site TSF</button></div>
+</section>
+
+<section class="card">
+<h2>3) One Site Bearing Capacity Result</h2>
+<div class="grid g3">
+  <div class="resultbox"><div class="small muted">Conservative Site Allowable Bearing Capacity</div><div id="soil_siteTsf" class="kpi">—</div><div class="small muted">Minimum qallow among evaluated boreholes</div></div>
+  <div class="resultbox"><div class="small muted">Governing Borehole</div><div id="soil_govBH" class="kpi" style="font-size:23px">—</div><div id="soil_govText" class="small muted">Run calculation.</div></div>
+  <div class="resultbox"><div class="small muted">Screening confidence</div><div id="soil_conf" class="kpi" style="font-size:22px">—</div><div class="small muted">SPT-derived strength can be uncertain, especially in cohesive soils.</div></div>
+</div>
+<div class="tablewrap" style="margin-top:12px">
+<table><thead><tr><th>Borehole</th><th>Selected depth</th><th>Soil</th><th>Nfield</th><th>N60</th><th>Used φ / Su</th><th>qᵤ (tsf)</th><th>qallow (tsf)</th><th>Note</th></tr></thead><tbody id="soil_siteBody"></tbody></table>
+</div>
+<div class="toolbar no-print"><button class="secondary" onclick="soil_exportCSV()">Export CSV</button><button class="secondary" onclick="window.print()">Print / Save PDF</button></div>
+</section>
+
+<section class="card">
+<h2>4) Sand Pile Suitability — SPT + Soil Type + Building Storeys</h2>
+<p class="small muted">No sand-pile bearing-capacity calculation is done here. This section gives a preliminary suitability judgement and a Bangladesh-practice trial range only.</p>
+<div class="grid g3">
+  <div class="resultbox"><div class="small muted">Screening judgement</div><div id="soil_spDecision" class="kpi" style="font-size:22px">—</div><div id="soil_spReason" class="small muted">Calculate Site TSF first.</div></div>
+  <div class="resultbox"><div class="small muted">Suggested trial geometry</div><div id="soil_spGeom" class="kpi" style="font-size:20px">—</div><div class="small muted">Diameter + center-to-center spacing; field trial required.</div></div>
+  <div class="resultbox"><div class="small muted">Suggested sand quality</div><div id="soil_spSand" class="kpi" style="font-size:20px">—</div><div class="small muted">Clean, non-plastic granular material preferred.</div></div>
+</div>
+<div id="soil_spDetails" class="statusline">—</div>
+</section>
+</div>
+
+<div id="soil_notes" class="soil-subpage">
+<section class="card bn">
+<h2>বাংলা নোট: কোন ইনপুট কোথা থেকে নেবেন</h2>
+<div class="note"><b>Moist unit weight γ (pcf):</b> সবচেয়ে ভালো হলো bore log/lab report-এর moist বা bulk unit weight নেওয়া। রিপোর্টে না থাকলে শুধু preliminary screening-এর জন্য সাধারণ alluvial sand/silty soil-এ প্রায় <b>110–120 pcf</b> ধরে শুরু করা যায়; এই টুলে default 115 pcf। Final design-এ measured value ব্যবহার করবেন।</div>
+<div class="note"><b>Saturated unit weight γsat (pcf):</b> groundwater-এর নিচের soil-এর জন্য lab/report value ব্যবহার করুন। না থাকলে preliminary হিসেবে প্রায় <b>118–128 pcf</b> range দেখা যায়; টুলে default 120 pcf।</div>
+<div class="note"><b>SPT hammer energy ratio ER (%):</b> drillers/SPT report-এ hammer energy calibration থাকলে সেটাই দিন। N60 হচ্ছে 60% reference energy-তে normalized N। Energy জানা না থাকলে ER=60% ব্যবহার করলে input N-কে N60 ধরে নেওয়ার মতো আচরণ করবে—কিন্তু এটি measured correction নয়।</div>
+<div class="note"><b>Clay Su factor (kPa per N60):</b> SPT-N থেকে Su বের করা খুব approximate। Vane shear, UU/UC test বা lab Su থাকলে অবশ্যই সেটি ব্যবহার করবেন। শুধু screening-এর জন্য প্রায় <b>5–7 kPa per N60</b> range ব্যবহার করা হয়; এখানে default 6.25 রাখা হয়েছে। Soft/sensitive clay-এ এই correlation ভুল হতে পারে।</div>
+<div class="note"><b>Factor of Safety:</b> এই tool-এ FS=3.0 default রাখা হয়েছে preliminary shallow bearing screening-এর জন্য। এটি সব project-এর জন্য BNBC fixed value হিসেবে ধরা যাবে না; design method, failure mode ও settlement অনুযায়ী engineer ঠিক করবেন।</div>
+</section>
+
+<section class="card bn">
+<h2>Multiple Borehole → একটি TSF কীভাবে নেওয়া হচ্ছে</h2>
+<p>১) আপনি foundation evaluation depth দেবেন। ২) প্রতিটি borehole থেকে ওই depth-এর সবচেয়ে কাছের SPT row নেওয়া হবে। ৩) ওই row-এর soil type + N60 দিয়ে preliminary bearing capacity বের হবে। ৪) সব borehole-এর allowable result-এর মধ্যে <b>সবচেয়ে কম value</b> Site TSF হিসেবে দেখাবে।</p>
+<p><b>কেন minimum?</b> ছোট/মাঝারি site-এ borehole-to-borehole variability থাকলে preliminary stage-এ দুর্বল borehole-কে ignore না করার জন্য এটি conservative screening rule। এটি BNBC-এর সরাসরি formula নয়। বড় site বা অনেক borehole হলে geotechnical engineer statistical zoning/stratigraphic model ব্যবহার করতে পারেন।</p>
+</section>
+
+<section class="card bn">
+<h2>BNBC-aligned Thumb Rule Guide — কীভাবে ব্যবহার করবেন</h2>
+<div class="notice"><strong>গুরুত্বপূর্ণ:</strong> নিচের diameter/spacing/FM সংখ্যা BNBC-এর mandatory table নয়। এগুলো Bangladesh project/case-study practice থেকে নেওয়া preliminary trial ranges। BNBC-compliant final design-এর জন্য site investigation, settlement, seismic/liquefaction, groundwater, load এবং verification test দরকার।</div>
+<h3>SPT অনুযায়ী quick soil reading</h3>
+<p><b>Sand / silty sand:</b> N60 ≤ 4 very loose, 5–10 loose, 11–30 medium dense, 31–50 dense, >50 very dense — qualitative screening.</p>
+<p><b>Clay / silty clay:</b> N60 < 2 very soft, 2–4 soft, 5–8 medium, 9–15 stiff, 16–30 very stiff, >30 hard — SPT-only consistency estimate is uncertain.</p>
+<h3>Sand pile কোথায় বেশি যুক্তিযুক্ত</h3>
+<p>Loose sand/silty sand (বিশেষ করে N60 ≤ 10) এবং low-rise building হলে sand compaction/displacement pile একটি reasonable candidate হতে পারে। Soft clay-এ sand pile কাজ করতে পারে, কিন্তু সেখানে simple N-value দিয়ে “safe” বলা যায় না; composite-ground/settlement analysis এবং field trial দরকার। Organic soil/peat, uncontrolled fill, খুব thick soft layer, high seismic/liquefaction concern বা 7+ storey building হলে এই screening tool দিয়ে sand pile finalise করবেন না।</p>
+<h3>Bangladesh-context preliminary trial range</h3>
+<p><b>1–3 storey + loose granular soil:</b> trial starting range প্রায় <b>10–12 inch diameter</b>, <b>24–30 inch c/c spacing</b>, clean non-plastic sand; <b>FM ~2.0–2.6</b> preferred as a practical starting band. Improvement depth should pass through the weak/loose layer; termination depth must come from bore log, not from storey count alone.</p>
+<p><b>4–6 storey:</b> sand pile may still be technically possible in some profiles, but this tool will mark it <b>Conditional</b>. Diameter/spacing should be engineered after load, settlement and area-replacement checks; post-improvement SPT/plate-load verification is strongly recommended.</p>
+<p><b>7 storey or more:</b> SPT + soil type + storey count alone is not enough to approve sand pile. Compare engineered ground improvement with RCC pile/deep foundation and verify settlement and seismic performance.</p>
+<h3>Sand quality note</h3>
+<p>Bangladesh granular-pile studies have reported better performance with coarser Sylhet-type sand (one field study reported FM about 2.58) compared with much finer local sand. Therefore this tool recommends clean, non-plastic, relatively coarse sand and flags low-FM/fine material as less desirable. Project specification should use sieve analysis, fines content and compaction criteria—not FM alone.</p>
+</section>
+
+<section class="card bn">
+<h2>References / basis for screening logic</h2>
+<p class="small">• Bangladesh National Building Code (BNBC 2020): use as governing code framework for geotechnical investigation/foundation design. This tool does not claim a BNBC fixed sand-pile diameter/spacing/FM table.</p>
+<p class="small">• Md. Ikramul Hoque & Muhammed Alamgir, field performance of granular pile in Bangladesh: rammed-compaction granular piles; reported Sylhet sand FM ≈ 2.58 and local finer sand FM ≈ 1.13.</p>
+<p class="small">• Bangladesh case study (2023): locally constructed sand compaction piles around 250 mm diameter at about 600 mm spacing were used for a project-specific soft-ground solution.</p>
+<p class="small">• Bangladesh southwest study/preprint (2026): 300 mm diameter, 8.25 m long sand compaction piles were field-tested; project-specific geometry and verification were central to the study.</p>
+<p class="small">• Dhaka MRT soil-improvement case study (2026): project-specific ground improvement used much larger displacement/SCP elements; reinforces that geometry is site/method dependent.</p>
+</section>
+</div>
+  <div class="soil-footer">Preliminary screening only. Do not issue construction drawings or foundation approval from this module alone.</div>
 </div>
 
 
@@ -4504,6 +4686,7 @@ async function tryUnlock() {
     setTimeout(() => {
       gateOverlay.style.display = 'none';
       appRoot.classList.remove('app-hidden');
+      document.body.classList.add('suite-unlocked');
     }, 520);
   } else {
     gateError.textContent = 'Incorrect password.';
@@ -11525,6 +11708,132 @@ html[data-user-type-custom="true"] :is(p,.muted,.hint,.compare-helper,.theme-upl
   window.addEventListener('structural-theme-change',sync);
   sync();
 })();
+</script>
+
+
+<!-- v6.1: AVASH 2 + Theme Studio scroll repair -->
+<style id="avash2-theme-scroll-repair-v61">
+/* Desktop shell: body is intentionally locked, so #mainContent must remain the scroll container. */
+@media (min-width:901px){
+  html[data-theme="avash2"] #mainContent{
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    overscroll-behavior-y:contain;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-gutter:stable;
+  }
+}
+
+/* Theme Studio grew beyond one viewport after the typography controls were added.
+   Scroll the whole dialog so the bottom controls + all themes are always reachable. */
+#themeBackdrop{overscroll-behavior:contain;}
+#themeDialog{
+  max-height:min(92dvh,850px)!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-gutter:stable;
+  touch-action:pan-y;
+}
+#themeGrid{
+  overflow:visible!important;
+  flex:0 0 auto!important;
+  min-height:0!important;
+}
+.theme-dialog-head{
+  position:sticky;
+  top:-1px;
+  z-index:30;
+  padding-top:2px;
+  background:color-mix(in srgb,var(--card) 94%,transparent);
+  backdrop-filter:blur(14px) saturate(130%);
+  -webkit-backdrop-filter:blur(14px) saturate(130%);
+}
+html[data-theme="avash2"] .theme-dialog-head{
+  background:rgba(255,255,255,.96)!important;
+}
+@media (max-width:900px){
+  #themeBackdrop{
+    align-items:flex-start!important;
+    padding-top:max(10px,env(safe-area-inset-top))!important;
+    padding-bottom:max(10px,env(safe-area-inset-bottom))!important;
+  }
+  #themeDialog{
+    width:min(100%,760px)!important;
+    max-height:calc(100dvh - max(20px,env(safe-area-inset-top)) - max(20px,env(safe-area-inset-bottom)))!important;
+  }
+}
+</style>
+<script id="theme-dialog-scroll-reset-v61">
+(function(){
+  const dialog=document.getElementById('themeDialog');
+  const launcher=document.getElementById('themePickerBtn');
+  if(!dialog||!launcher)return;
+  launcher.addEventListener('click',()=>requestAnimationFrame(()=>{dialog.scrollTop=0;}));
+})();
+</script>
+
+
+<!-- v6.2: keep app navigation/chrome out of the password screen -->
+<style id="login-chrome-isolation-v62">
+/* The mobile top bar/dock are injected outside #appRoot, so app-hidden alone cannot hide them.
+   Keep every app-level floating control unavailable until the password gate is dismissed. */
+body:not(.suite-unlocked) #mobileTopBar,
+body:not(.suite-unlocked) #mobileDock,
+body:not(.suite-unlocked) #mobileNavOverlay,
+body:not(.suite-unlocked) .glass-quick-access,
+body:not(.suite-unlocked) #glassQuickToggle{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+body:not(.suite-unlocked) #gateOverlay{
+  z-index:2147483000!important;
+}
+@media(max-width:900px){
+  body:not(.suite-unlocked){
+    padding:0!important;
+    overflow:hidden!important;
+  }
+  body:not(.suite-unlocked) #gateOverlay{
+    padding:max(14px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important;
+  }
+}
+</style>
+
+<script id="soilModuleScript">
+
+const SOIL_TSF_KPA=95.7605,SOIL_FT_M=0.3048,SOIL_PCF_KNM3=0.157087,SOIL_GW=9.81;let soilBhCounter=0,soilLastSite=[];
+function soil_showPage(id,btn){document.querySelectorAll('#page-soil .soil-subpage').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('#page-soil .soil-tabbtn').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
+function soil_soilOptions(selected='sand'){return [['sand','Sand'],['siltysand','Silty Sand'],['clay','Clay'],['siltyclay','Silty Clay'],['silt','Silt / Unknown']].map(([v,t])=>`<option value="${v}" ${v===selected?'selected':''}>${t}</option>`).join('')}
+function soil_addBorehole(name){soilBhCounter++;const id='bh'+soilBhCounter;const box=document.createElement('div');box.className='soil-bh';box.id=id;box.innerHTML=`<div class="soil-bhhead"><b>Borehole</b><input class="soil-bhname" value="${name||'BH-'+String(soilBhCounter).padStart(2,'0')}"><span class="spacer"></span><button class="secondary no-print" onclick="soil_addRow('${id}')">+ SPT Row</button><button class="danger no-print" onclick="document.getElementById('${id}').remove()">Remove BH</button></div><div class="tablewrap" style="border:0;border-radius:0"><table><thead><tr><th>Depth</th><th>Soil type</th><th>SPT N field</th><th>φ override (°)</th><th>Su override (kPa)</th><th>Notes</th><th class="no-print">Action</th></tr></thead><tbody class="rows"></tbody></table></div>`;document.getElementById('soil_boreholes').appendChild(box);soil_addRow(id)}
+function soil_addRow(id,data={}){const tb=document.querySelector('#'+id+' .rows');const tr=document.createElement('tr');tr.innerHTML=`<td><input class="depth" type="number" step="0.1" value="${data.depth??''}"></td><td><select class="soil">${soil_soilOptions(data.soil||'sand')}</select></td><td><input class="nfield" type="number" min="0" step="1" value="${data.n??''}"></td><td><input class="phi" type="number" min="0" max="50" step="0.5" value="${data.phi??''}" placeholder="auto"></td><td><input class="su" type="number" min="0" step="1" value="${data.su??''}" placeholder="auto"></td><td><input class="notes" value="${data.notes??''}" placeholder="soil description"></td><td class="no-print"><button class="danger" onclick="this.closest('tr').remove()">Remove</button></td>`;tb.appendChild(tr)}
+function soil_clearAll(){document.getElementById('soil_boreholes').innerHTML='';soilBhCounter=0;soilLastSite=[];document.getElementById('soil_siteBody').innerHTML='';['soil_siteTsf','soil_govBH','soil_conf','soil_spDecision','soil_spGeom','soil_spSand'].forEach(id=>document.getElementById(id).textContent='—');document.getElementById('soil_spDetails').textContent='—';soil_addBorehole()}
+function soil_loadExample(){document.getElementById('soil_boreholes').innerHTML='';soilBhCounter=0;document.getElementById('soil_depthUnit').value='m';document.getElementById('soil_evalDepth').value='1.5';document.getElementById('soil_gwt').value='0.7';soil_addBorehole('BH-01');let b1=document.querySelector('#bh1 .rows');b1.innerHTML='';[[1.5,'siltysand',5],[3,'siltysand',7],[4.5,'siltyclay',6],[6,'siltyclay',8]].forEach(r=>soil_addRow('bh1',{depth:r[0],soil:r[1],n:r[2]}));soil_addBorehole('BH-02');let b2=document.querySelector('#bh2 .rows');b2.innerHTML='';[[1.5,'siltysand',4],[3,'siltysand',6],[4.5,'siltyclay',5],[6,'siltyclay',9]].forEach(r=>soil_addRow('bh2',{depth:r[0],soil:r[1],n:r[2]}));soil_calculateSite()}
+function soil_depthToM(v){return document.getElementById('soil_depthUnit').value==='ft'?v*SOIL_FT_M:v}function soil_depthLabel(v){return `${v} ${document.getElementById('soil_depthUnit').value}`}
+function soil_n60(n){const er=parseFloat(document.getElementById('soil_er').value)||60;return n*er/60}
+function soil_autoPhi(N,soil){let p;if(N<=4)p=27+0.5*N;else if(N<=10)p=29+(N-4)*(2/6);else if(N<=30)p=31+(N-10)*(4/20);else if(N<=50)p=35+(N-30)*(3/20);else p=Math.min(41,38+(N-50)*0.06);if(soil==='siltysand')p-=1;return Math.max(24,Math.min(42,p))}
+function soil_bearingFactors(phi){if(phi<=0.01)return{Nc:5.7,Nq:1,Ng:0};const r=phi*Math.PI/180,Nq=Math.exp(Math.PI*Math.tan(r))*Math.pow(Math.tan(Math.PI/4+r/2),2),Nc=(Nq-1)/Math.tan(r),Ng=2*(Nq+1)*Math.tan(r);return{Nc,Nq,Ng}}
+function soil_shapeFactors(){const s=document.getElementById('soil_shape').value;if(s==='square')return{sc:1.3,sq:1,sg:0.8};if(s==='circular')return{sc:1.3,sq:1,sg:0.6};return{sc:1,sq:1,sg:1}}
+function soil_gammas(){const gm=(parseFloat(document.getElementById('soil_gammaPcf').value)||115)*SOIL_PCF_KNM3,gs=(parseFloat(document.getElementById('soil_gammaSatPcf').value)||120)*SOIL_PCF_KNM3;return{gm,gs,gsub:Math.max(1,gs-SOIL_GW)}}
+function soil_gwtM(){const x=document.getElementById('soil_gwt').value;if(x==='')return Infinity;return soil_depthToM(parseFloat(x))}
+function soil_surchargeAt(D){const {gm,gsub}=soil_gammas(),wt=soil_gwtM();return wt>=D?gm*D:gm*Math.max(0,wt)+gsub*Math.max(0,D-wt)}
+function soil_gammaBelow(D,B){const {gm,gsub}=soil_gammas(),wt=soil_gwtM();if(wt<=D)return gsub;if(wt>=D+B)return gm;const frac=(wt-D)/B;return gsub+(gm-gsub)*Math.max(0,Math.min(1,frac))}
+function soil_calcRow(r){const N=soil_n60(r.n),D=soil_depthToM(r.depth),B=(parseFloat(document.getElementById('soil_Bft').value)||5)*SOIL_FT_M,q=soil_surchargeAt(D),gb=soil_gammaBelow(D,B),sf=soil_shapeFactors();let phi=0,su=0,c=0,confidence='Medium';if(r.soil==='sand'||r.soil==='siltysand'){phi=r.phi!==''?parseFloat(r.phi):soil_autoPhi(N,r.soil)}else if(r.soil==='clay'||r.soil==='siltyclay'){su=r.su!==''?parseFloat(r.su):(parseFloat(document.getElementById('soil_suFactor').value)||6.25)*N;c=su;confidence=r.su!==''?'Medium':'Low'}else return{error:'Unknown soil type'};const f=soil_bearingFactors(phi),qu=sf.sc*c*f.Nc+sf.sq*q*f.Nq+0.5*sf.sg*gb*B*f.Ng,fs=parseFloat(document.getElementById('soil_fs').value)||3;return{N,phi,su,quTsf:qu/SOIL_TSF_KPA,qaTsf:(qu/SOIL_TSF_KPA)/fs,confidence}}
+function soil_getBHData(){return [...document.querySelectorAll('#page-soil .soil-bh')].map(b=>({name:b.querySelector('.soil-bhname').value||'BH',rows:[...b.querySelectorAll('tbody.rows tr')].map(tr=>({depth:parseFloat(tr.querySelector('.depth').value),soil:tr.querySelector('.soil').value,n:parseFloat(tr.querySelector('.nfield').value),phi:tr.querySelector('.phi').value,su:tr.querySelector('.su').value,notes:tr.querySelector('.notes').value})).filter(r=>Number.isFinite(r.depth)&&Number.isFinite(r.n))})).filter(b=>b.rows.length)}
+function soil_soilName(v){return{sand:'Sand',siltysand:'Silty Sand',clay:'Clay',siltyclay:'Silty Clay',silt:'Silt / Unknown'}[v]||v}function soil_fmt(x,p=2){return Number.isFinite(x)?x.toFixed(p):'—'}
+function soil_calculateSite(){const bhs=soil_getBHData(),target=parseFloat(document.getElementById('soil_evalDepth').value);const body=document.getElementById('soil_siteBody');body.innerHTML='';soilLastSite=[];if(!bhs.length||!Number.isFinite(target)){alert('Enter at least one borehole and a valid evaluation depth.');return}bhs.forEach(b=>{let r=b.rows.slice().sort((a,z)=>Math.abs(a.depth-target)-Math.abs(z.depth-target))[0],z=soil_calcRow(r);if(z.error){body.insertAdjacentHTML('beforeend',`<tr><td>${b.name}</td><td>${soil_depthLabel(r.depth)}</td><td>${soil_soilName(r.soil)}</td><td>${r.n}</td><td colspan="5"><span class="badge bad">${z.error}</span></td></tr>`);return}soilLastSite.push({...b,r,...z});const used=(r.soil==='sand'||r.soil==='siltysand')?`φ=${soil_fmt(z.phi)}°`:`Su=${soil_fmt(z.su)} kPa`;body.insertAdjacentHTML('beforeend',`<tr><td><b>${b.name}</b></td><td>${soil_depthLabel(r.depth)}</td><td>${soil_soilName(r.soil)}</td><td>${r.n}</td><td>${soil_fmt(z.N)}</td><td>${used}</td><td class="num">${soil_fmt(z.quTsf)}</td><td class="num"><b>${soil_fmt(z.qaTsf)}</b></td><td>${z.confidence==='Low'?'<span class="badge bad">Clay SPT correlation</span>':'<span class="badge mid">Screening</span>'}</td></tr>`) });if(!soilLastSite.length){document.getElementById('soil_siteTsf').textContent='—';return}const gov=soilLastSite.reduce((a,b)=>a.qaTsf<=b.qaTsf?a:b);document.getElementById('soil_siteTsf').innerHTML=`${soil_fmt(gov.qaTsf)} <small>TSF allowable</small>`;document.getElementById('soil_govBH').textContent=gov.name;document.getElementById('soil_govText').textContent=`Nearest SPT at ${soil_depthLabel(gov.r.depth)}; ${soil_soilName(gov.r.soil)}, N60=${soil_fmt(gov.N)}.`;document.getElementById('soil_conf').innerHTML=soilLastSite.some(x=>x.confidence==='Low')?'<span class="badge mid">Low–Medium</span>':'<span class="badge ok">Medium</span>';soil_screenSandPile()}
+function soil_screenSandPile(){if(!soilLastSite.length)return;const st=Math.max(1,parseInt(document.getElementById('soil_storeys').value)||1),minN=Math.min(...soilLastSite.map(x=>x.N)),avgN=soilLastSite.reduce((s,x)=>s+x.N,0)/soilLastSite.length,sandCount=soilLastSite.filter(x=>x.r.soil==='sand'||x.r.soil==='siltysand').length,clayCount=soilLastSite.filter(x=>x.r.soil==='clay'||x.r.soil==='siltyclay').length,total=soilLastSite.length;let decision,cls,reason,geom='Not assigned',sand='FM 2.0–2.6 preferred';if(st>=7){decision='Not recommended by this screening';cls='bad';reason='7+ storeys: SPT + soil type + storey count is not sufficient to approve sand piles. Compare engineered ground improvement with deep foundation and check settlement/seismic performance.';geom='Specialist design only';sand='Project specification required'}else if(sandCount>=clayCount){if(minN<=10){decision=st<=3?'Recommended candidate':'Conditional candidate';cls=st<=3?'ok':'mid';reason=`Predominantly granular profile near foundation depth with minimum N60=${soil_fmt(minN,1)}. Loose sand/silty sand is the situation where densification-type sand piles are most likely to be useful.`;geom=st<=3?'10–12 in dia; 24–30 in c/c':'Start trial around 10–14 in dia; spacing by design';sand='Clean non-plastic sand; FM ~2.0–2.6'}else if(minN<=20){decision='Limited benefit / Conditional';cls='mid';reason=`Granular soil is already medium dense in part of the site (minimum N60=${soil_fmt(minN,1)}). Sand piling may give less benefit; compare against direct shallow footing settlement/capacity.`;geom='Only after trial section';sand='Clean non-plastic sand; FM ~2.0–2.6'}else{decision='Generally not needed for densification';cls='mid';reason=`Evaluated granular layers are relatively dense (minimum N60=${soil_fmt(minN,1)}). Sand piles may not be economical unless another weak layer controls settlement.`;geom='No default geometry';sand='—'}}else{if(minN<=4){decision='Conditional — specialist design';cls='mid';reason=`Predominantly cohesive/soft profile with minimum N60=${soil_fmt(minN,1)}. Sand displacement/compaction piles can work in some Bangladesh soft-ground projects, but SPT-only screening cannot prove safety or settlement performance.`;geom=st<=3?'Trial only: ~10–12 in dia; ~24–30 in c/c':'Composite-ground design required';sand='Clean coarse sand; FM ~2.2–2.6 preferred'}else{decision='Conditional / other options may suit better';cls='mid';reason=`Cohesive soil controls and minimum N60=${soil_fmt(minN,1)}. Evaluate replacement, stone/granular columns, raft or deep foundation based on settlement and layer thickness.`;geom='No automatic recommendation';sand='Project-specific'}}document.getElementById('soil_spDecision').innerHTML=`<span class="badge ${cls}" style="font-size:14px">${decision}</span>`;document.getElementById('soil_spReason').textContent=reason;document.getElementById('soil_spGeom').textContent=geom;document.getElementById('soil_spSand').textContent=sand;document.getElementById('soil_spDetails').innerHTML=`Screen uses ${total} borehole(s) at the selected evaluation depth; minimum N60=${soil_fmt(minN,1)}, average N60=${soil_fmt(avgN,1)}, granular BH=${sandCount}, cohesive BH=${clayCount}, building=${st} storey(s). <b>Geometry/FM shown above are trial starting ranges, not BNBC mandatory values.</b> Verify with post-improvement SPT and/or plate load test plus settlement analysis.`}
+function soil_exportCSV(){if(!soilLastSite.length)soil_calculateSite();if(!soilLastSite.length)return;let lines=['Borehole,SelectedDepth,Unit,Soil,Nfield,N60,Phi_deg,Su_kPa,q_ult_tsf,q_allow_tsf'];soilLastSite.forEach(x=>lines.push([x.name,x.r.depth,document.getElementById('soil_depthUnit').value,soil_soilName(x.r.soil),x.r.n,x.N,x.phi||'',x.su||'',x.quTsf,x.qaTsf].join(',')));const blob=new Blob([lines.join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='site_spt_bearing_results.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+soil_addBorehole('BH-01');
+
+window.addEventListener('structural-theme-change', function(){
+  const panel=document.getElementById('page-soil');
+  if(panel) panel.dataset.themeRefresh=String(Date.now());
+});
+
 </script>
 </body>
 </html>
