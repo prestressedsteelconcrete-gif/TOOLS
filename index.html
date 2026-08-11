@@ -2319,7 +2319,7 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
 <div class="grid g4">
   <div><label>Project / Site</label><input id="soil_project" placeholder="e.g., Kushtia, Bangladesh"></div>
   <div><label>Building storeys</label><input id="soil_storeys" type="number" min="1" step="1" value="3"></div>
-  <div><label>Foundation evaluation depth</label><input id="soil_evalDepth" type="number" step="0.1" value="1.5"><div class="hint">Nearest SPT point from each borehole will be used.</div></div>
+  <div><label>Proposed foundation base depth</label><input id="soil_evalDepth" type="number" step="0.1" value="1.5"><div class="hint">Actual footing base level. Surcharge is calculated at this depth — not at the SPT sample depth.</div></div>
   <div><label>Depth unit</label><select id="soil_depthUnit"><option value="m">meter (m)</option><option value="ft">feet (ft)</option></select></div>
 </div>
 <div class="grid g4" style="margin-top:12px">
@@ -2334,25 +2334,36 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
   <div><label>SPT hammer energy ratio ER (%)</label><input id="soil_er" type="number" step="1" value="60"><div class="hint">N60 = (ER / 60) × Nfield</div></div>
   <div><label>Clay Su factor (kPa per N60)</label><input id="soil_suFactor" type="number" step="0.25" value="6.25"><div class="hint">Screening only; measured Su overrides this.</div></div>
 </div>
+<div class="grid g4" style="margin-top:12px">
+  <div><label>Pressure influence depth (× B)</label><input id="soil_influenceB" type="number" step="0.25" min="1" max="4" value="2"><div class="hint">Default 2B screening zone below footing base.</div></div>
+  <div><label>Sand pile trigger (TSF)</label><input id="soil_spThreshold" type="number" step="0.05" min="0.25" value="1.0"><div class="hint">Your rule: at or above this Site TSF, sand pile is not recommended.</div></div>
+  <div><label>Max practical shallow depth</label><input id="soil_maxShallowDepth" type="number" step="0.1" min="1" value="3.0"><div class="hint">Used only to search for a deeper shallow-footing option.</div></div>
+  <div><label>Recommendation mode</label><select id="soil_recMode"><option value="conservative">Conservative multi-BH</option></select><div class="hint">Lowest borehole remains governing.</div></div>
+</div>
 <div class="toolbar no-print"><button class="secondary" onclick="soil_loadExample()">Load 2-Borehole Example</button><button class="secondary" onclick="soil_clearAll()">Clear All</button></div>
 </section>
 
 <section class="card">
 <h2>2) Borehole / SPT Input</h2>
-<p class="small muted">Add as many boreholes as needed. For the final site TSF, the tool finds the nearest SPT row to the selected foundation evaluation depth in each borehole, calculates the preliminary allowable bearing pressure, then reports the <b>lowest valid borehole value</b> as the conservative Site TSF.</p>
+<p class="small muted">Add as many boreholes as needed. At the proposed footing base, each borehole is checked using conservative bracketing SPT data. Soil below the base is then checked through the selected pressure-influence zone using a simplified 2:1 stress-spread screen. The <b>lowest borehole pressure limit governs the one Site TSF</b>. A deeper good layer does not automatically increase shallow-footing capacity; the footing must reach it or the weak layer must be engineered.</p>
 <div id="soil_boreholes"></div>
 <div class="toolbar no-print"><button onclick="soil_addBorehole()">+ Add Borehole</button><button class="good" onclick="soil_calculateSite()">Calculate Site TSF</button></div>
 </section>
 
 <section class="card">
-<h2>3) One Site Bearing Capacity Result</h2>
-<div class="grid g3">
-  <div class="resultbox"><div class="small muted">Conservative Site Allowable Bearing Capacity</div><div id="soil_siteTsf" class="kpi">—</div><div class="small muted">Minimum qallow among evaluated boreholes</div></div>
+<h2>3) One Site Bearing Capacity + Foundation Recommendation</h2>
+<div class="grid g4">
+  <div class="resultbox"><div class="small muted">Conservative Site Allowable Bearing Pressure</div><div id="soil_siteTsf" class="kpi">—</div><div class="small muted">Lowest pressure-transfer limit among all boreholes</div></div>
   <div class="resultbox"><div class="small muted">Governing Borehole</div><div id="soil_govBH" class="kpi" style="font-size:23px">—</div><div id="soil_govText" class="small muted">Run calculation.</div></div>
-  <div class="resultbox"><div class="small muted">Screening confidence</div><div id="soil_conf" class="kpi" style="font-size:22px">—</div><div class="small muted">SPT-derived strength can be uncertain, especially in cohesive soils.</div></div>
+  <div class="resultbox"><div class="small muted">Recommended foundation base depth</div><div id="soil_recDepth" class="kpi" style="font-size:23px">—</div><div id="soil_recDepthText" class="small muted">Profile-based screening.</div></div>
+  <div class="resultbox"><div class="small muted">Foundation system screen</div><div id="soil_foundationRec" class="kpi" style="font-size:20px">—</div><div id="soil_foundationReason" class="small muted">Shallow vs improvement vs pile.</div></div>
+</div>
+<div class="grid g2" style="margin-top:12px">
+  <div class="resultbox"><div class="small muted">Pressure-transfer check</div><div id="soil_influenceSummary" class="small">—</div></div>
+  <div class="resultbox"><div class="small muted">Screening confidence</div><div id="soil_conf" class="kpi" style="font-size:22px">—</div><div class="small muted">Settlement/layered-soil analysis can still control final design.</div></div>
 </div>
 <div class="tablewrap" style="margin-top:12px">
-<table><thead><tr><th>Borehole</th><th>Selected depth</th><th>Soil</th><th>Nfield</th><th>N60</th><th>Used φ / Su</th><th>qᵤ (tsf)</th><th>qallow (tsf)</th><th>Note</th></tr></thead><tbody id="soil_siteBody"></tbody></table>
+<table><thead><tr><th>Borehole</th><th>Base SPT used</th><th>Base soil / N60</th><th>Base qallow</th><th>Controlling depth</th><th>Control soil / N60</th><th>Stress factor I</th><th>BH pressure limit</th><th>Note</th></tr></thead><tbody id="soil_siteBody"></tbody></table>
 </div>
 <div class="toolbar no-print"><button class="secondary" onclick="soil_exportCSV()">Export CSV</button><button class="secondary" onclick="window.print()">Print / Save PDF</button></div>
 </section>
@@ -2380,9 +2391,16 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
 </section>
 
 <section class="card bn">
-<h2>Multiple Borehole → একটি TSF কীভাবে নেওয়া হচ্ছে</h2>
-<p>১) আপনি foundation evaluation depth দেবেন। ২) প্রতিটি borehole থেকে ওই depth-এর সবচেয়ে কাছের SPT row নেওয়া হবে। ৩) ওই row-এর soil type + N60 দিয়ে preliminary bearing capacity বের হবে। ৪) সব borehole-এর allowable result-এর মধ্যে <b>সবচেয়ে কম value</b> Site TSF হিসেবে দেখাবে।</p>
-<p><b>কেন minimum?</b> ছোট/মাঝারি site-এ borehole-to-borehole variability থাকলে preliminary stage-এ দুর্বল borehole-কে ignore না করার জন্য এটি conservative screening rule। এটি BNBC-এর সরাসরি formula নয়। বড় site বা অনেক borehole হলে geotechnical engineer statistical zoning/stratigraphic model ব্যবহার করতে পারেন।</p>
+<h2>Multiple Borehole + Soil Pressure Transfer → একটি TSF</h2>
+<p>১) Proposed footing base depth-এই surcharge ধরা হয়; SPT sample যদি আরও নিচে থাকে, সেই sample depth-কে foundation depth বানানো হয় না। ২) Base level-এর উপরে/নিচে nearest bracketing SPT data থেকে conservative strength নেওয়া হয়। ৩) Footing base-এর নিচে default <b>2B influence zone</b> পর্যন্ত SPT rows দেখা হয়। ৪) Simplified 2:1 stress spread দিয়ে নিচের layer-এ footing pressure-এর কত অংশ পৌঁছায় তার factor I ধরা হয়। ৫) প্রতিটি borehole-এর pressure limit বের করে <b>সবচেয়ে কম borehole value</b> Site TSF হয়।</p>
+<p><b>গুরুত্বপূর্ণ:</b> নিচে ভালো soil থাকলেই উপরের দুর্বল layer-এ বসানো shallow footing-এর TSF বাড়ানো হয় না। দুর্বল layer যদি footing base-এই থাকে, সেটাই base bearing control করতে পারে। আবার নিচে খুব দুর্বল/compressible layer থাকলে stress bulb-এর মধ্যে সেটি settlement/pressure-transfer risk তৈরি করতে পারে। এই tool layered-soil finite-element analysis নয়; conservative screening.</p>
+</section>
+
+<section class="card bn">
+<h2>Foundation depth / pile recommendation logic</h2>
+<p><b>Site TSF ≥ 1.0:</b> default screen-এ sand pile recommend করা হবে না। Proposed depth-এ shallow footing/raft candidate দেখাবে, তবে structural service pressure ও settlement check লাগবে.</p>
+<p><b>Site TSF &lt; 1.0:</b> tool current depth থেকে max practical shallow depth পর্যন্ত profile scan করবে। যদি সব borehole consider করে ≥1.0 TSF-এর একটি shallower practical solution পাওয়া যায়, আগে <b>deeper shallow footing</b> recommend করবে। যদি ভালো shallow layer না পাওয়া যায়, soil type, weak-zone depth ও storey count দেখে <b>sand pile / engineered ground improvement / deep pile comparison</b> suggest করবে।</p>
+<p>Storey count actual column load নয়। Final footing-vs-pile decision-এর জন্য column reactions, footing size, settlement, groundwater, liquefaction, negative skin friction এবং constructability লাগবে।</p>
 </section>
 
 <section class="card bn">
@@ -11804,36 +11822,203 @@ body:not(.suite-unlocked) #gateOverlay{
 </style>
 
 <script id="soilModuleScript">
+const SOIL_TSF_KPA=95.7605,SOIL_FT_M=0.3048,SOIL_PCF_KNM3=0.157087,SOIL_GW=9.81;
+let soilBhCounter=0,soilLastSite=[],soilLastRecommendation=null,soilLastSiteModel=null;
 
-const SOIL_TSF_KPA=95.7605,SOIL_FT_M=0.3048,SOIL_PCF_KNM3=0.157087,SOIL_GW=9.81;let soilBhCounter=0,soilLastSite=[];
-function soil_showPage(id,btn){document.querySelectorAll('#page-soil .soil-subpage').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('#page-soil .soil-tabbtn').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
-function soil_soilOptions(selected='sand'){return [['sand','Sand'],['siltysand','Silty Sand'],['clay','Clay'],['siltyclay','Silty Clay'],['silt','Silt / Unknown']].map(([v,t])=>`<option value="${v}" ${v===selected?'selected':''}>${t}</option>`).join('')}
-function soil_addBorehole(name){soilBhCounter++;const id='bh'+soilBhCounter;const box=document.createElement('div');box.className='soil-bh';box.id=id;box.innerHTML=`<div class="soil-bhhead"><b>Borehole</b><input class="soil-bhname" value="${name||'BH-'+String(soilBhCounter).padStart(2,'0')}"><span class="spacer"></span><button class="secondary no-print" onclick="soil_addRow('${id}')">+ SPT Row</button><button class="danger no-print" onclick="document.getElementById('${id}').remove()">Remove BH</button></div><div class="tablewrap" style="border:0;border-radius:0"><table><thead><tr><th>Depth</th><th>Soil type</th><th>SPT N field</th><th>φ override (°)</th><th>Su override (kPa)</th><th>Notes</th><th class="no-print">Action</th></tr></thead><tbody class="rows"></tbody></table></div>`;document.getElementById('soil_boreholes').appendChild(box);soil_addRow(id)}
-function soil_addRow(id,data={}){const tb=document.querySelector('#'+id+' .rows');const tr=document.createElement('tr');tr.innerHTML=`<td><input class="depth" type="number" step="0.1" value="${data.depth??''}"></td><td><select class="soil">${soil_soilOptions(data.soil||'sand')}</select></td><td><input class="nfield" type="number" min="0" step="1" value="${data.n??''}"></td><td><input class="phi" type="number" min="0" max="50" step="0.5" value="${data.phi??''}" placeholder="auto"></td><td><input class="su" type="number" min="0" step="1" value="${data.su??''}" placeholder="auto"></td><td><input class="notes" value="${data.notes??''}" placeholder="soil description"></td><td class="no-print"><button class="danger" onclick="this.closest('tr').remove()">Remove</button></td>`;tb.appendChild(tr)}
-function soil_clearAll(){document.getElementById('soil_boreholes').innerHTML='';soilBhCounter=0;soilLastSite=[];document.getElementById('soil_siteBody').innerHTML='';['soil_siteTsf','soil_govBH','soil_conf','soil_spDecision','soil_spGeom','soil_spSand'].forEach(id=>document.getElementById(id).textContent='—');document.getElementById('soil_spDetails').textContent='—';soil_addBorehole()}
-function soil_loadExample(){document.getElementById('soil_boreholes').innerHTML='';soilBhCounter=0;document.getElementById('soil_depthUnit').value='m';document.getElementById('soil_evalDepth').value='1.5';document.getElementById('soil_gwt').value='0.7';soil_addBorehole('BH-01');let b1=document.querySelector('#bh1 .rows');b1.innerHTML='';[[1.5,'siltysand',5],[3,'siltysand',7],[4.5,'siltyclay',6],[6,'siltyclay',8]].forEach(r=>soil_addRow('bh1',{depth:r[0],soil:r[1],n:r[2]}));soil_addBorehole('BH-02');let b2=document.querySelector('#bh2 .rows');b2.innerHTML='';[[1.5,'siltysand',4],[3,'siltysand',6],[4.5,'siltyclay',5],[6,'siltyclay',9]].forEach(r=>soil_addRow('bh2',{depth:r[0],soil:r[1],n:r[2]}));soil_calculateSite()}
-function soil_depthToM(v){return document.getElementById('soil_depthUnit').value==='ft'?v*SOIL_FT_M:v}function soil_depthLabel(v){return `${v} ${document.getElementById('soil_depthUnit').value}`}
+function soil_showPage(id,btn){
+  document.querySelectorAll('#page-soil .soil-subpage').forEach(x=>x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('#page-soil .soil-tabbtn').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+}
+function soil_soilOptions(selected='sand'){
+  return [['sand','Sand'],['siltysand','Silty Sand'],['clay','Clay'],['siltyclay','Silty Clay'],['silt','Silt / Unknown']]
+    .map(([v,t])=>`<option value="${v}" ${v===selected?'selected':''}>${t}</option>`).join('');
+}
+function soil_addBorehole(name){
+  soilBhCounter++;
+  const id='bh'+soilBhCounter,box=document.createElement('div');
+  box.className='soil-bh';box.id=id;
+  box.innerHTML=`<div class="soil-bhhead"><b>Borehole</b><input class="soil-bhname" value="${name||'BH-'+String(soilBhCounter).padStart(2,'0')}"><span class="spacer"></span><button class="secondary no-print" onclick="soil_addRow('${id}')">+ SPT Row</button><button class="danger no-print" onclick="document.getElementById('${id}').remove()">Remove BH</button></div><div class="tablewrap" style="border:0;border-radius:0"><table><thead><tr><th>Depth</th><th>Soil type</th><th>SPT N field</th><th>φ override (°)</th><th>Su override (kPa)</th><th>Notes</th><th class="no-print">Action</th></tr></thead><tbody class="rows"></tbody></table></div>`;
+  document.getElementById('soil_boreholes').appendChild(box);soil_addRow(id);
+}
+function soil_addRow(id,data={}){
+  const tb=document.querySelector('#'+id+' .rows'),tr=document.createElement('tr');
+  tr.innerHTML=`<td><input class="depth" type="number" step="0.1" value="${data.depth??''}"></td><td><select class="soil">${soil_soilOptions(data.soil||'sand')}</select></td><td><input class="nfield" type="number" min="0" step="1" value="${data.n??''}"></td><td><input class="phi" type="number" min="0" max="50" step="0.5" value="${data.phi??''}" placeholder="auto"></td><td><input class="su" type="number" min="0" step="1" value="${data.su??''}" placeholder="auto"></td><td><input class="notes" value="${data.notes??''}" placeholder="soil description"></td><td class="no-print"><button class="danger" onclick="this.closest('tr').remove()">Remove</button></td>`;
+  tb.appendChild(tr);
+}
+function soil_resetOutputs(){
+  soilLastSite=[];soilLastRecommendation=null;soilLastSiteModel=null;
+  document.getElementById('soil_siteBody').innerHTML='';
+  ['soil_siteTsf','soil_govBH','soil_conf','soil_spDecision','soil_spGeom','soil_spSand','soil_recDepth','soil_foundationRec'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='—'});
+  ['soil_govText','soil_recDepthText','soil_foundationReason','soil_influenceSummary','soil_spReason','soil_spDetails'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='—'});
+}
+function soil_clearAll(){document.getElementById('soil_boreholes').innerHTML='';soilBhCounter=0;soil_resetOutputs();soil_addBorehole()}
+function soil_loadExample(){
+  document.getElementById('soil_boreholes').innerHTML='';soilBhCounter=0;soil_resetOutputs();
+  document.getElementById('soil_depthUnit').value='m';document.getElementById('soil_evalDepth').value='1.5';document.getElementById('soil_gwt').value='0.7';document.getElementById('soil_Bft').value='5';
+  soil_addBorehole('BH-01');document.querySelector('#bh1 .rows').innerHTML='';
+  [[1.5,'siltysand',4,'Loose silty sand'],[3,'siltysand',8,'Loose to medium sand'],[4.5,'sand',18,'Medium dense sand'],[6,'sand',28,'Medium dense sand']].forEach(r=>soil_addRow('bh1',{depth:r[0],soil:r[1],n:r[2],notes:r[3]}));
+  soil_addBorehole('BH-02');document.querySelector('#bh2 .rows').innerHTML='';
+  [[1.5,'siltyclay',3,'Soft silty clay'],[3,'siltysand',7,'Loose silty sand'],[4.5,'sand',16,'Medium dense sand'],[6,'sand',25,'Medium dense sand']].forEach(r=>soil_addRow('bh2',{depth:r[0],soil:r[1],n:r[2],notes:r[3]}));
+  soil_calculateSite();
+}
+function soil_depthToM(v){return document.getElementById('soil_depthUnit').value==='ft'?v*SOIL_FT_M:v}
+function soil_mToDepth(v){return document.getElementById('soil_depthUnit').value==='ft'?v/SOIL_FT_M:v}
+function soil_depthLabel(v){return `${soil_fmt(v,2)} ${document.getElementById('soil_depthUnit').value}`}
+function soil_depthLabelM(v){return soil_depthLabel(soil_mToDepth(v))}
 function soil_n60(n){const er=parseFloat(document.getElementById('soil_er').value)||60;return n*er/60}
 function soil_autoPhi(N,soil){let p;if(N<=4)p=27+0.5*N;else if(N<=10)p=29+(N-4)*(2/6);else if(N<=30)p=31+(N-10)*(4/20);else if(N<=50)p=35+(N-30)*(3/20);else p=Math.min(41,38+(N-50)*0.06);if(soil==='siltysand')p-=1;return Math.max(24,Math.min(42,p))}
 function soil_bearingFactors(phi){if(phi<=0.01)return{Nc:5.7,Nq:1,Ng:0};const r=phi*Math.PI/180,Nq=Math.exp(Math.PI*Math.tan(r))*Math.pow(Math.tan(Math.PI/4+r/2),2),Nc=(Nq-1)/Math.tan(r),Ng=2*(Nq+1)*Math.tan(r);return{Nc,Nq,Ng}}
 function soil_shapeFactors(){const s=document.getElementById('soil_shape').value;if(s==='square')return{sc:1.3,sq:1,sg:0.8};if(s==='circular')return{sc:1.3,sq:1,sg:0.6};return{sc:1,sq:1,sg:1}}
 function soil_gammas(){const gm=(parseFloat(document.getElementById('soil_gammaPcf').value)||115)*SOIL_PCF_KNM3,gs=(parseFloat(document.getElementById('soil_gammaSatPcf').value)||120)*SOIL_PCF_KNM3;return{gm,gs,gsub:Math.max(1,gs-SOIL_GW)}}
 function soil_gwtM(){const x=document.getElementById('soil_gwt').value;if(x==='')return Infinity;return soil_depthToM(parseFloat(x))}
-function soil_surchargeAt(D){const {gm,gsub}=soil_gammas(),wt=soil_gwtM();return wt>=D?gm*D:gm*Math.max(0,wt)+gsub*Math.max(0,D-wt)}
-function soil_gammaBelow(D,B){const {gm,gsub}=soil_gammas(),wt=soil_gwtM();if(wt<=D)return gsub;if(wt>=D+B)return gm;const frac=(wt-D)/B;return gsub+(gm-gsub)*Math.max(0,Math.min(1,frac))}
-function soil_calcRow(r){const N=soil_n60(r.n),D=soil_depthToM(r.depth),B=(parseFloat(document.getElementById('soil_Bft').value)||5)*SOIL_FT_M,q=soil_surchargeAt(D),gb=soil_gammaBelow(D,B),sf=soil_shapeFactors();let phi=0,su=0,c=0,confidence='Medium';if(r.soil==='sand'||r.soil==='siltysand'){phi=r.phi!==''?parseFloat(r.phi):soil_autoPhi(N,r.soil)}else if(r.soil==='clay'||r.soil==='siltyclay'){su=r.su!==''?parseFloat(r.su):(parseFloat(document.getElementById('soil_suFactor').value)||6.25)*N;c=su;confidence=r.su!==''?'Medium':'Low'}else return{error:'Unknown soil type'};const f=soil_bearingFactors(phi),qu=sf.sc*c*f.Nc+sf.sq*q*f.Nq+0.5*sf.sg*gb*B*f.Ng,fs=parseFloat(document.getElementById('soil_fs').value)||3;return{N,phi,su,quTsf:qu/SOIL_TSF_KPA,qaTsf:(qu/SOIL_TSF_KPA)/fs,confidence}}
-function soil_getBHData(){return [...document.querySelectorAll('#page-soil .soil-bh')].map(b=>({name:b.querySelector('.soil-bhname').value||'BH',rows:[...b.querySelectorAll('tbody.rows tr')].map(tr=>({depth:parseFloat(tr.querySelector('.depth').value),soil:tr.querySelector('.soil').value,n:parseFloat(tr.querySelector('.nfield').value),phi:tr.querySelector('.phi').value,su:tr.querySelector('.su').value,notes:tr.querySelector('.notes').value})).filter(r=>Number.isFinite(r.depth)&&Number.isFinite(r.n))})).filter(b=>b.rows.length)}
-function soil_soilName(v){return{sand:'Sand',siltysand:'Silty Sand',clay:'Clay',siltyclay:'Silty Clay',silt:'Silt / Unknown'}[v]||v}function soil_fmt(x,p=2){return Number.isFinite(x)?x.toFixed(p):'—'}
-function soil_calculateSite(){const bhs=soil_getBHData(),target=parseFloat(document.getElementById('soil_evalDepth').value);const body=document.getElementById('soil_siteBody');body.innerHTML='';soilLastSite=[];if(!bhs.length||!Number.isFinite(target)){alert('Enter at least one borehole and a valid evaluation depth.');return}bhs.forEach(b=>{let r=b.rows.slice().sort((a,z)=>Math.abs(a.depth-target)-Math.abs(z.depth-target))[0],z=soil_calcRow(r);if(z.error){body.insertAdjacentHTML('beforeend',`<tr><td>${b.name}</td><td>${soil_depthLabel(r.depth)}</td><td>${soil_soilName(r.soil)}</td><td>${r.n}</td><td colspan="5"><span class="badge bad">${z.error}</span></td></tr>`);return}soilLastSite.push({...b,r,...z});const used=(r.soil==='sand'||r.soil==='siltysand')?`φ=${soil_fmt(z.phi)}°`:`Su=${soil_fmt(z.su)} kPa`;body.insertAdjacentHTML('beforeend',`<tr><td><b>${b.name}</b></td><td>${soil_depthLabel(r.depth)}</td><td>${soil_soilName(r.soil)}</td><td>${r.n}</td><td>${soil_fmt(z.N)}</td><td>${used}</td><td class="num">${soil_fmt(z.quTsf)}</td><td class="num"><b>${soil_fmt(z.qaTsf)}</b></td><td>${z.confidence==='Low'?'<span class="badge bad">Clay SPT correlation</span>':'<span class="badge mid">Screening</span>'}</td></tr>`) });if(!soilLastSite.length){document.getElementById('soil_siteTsf').textContent='—';return}const gov=soilLastSite.reduce((a,b)=>a.qaTsf<=b.qaTsf?a:b);document.getElementById('soil_siteTsf').innerHTML=`${soil_fmt(gov.qaTsf)} <small>TSF allowable</small>`;document.getElementById('soil_govBH').textContent=gov.name;document.getElementById('soil_govText').textContent=`Nearest SPT at ${soil_depthLabel(gov.r.depth)}; ${soil_soilName(gov.r.soil)}, N60=${soil_fmt(gov.N)}.`;document.getElementById('soil_conf').innerHTML=soilLastSite.some(x=>x.confidence==='Low')?'<span class="badge mid">Low–Medium</span>':'<span class="badge ok">Medium</span>';soil_screenSandPile()}
-function soil_screenSandPile(){if(!soilLastSite.length)return;const st=Math.max(1,parseInt(document.getElementById('soil_storeys').value)||1),minN=Math.min(...soilLastSite.map(x=>x.N)),avgN=soilLastSite.reduce((s,x)=>s+x.N,0)/soilLastSite.length,sandCount=soilLastSite.filter(x=>x.r.soil==='sand'||x.r.soil==='siltysand').length,clayCount=soilLastSite.filter(x=>x.r.soil==='clay'||x.r.soil==='siltyclay').length,total=soilLastSite.length;let decision,cls,reason,geom='Not assigned',sand='FM 2.0–2.6 preferred';if(st>=7){decision='Not recommended by this screening';cls='bad';reason='7+ storeys: SPT + soil type + storey count is not sufficient to approve sand piles. Compare engineered ground improvement with deep foundation and check settlement/seismic performance.';geom='Specialist design only';sand='Project specification required'}else if(sandCount>=clayCount){if(minN<=10){decision=st<=3?'Recommended candidate':'Conditional candidate';cls=st<=3?'ok':'mid';reason=`Predominantly granular profile near foundation depth with minimum N60=${soil_fmt(minN,1)}. Loose sand/silty sand is the situation where densification-type sand piles are most likely to be useful.`;geom=st<=3?'10–12 in dia; 24–30 in c/c':'Start trial around 10–14 in dia; spacing by design';sand='Clean non-plastic sand; FM ~2.0–2.6'}else if(minN<=20){decision='Limited benefit / Conditional';cls='mid';reason=`Granular soil is already medium dense in part of the site (minimum N60=${soil_fmt(minN,1)}). Sand piling may give less benefit; compare against direct shallow footing settlement/capacity.`;geom='Only after trial section';sand='Clean non-plastic sand; FM ~2.0–2.6'}else{decision='Generally not needed for densification';cls='mid';reason=`Evaluated granular layers are relatively dense (minimum N60=${soil_fmt(minN,1)}). Sand piles may not be economical unless another weak layer controls settlement.`;geom='No default geometry';sand='—'}}else{if(minN<=4){decision='Conditional — specialist design';cls='mid';reason=`Predominantly cohesive/soft profile with minimum N60=${soil_fmt(minN,1)}. Sand displacement/compaction piles can work in some Bangladesh soft-ground projects, but SPT-only screening cannot prove safety or settlement performance.`;geom=st<=3?'Trial only: ~10–12 in dia; ~24–30 in c/c':'Composite-ground design required';sand='Clean coarse sand; FM ~2.2–2.6 preferred'}else{decision='Conditional / other options may suit better';cls='mid';reason=`Cohesive soil controls and minimum N60=${soil_fmt(minN,1)}. Evaluate replacement, stone/granular columns, raft or deep foundation based on settlement and layer thickness.`;geom='No automatic recommendation';sand='Project-specific'}}document.getElementById('soil_spDecision').innerHTML=`<span class="badge ${cls}" style="font-size:14px">${decision}</span>`;document.getElementById('soil_spReason').textContent=reason;document.getElementById('soil_spGeom').textContent=geom;document.getElementById('soil_spSand').textContent=sand;document.getElementById('soil_spDetails').innerHTML=`Screen uses ${total} borehole(s) at the selected evaluation depth; minimum N60=${soil_fmt(minN,1)}, average N60=${soil_fmt(avgN,1)}, granular BH=${sandCount}, cohesive BH=${clayCount}, building=${st} storey(s). <b>Geometry/FM shown above are trial starting ranges, not BNBC mandatory values.</b> Verify with post-improvement SPT and/or plate load test plus settlement analysis.`}
-function soil_exportCSV(){if(!soilLastSite.length)soil_calculateSite();if(!soilLastSite.length)return;let lines=['Borehole,SelectedDepth,Unit,Soil,Nfield,N60,Phi_deg,Su_kPa,q_ult_tsf,q_allow_tsf'];soilLastSite.forEach(x=>lines.push([x.name,x.r.depth,document.getElementById('soil_depthUnit').value,soil_soilName(x.r.soil),x.r.n,x.N,x.phi||'',x.su||'',x.quTsf,x.qaTsf].join(',')));const blob=new Blob([lines.join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='site_spt_bearing_results.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function soil_surchargeAt(Dm){const {gm,gsub}=soil_gammas(),wt=soil_gwtM();return wt>=Dm?gm*Dm:gm*Math.max(0,wt)+gsub*Math.max(0,Dm-wt)}
+function soil_gammaBelow(Dm,Bm){const {gm,gsub}=soil_gammas(),wt=soil_gwtM();if(wt<=Dm)return gsub;if(wt>=Dm+Bm)return gm;const frac=(wt-Dm)/Bm;return gsub+(gm-gsub)*Math.max(0,Math.min(1,frac))}
+function soil_calcRowAtFoundation(r,Dm){
+  const N=soil_n60(r.n),Bm=(parseFloat(document.getElementById('soil_Bft').value)||5)*SOIL_FT_M,q=soil_surchargeAt(Dm),gb=soil_gammaBelow(Dm,Bm),sf=soil_shapeFactors();
+  let phi=0,su=0,c=0,confidence='Medium';
+  if(r.soil==='sand'||r.soil==='siltysand'){phi=r.phi!==''?parseFloat(r.phi):soil_autoPhi(N,r.soil)}
+  else if(r.soil==='clay'||r.soil==='siltyclay'){su=r.su!==''?parseFloat(r.su):(parseFloat(document.getElementById('soil_suFactor').value)||6.25)*N;c=su;confidence=r.su!==''?'Medium':'Low'}
+  else return{error:'Unknown soil type'};
+  const f=soil_bearingFactors(phi),qu=sf.sc*c*f.Nc+sf.sq*q*f.Nq+0.5*sf.sg*gb*Bm*f.Ng,fs=parseFloat(document.getElementById('soil_fs').value)||3;
+  return{N,phi,su,quTsf:qu/SOIL_TSF_KPA,qaTsf:(qu/SOIL_TSF_KPA)/fs,confidence,Dm,Bm};
+}
+function soil_getBHData(){
+  return [...document.querySelectorAll('#page-soil .soil-bh')].map(b=>({name:b.querySelector('.soil-bhname').value||'BH',rows:[...b.querySelectorAll('tbody.rows tr')].map(tr=>({depth:parseFloat(tr.querySelector('.depth').value),soil:tr.querySelector('.soil').value,n:parseFloat(tr.querySelector('.nfield').value),phi:tr.querySelector('.phi').value,su:tr.querySelector('.su').value,notes:tr.querySelector('.notes').value})).filter(r=>Number.isFinite(r.depth)&&Number.isFinite(r.n)).sort((a,z)=>a.depth-z.depth)})).filter(b=>b.rows.length);
+}
+function soil_soilName(v){return{sand:'Sand',siltysand:'Silty Sand',clay:'Clay',siltyclay:'Silty Clay',silt:'Silt / Unknown'}[v]||v}
+function soil_fmt(x,p=2){return Number.isFinite(x)?x.toFixed(p):'—'}
+function soil_isGranular(v){return v==='sand'||v==='siltysand'}
+function soil_isCohesive(v){return v==='clay'||v==='siltyclay'}
+function soil_strengthText(r,z){return soil_isGranular(r.soil)?`φ=${soil_fmt(z.phi)}°`:`Su=${soil_fmt(z.su)} kPa`}
+function soil_stressFactor(zm,Bm){
+  if(zm<=0)return 1;
+  const shape=document.getElementById('soil_shape').value;
+  if(shape==='strip')return Bm/(Bm+zm);
+  return Math.pow(Bm/(Bm+zm),2);
+}
+function soil_baseChoice(b,Dm){
+  const target=soil_mToDepth(Dm),rows=b.rows;
+  const exact=rows.filter(r=>Math.abs(r.depth-target)<1e-6);
+  let candidates=[],method='';
+  if(exact.length){candidates=exact;method='exact SPT'}
+  else{
+    const above=rows.filter(r=>r.depth<target).sort((a,z)=>z.depth-a.depth)[0];
+    const below=rows.filter(r=>r.depth>target).sort((a,z)=>a.depth-z.depth)[0];
+    if(above)candidates.push(above);if(below)candidates.push(below);
+    method=above&&below?'conservative bracket':(below?'nearest SPT below base':'extrapolated from SPT above base');
+  }
+  const valid=candidates.map(r=>({r,z:soil_calcRowAtFoundation(r,Dm)})).filter(x=>!x.z.error);
+  if(!valid.length)return{error:'No defined sand/clay SPT row near footing base'};
+  const chosen=valid.reduce((a,x)=>a.z.qaTsf<=x.z.qaTsf?a:x);
+  return{...chosen,method,candidates:valid};
+}
+function soil_profileAtDepth(b,Dm){
+  const base=soil_baseChoice(b,Dm);if(base.error)return{error:base.error,name:b.name};
+  const Bm=base.z.Bm,mult=Math.max(1,Math.min(4,parseFloat(document.getElementById('soil_influenceB').value)||2)),bottom=Dm+mult*Bm;
+  const checks=[{kind:'base',r:base.r,z:base.z,depthM:Dm,offsetM:0,I:1,limit:base.z.qaTsf}];
+  b.rows.forEach(r=>{
+    const rm=soil_depthToM(r.depth);if(rm<Dm-1e-9||rm>bottom+1e-9)return;
+    const z=soil_calcRowAtFoundation(r,Dm);if(z.error)return;
+    const off=Math.max(0,rm-Dm),I=soil_stressFactor(off,Bm),limit=z.qaTsf/Math.max(I,0.03);
+    checks.push({kind:'influence',r,z,depthM:rm,offsetM:off,I,limit});
+  });
+  const control=checks.reduce((a,x)=>a.limit<=x.limit?a:x),maxRowM=Math.max(...b.rows.map(r=>soil_depthToM(r.depth))),coverageComplete=maxRowM>=bottom-1e-6;
+  const lowConf=checks.some(x=>x.z.confidence==='Low');
+  return{name:b.name,b,base,checks,control,qaTsf:control.limit,baseQaTsf:base.z.qaTsf,coverageComplete,influenceBottomM:bottom,influenceMult:mult,Bm,confidence:lowConf?'Low':'Medium'};
+}
+function soil_siteAtDepth(bhs,Dm){
+  const results=bhs.map(b=>soil_profileAtDepth(b,Dm)).filter(x=>!x.error);
+  if(!results.length)return null;
+  const gov=results.reduce((a,x)=>a.qaTsf<=x.qaTsf?a:x);
+  return{Dm,results,gov,qaTsf:gov.qaTsf,coverageComplete:results.length===bhs.length&&results.every(x=>x.coverageComplete)};
+}
+function soil_candidateDepths(bhs,currentDm,maxDm){
+  const set=new Set([currentDm.toFixed(4)]),step=0.25;
+  for(let d=currentDm+step;d<=maxDm+1e-9;d+=step)set.add(d.toFixed(4));
+  bhs.forEach(b=>b.rows.forEach(r=>{const d=soil_depthToM(r.depth);if(d>=currentDm&&d<=maxDm)set.add(d.toFixed(4))}));
+  return [...set].map(Number).sort((a,b)=>a-b);
+}
+function soil_recommendFoundation(bhs,site){
+  const threshold=Math.max(0.25,parseFloat(document.getElementById('soil_spThreshold').value)||1),st=Math.max(1,parseInt(document.getElementById('soil_storeys').value)||1),currentDm=site.Dm,maxInput=parseFloat(document.getElementById('soil_maxShallowDepth').value),maxDm=Math.max(currentDm,soil_depthToM(Number.isFinite(maxInput)?maxInput:3));
+  let firstGood=null;
+  if(site.qaTsf<threshold){
+    for(const d of soil_candidateDepths(bhs,currentDm,maxDm)){
+      if(d<=currentDm+1e-6)continue;
+      const trial=soil_siteAtDepth(bhs,d);if(trial&&trial.qaTsf>=threshold&&trial.coverageComplete){firstGood=trial;break}
+    }
+  }
+  const gov=site.gov,weakRows=gov.checks.filter(x=>x.z.qaTsf<threshold&&x.offsetM>=0),weakDepth=weakRows.length?Math.max(...weakRows.map(x=>x.offsetM)):0;
+  const granular=site.results.filter(x=>soil_isGranular(x.control.r.soil)||soil_isGranular(x.base.r.soil)).length,cohesive=site.results.length-granular;
+  let mode,depthDm=currentDm,system,reason;
+  if(site.qaTsf>=threshold){
+    mode='shallow';system='Shallow footing / raft candidate';reason=`Site pressure limit ${soil_fmt(site.qaTsf)} TSF is at/above the ${soil_fmt(threshold)} TSF sand-pile trigger. Sand pile is not recommended by this screen. Final footing size must still satisfy structural service pressure and settlement.`;
+  }else if(firstGood){
+    mode='deeper_shallow';depthDm=firstGood.Dm;system='Deeper shallow footing candidate';reason=`Current depth is below ${soil_fmt(threshold)} TSF, but all boreholes reach a screened Site TSF ≥ ${soil_fmt(threshold)} at about ${soil_depthLabelM(firstGood.Dm)}. If excavation/dewatering is practical, bearing directly at that level is preferred before adding sand piles.`;
+  }else if(st<=3&&granular>=cohesive&&weakDepth<=2*gov.Bm){
+    mode='ground_improvement';system='Sand pile / ground improvement candidate';reason=`No ≥${soil_fmt(threshold)} TSF shallow bearing level was found within the selected practical depth. Low-rise building + predominantly granular weak zone makes densification/displacement sand pile a reasonable trial candidate, subject to field verification.`;
+  }else if(st<=6){
+    mode='compare';system='Engineered improvement / raft / pile comparison';reason=`Site TSF remains below ${soil_fmt(threshold)} within the practical shallow-depth search. Because the weak zone is ${soil_fmt(weakDepth,2)} m below the current base and/or cohesive soil controls, compare engineered ground improvement, raft and deep foundation using actual column loads and settlement.`;
+  }else{
+    mode='deep_pile';system='Deep pile foundation comparison recommended';reason=`Site TSF stays below ${soil_fmt(threshold)} and the building is ${st} storeys. SPT-only screening is not enough to approve shallow footing or sand piles; deep piles/other engineered systems should be evaluated with load and settlement analysis.`;
+  }
+  return{mode,depthDm,system,reason,threshold,weakDepth,granular,cohesive,firstGood};
+}
+function soil_calculateSite(){
+  const bhs=soil_getBHData(),target=parseFloat(document.getElementById('soil_evalDepth').value),body=document.getElementById('soil_siteBody');body.innerHTML='';soilLastSite=[];
+  if(!bhs.length||!Number.isFinite(target)){alert('Enter at least one borehole and a valid foundation base depth.');return}
+  const Dm=soil_depthToM(target),site=soil_siteAtDepth(bhs,Dm);if(!site){alert('No valid sand/clay SPT data available.');return}
+  soilLastSiteModel=site;soilLastSite=site.results;
+  site.results.forEach(x=>{
+    const base=x.base,ctrl=x.control,baseText=`${soil_depthLabel(base.r.depth)} · ${base.method}`,baseSoil=`${soil_soilName(base.r.soil)} · N60=${soil_fmt(base.z.N)}`,ctrlDepth=ctrl.kind==='base'?soil_depthLabelM(Dm):soil_depthLabelM(ctrl.depthM),ctrlSoil=`${soil_soilName(ctrl.r.soil)} · N60=${soil_fmt(ctrl.z.N)}`,note=(ctrl.kind==='base'?'Base bearing governs':'Deeper weak layer governs pressure-transfer screen')+(x.coverageComplete?'':' · influence-zone data incomplete');
+    body.insertAdjacentHTML('beforeend',`<tr><td><b>${x.name}</b></td><td>${baseText}</td><td>${baseSoil}</td><td class="num">${soil_fmt(x.baseQaTsf)} TSF</td><td>${ctrlDepth}</td><td>${ctrlSoil}</td><td class="num">${soil_fmt(ctrl.I,3)}</td><td class="num"><b>${soil_fmt(x.qaTsf)} TSF</b></td><td><span class="badge ${x.coverageComplete?'mid':'bad'}">${note}</span></td></tr>`);
+  });
+  const gov=site.gov,ctrl=gov.control;
+  document.getElementById('soil_siteTsf').innerHTML=`${soil_fmt(site.qaTsf)} <small>TSF allowable screen</small>`;
+  document.getElementById('soil_govBH').textContent=gov.name;
+  document.getElementById('soil_govText').textContent=`Governing at ${ctrl.kind==='base'?'footing base':soil_depthLabelM(ctrl.depthM)}; ${soil_soilName(ctrl.r.soil)}, N60=${soil_fmt(ctrl.z.N)}, stress factor I=${soil_fmt(ctrl.I,3)}.`;
+  document.getElementById('soil_conf').innerHTML=site.results.some(x=>x.confidence==='Low')?'<span class="badge mid">Low–Medium</span>':'<span class="badge ok">Medium</span>';
+  const Bm=(parseFloat(document.getElementById('soil_Bft').value)||5)*SOIL_FT_M,mult=Math.max(1,parseFloat(document.getElementById('soil_influenceB').value)||2),missing=site.results.filter(x=>!x.coverageComplete).map(x=>x.name);
+  document.getElementById('soil_influenceSummary').innerHTML=`Footing base = <b>${soil_depthLabelM(Dm)}</b>; B = <b>${soil_fmt(Bm,2)} m</b>; checked to about <b>${soil_depthLabelM(Dm+mult*Bm)}</b> (${soil_fmt(mult,1)}B below base) using simplified 2:1 stress spread. ${missing.length?`<span class="badge bad">Incomplete depth data: ${missing.join(', ')}</span>`:'<span class="badge ok">All BH cover influence zone</span>'}`;
+  soilLastRecommendation=soil_recommendFoundation(bhs,site);
+  document.getElementById('soil_recDepth').textContent=soil_depthLabelM(soilLastRecommendation.depthDm);
+  document.getElementById('soil_recDepthText').textContent=soilLastRecommendation.mode==='shallow'?'Current proposed depth is acceptable for further shallow-foundation checks.':(soilLastRecommendation.mode==='deeper_shallow'?'First deeper screened level crossing the TSF trigger.':'No automatic better shallow level found within the selected practical depth.');
+  const recClass=soilLastRecommendation.mode==='shallow'?'ok':(soilLastRecommendation.mode==='deeper_shallow'||soilLastRecommendation.mode==='ground_improvement'?'mid':'bad');
+  document.getElementById('soil_foundationRec').innerHTML=`<span class="badge ${recClass}" style="font-size:14px">${soilLastRecommendation.system}</span>`;
+  document.getElementById('soil_foundationReason').textContent=soilLastRecommendation.reason;
+  soil_screenSandPile();
+}
+function soil_screenSandPile(){
+  if(!soilLastSiteModel||!soilLastRecommendation)return;
+  const site=soilLastSiteModel,rec=soilLastRecommendation,st=Math.max(1,parseInt(document.getElementById('soil_storeys').value)||1),threshold=rec.threshold,minN=Math.min(...site.results.map(x=>Math.min(x.base.z.N,x.control.z.N))),avgN=site.results.reduce((s,x)=>s+x.base.z.N,0)/site.results.length,total=site.results.length;
+  const sandCount=site.results.filter(x=>soil_isGranular(x.base.r.soil)||soil_isGranular(x.control.r.soil)).length,clayCount=total-sandCount;
+  let decision,cls,reason,geom='—',sand='—';
+  if(site.qaTsf>=threshold){
+    decision='Sand pile not needed';cls='ok';reason=`Governing Site TSF = ${soil_fmt(site.qaTsf)}, which is at/above your ${soil_fmt(threshold)} TSF trigger. This screen therefore does not recommend sand piles.`;
+  }else if(rec.mode==='deeper_shallow'){
+    decision='Not first choice';cls='mid';reason=`Current depth is below ${soil_fmt(threshold)} TSF, but a deeper shallow-bearing level is screened at about ${soil_depthLabelM(rec.depthDm)}. Consider taking the footing to that competent layer before sand piling, if excavation and groundwater conditions permit.`;
+  }else if(rec.mode==='deep_pile'||st>=7){
+    decision='Do not approve sand pile from this screen';cls='bad';reason='Building height and weak profile require engineered comparison with deep piles/other ground improvement. SPT + storey count alone cannot establish sand-pile safety.';
+  }else if(sandCount>=clayCount){
+    decision=st<=3?'Sand pile candidate':'Conditional candidate';cls=st<=3?'mid':'mid';reason=`Site TSF ${soil_fmt(site.qaTsf)} is below ${soil_fmt(threshold)} and the controlling profile is mainly granular. Loose granular soil is suitable for densification-type methods when fines/groundwater/constructability are acceptable.`;
+    geom=st<=3?'Trial start: 10–12 in dia; 24–30 in c/c':'Geometry by engineered trial/design';sand='Clean non-plastic sand; FM ~2.0–2.6';
+  }else{
+    decision='Conditional — specialist design';cls='mid';reason=`Site TSF ${soil_fmt(site.qaTsf)} is below ${soil_fmt(threshold)} and cohesive soil controls. Sand displacement/compaction piles may work in some cases, but composite-ground settlement and stability must be designed.`;
+    geom=st<=3?'Trial only; no automatic safe spacing':'Composite-ground design required';sand='Clean coarse sand; project gradation';
+  }
+  document.getElementById('soil_spDecision').innerHTML=`<span class="badge ${cls}" style="font-size:14px">${decision}</span>`;
+  document.getElementById('soil_spReason').textContent=reason;document.getElementById('soil_spGeom').textContent=geom;document.getElementById('soil_spSand').textContent=sand;
+  document.getElementById('soil_spDetails').innerHTML=`Screen uses ${total} borehole(s); governing Site TSF=${soil_fmt(site.qaTsf)}; trigger=${soil_fmt(threshold)} TSF; minimum relevant N60=${soil_fmt(minN,1)}; average base N60=${soil_fmt(avgN,1)}; granular BH=${sandCount}, cohesive BH=${clayCount}; building=${st} storey(s). <b>If Site TSF ≥ trigger, this module will not recommend sand piles.</b> Geometry/FM are trial guidance only, never a BNBC mandatory design.`;
+}
+function soil_exportCSV(){
+  if(!soilLastSiteModel)soil_calculateSite();if(!soilLastSiteModel)return;
+  let lines=['Borehole,FoundationBase,BaseSPTDepth,BaseSoil,BaseN60,BaseQallow_tsf,ControllingDepth,ControlSoil,ControlN60,StressFactor_I,BHPressureLimit_tsf,CoverageComplete'];
+  soilLastSiteModel.results.forEach(x=>{const c=x.control;lines.push([x.name,soil_mToDepth(soilLastSiteModel.Dm),x.base.r.depth,soil_soilName(x.base.r.soil),x.base.z.N,x.baseQaTsf,soil_mToDepth(c.depthM),soil_soilName(c.r.soil),c.z.N,c.I,x.qaTsf,x.coverageComplete].join(','))});
+  const blob=new Blob([lines.join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='site_spt_pressure_transfer_results.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
 soil_addBorehole('BH-01');
-
-window.addEventListener('structural-theme-change', function(){
-  const panel=document.getElementById('page-soil');
-  if(panel) panel.dataset.themeRefresh=String(Date.now());
-});
-
+window.addEventListener('structural-theme-change',function(){const panel=document.getElementById('page-soil');if(panel)panel.dataset.themeRefresh=String(Date.now())});
 </script>
 </body>
 </html>
