@@ -2387,7 +2387,7 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
       <div class="pc-field"><label>Rebar fy (ksi)</label><input id="pcFy" type="number" min="20" step="1" value="60"></div>
       <div class="pc-field"><label>Column X Size (in)</label><input id="pcColX" type="number" min="4" step="1" value="12"></div>
       <div class="pc-field"><label>Column Y Size (in)</label><input id="pcColY" type="number" min="4" step="1" value="12"></div>
-      <div class="pc-field"><label>C/C Spacing Factor (× pile size)</label><input id="pcSpacingD" type="number" min="2.5" step="0.25" value="3"><div class="pc-dim-note">Circular: s = factor × D. Rectangular precast: sx = factor × Bx, sy = factor × By.</div></div>
+      <div class="pc-field"><label>C/C Spacing Factor (× pile size)</label><input id="pcSpacingD" type="number" min="2.5" step="0.25" value="3"><div class="pc-dim-note">Circular: s = factor × D. Rectangular precast: sx = factor × Bx, sy = factor × By. Staggered rows auto-calculate the vertical row pitch so the actual diagonal C/C is maintained (for equal spacing: Y = 0.866S).</div></div>
       <div class="pc-field"><label>Pile Face → Cap Edge (in)</label><input id="pcEdgeFace" type="number" min="3.94" step="0.25" value="4"><div class="pc-dim-note">Center → edge is calculated automatically as ½ pile size + this face overhang.</div></div>
       <div class="pc-field"><label>Bottom Clear Cover (in)</label><input id="pcCover" type="number" min="1.5" step="0.25" value="3"></div>
       <div class="pc-field"><label>Minimum Trial Thickness h (in)</label><input id="pcMinH" type="number" min="12" step="1" value="18"></div>
@@ -8681,40 +8681,91 @@ html[data-theme="glass-frost"] #panelBeamDesign :is(.brd-fit,.brd-warnings,.brd-
     return counts;
   }
 
+  function rowXs(count,sx){
+    return [...Array(count).keys()].map(c=>(c-(count-1)/2)*sx);
+  }
+
+  function nearestRowPair(xsA,xsB){
+    let best={dx:Infinity,x1:0,x2:0};
+    xsA.forEach(x1=>xsB.forEach(x2=>{
+      const dx=Math.abs(x2-x1);
+      if(dx<best.dx-1e-9) best={dx,x1,x2};
+    }));
+    return best;
+  }
+
   function rowsToPoints(counts,sx,sy){
+    const rowX=counts.map(count=>rowXs(count,sx));
+    const rawY=[0], rawGaps=[];
+    // For a staggered row, the cross-row C/C is a diagonal distance. Keep that actual
+    // diagonal C/C equal to (or above) the governing nominal spacing instead of using
+    // the same full spacing in both X and Y, which would make the diagonal too large.
+    // For equal X/Y spacing S: offset = S/2 and vertical pitch = sqrt(S²-(S/2)²)=0.866S.
+    const crossTarget=Math.max(sx,sy);
+    for(let r=1;r<counts.length;r++){
+      const pair=nearestRowPair(rowX[r-1],rowX[r]);
+      const isStaggered=pair.dx>1e-6;
+      const dy=isStaggered
+        ?Math.sqrt(Math.max(0,crossTarget*crossTarget-pair.dx*pair.dx))
+        :crossTarget;
+      rawY[r]=rawY[r-1]+dy;
+      rawGaps.push({rowA:r-1,rowB:r,dx:pair.dx,dy,diag:Math.hypot(pair.dx,dy),isStaggered,x1:pair.x1,x2:pair.x2});
+    }
+
+    // Weighted-centroid correction keeps concentric load centred on group centroid.
+    const total=counts.reduce((a,b)=>a+b,0);
+    const yBar=counts.reduce((sum,c,i)=>sum+c*rawY[i],0)/Math.max(1,total);
+    const rowY=rawY.map(y=>y-yBar);
     const pts=[];
-    const rawY=counts.map((_,r)=>(r-(counts.length-1)/2)*sy);
-    // weighted-centroid correction keeps concentric load centred on group centroid.
-    const yBar=counts.reduce((sum,c,i)=>sum+c*rawY[i],0)/Math.max(1,counts.reduce((a,b)=>a+b,0));
-    counts.forEach((count,r)=>{
-      const y=rawY[r]-yBar;
-      for(let c=0;c<count;c++) pts.push([(c-(count-1)/2)*sx,y]);
-    });
-    return pts;
+    counts.forEach((count,r)=>rowX[r].forEach(x=>pts.push([x,rowY[r]])));
+    const gaps=rawGaps.map(g=>({...g,y1:rowY[g.rowA],y2:rowY[g.rowB]}));
+    const staggerGaps=gaps.filter(g=>g.isStaggered);
+    const alignedGaps=gaps.filter(g=>!g.isStaggered);
+    return {
+      pts,rowX,rowY,gaps,crossTarget,
+      hasStagger:staggerGaps.length>0,
+      staggerGap:staggerGaps[0]||null,
+      alignedGap:alignedGaps[0]||null,
+      horizontalPitch:sx,
+      staggerOffset:staggerGaps[0]?.dx||0,
+      staggerVertical:staggerGaps[0]?.dy||null,
+      diagonalCC:staggerGaps[0]?.diag||null
+    };
   }
 
   function layoutFor(n,opt){
     const sx=opt.spacingX, sy=opt.spacingY, ex=opt.edgeCenterX, ey=opt.edgeCenterY;
-    let pts=[], counts=autoRowTemplate(n), shape='rect';
+    let pts=[], counts=autoRowTemplate(n), shape='rect', rowGeom=null, angular=null;
 
     if(n===3){
-      // Equilateral triangular 3-pile cap; use the larger directional spacing conservatively.
+      // True equilateral triangular 3-pile cap: all three pile C/C distances are equal.
       const s=Math.max(sx,sy), h=s*Math.sqrt(3)/2;
       pts=[[0,-2*h/3],[-s/2,h/3],[s/2,h/3]];
       shape='triangle';
+      angular={active:true,type:'triangle',horizontalPitch:s,staggerOffset:s/2,verticalPitch:h,diagonalCC:s,
+        diagPair:{x1:0,y1:-2*h/3,x2:-s/2,y2:h/3},horizontalPair:{x1:-s/2,y1:h/3,x2:s/2,y2:h/3}};
     }else if(n===5){
       // Four corners + one centre; centre-to-corner = nominal spacing.
       const ax=sx/Math.sqrt(2), ay=sy/Math.sqrt(2);
       pts=[[-ax,-ay],[ax,-ay],[0,0],[-ax,ay],[ax,ay]];
     }else{
-      pts=rowsToPoints(counts,sx,sy);
+      rowGeom=rowsToPoints(counts,sx,sy);
+      pts=rowGeom.pts;
+      if(rowGeom.hasStagger){
+        const g=rowGeom.staggerGap;
+        const hRow=rowGeom.rowX.findIndex(xs=>xs.length>=2);
+        const hp=hRow>=0?{x1:rowGeom.rowX[hRow][0],y1:rowGeom.rowY[hRow],x2:rowGeom.rowX[hRow][1],y2:rowGeom.rowY[hRow]}:null;
+        angular={active:true,type:'staggered',horizontalPitch:rowGeom.horizontalPitch,staggerOffset:rowGeom.staggerOffset,
+          verticalPitch:rowGeom.staggerVertical,alignedVertical:rowGeom.alignedGap?.dy||null,diagonalCC:rowGeom.diagonalCC,
+          diagPair:g?{x1:g.x1,y1:g.y1,x2:g.x2,y2:g.y2}:null,horizontalPair:hp};
+      }
     }
 
     const xs=pts.map(p=>p[0]), ys=pts.map(p=>p[1]);
     const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
     return {
       pts,minX,maxX,minY,maxY,edgeX:ex,edgeY:ey,
-      widthIn:(maxX-minX)+2*ex,heightIn:(maxY-minY)+2*ey,shape,
+      widthIn:(maxX-minX)+2*ex,heightIn:(maxY-minY)+2*ey,shape,rowGeom,angular,
       rows:counts.slice(),pattern:n===3?'1–2 triangular':counts.join('–')
     };
   }
@@ -8864,20 +8915,33 @@ html[data-theme="glass-frost"] #panelBeamDesign :is(.brd-fit,.brd-warnings,.brd-
     }).join('');
     const col=`<rect x="${px(-opt.colX/2)}" y="${py(-opt.colY/2)}" width="${opt.colX*sc}" height="${opt.colY*sc}" fill="none" stroke="#b8862f" stroke-dasharray="4 3" stroke-width="1.5"/>`;
 
-    // Dimension arrows: center-to-edge at top and nominal C/C at bottom.
+    // Dimension arrows: center-to-edge plus actual angular/staggered pile geometry.
     const arrowId=`pcArr${n}`;
     const topY=Math.max(7,py(capTop)-6);
     const leftCenterX=px(lay.minX), leftEdgeX=px(capLeft);
     const edgeDim=`<line x1="${leftEdgeX}" y1="${topY}" x2="${leftCenterX}" y2="${topY}" stroke="#b8862f" stroke-width="1" marker-start="url(#${arrowId})" marker-end="url(#${arrowId})"/><text x="${(leftEdgeX+leftCenterX)/2}" y="${topY-2}" text-anchor="middle" font-size="7.5" fill="#8a611b">edge ${fmt(opt.edgeCenterX,0)} in</text>`;
+    let angularDim='';
+    if(lay.angular?.active){
+      const a=lay.angular, d=a.diagPair, h=a.horizontalPair;
+      if(d){
+        angularDim+=`<line x1="${px(d.x1)}" y1="${py(d.y1)}" x2="${px(d.x2)}" y2="${py(d.y2)}" stroke="#16a34a" stroke-width="1.7" marker-start="url(#${arrowId})" marker-end="url(#${arrowId})"/><text x="${(px(d.x1)+px(d.x2))/2+7}" y="${(py(d.y1)+py(d.y2))/2-3}" font-size="7.4" fill="#15803d">diag ${fmt(a.diagonalCC,1)} in</text>`;
+      }
+      if(h){
+        angularDim+=`<line x1="${px(h.x1)}" y1="${py(h.y1)-6}" x2="${px(h.x2)}" y2="${py(h.y2)-6}" stroke="#2563eb" stroke-width="1.2" marker-start="url(#${arrowId})" marker-end="url(#${arrowId})"/><text x="${(px(h.x1)+px(h.x2))/2}" y="${py(h.y1)-9}" text-anchor="middle" font-size="7.2" fill="#1d4ed8">X ${fmt(a.horizontalPitch,1)} in</text>`;
+      }
+    }
     let ccDim='';
     if(n>1){
       const y=206, x1=24, x2=246;
-      ccDim=`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#64748b" stroke-width="1" marker-start="url(#${arrowId})" marker-end="url(#${arrowId})"/><text x="135" y="${y-3}" text-anchor="middle" font-size="8" fill="#475569">nominal c/c: X ${fmt(opt.spacingX,0)} in · Y ${fmt(opt.spacingY,0)} in</text>`;
+      const label=lay.angular?.active
+        ?`actual c/c: X ${fmt(lay.angular.horizontalPitch,1)} · vertical ${fmt(lay.angular.verticalPitch,1)} · diagonal ${fmt(lay.angular.diagonalCC,1)} in`
+        :`nominal c/c: X ${fmt(opt.spacingX,0)} in · Y ${fmt(opt.spacingY,0)} in`;
+      ccDim=`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#64748b" stroke-width="1" marker-start="url(#${arrowId})" marker-end="url(#${arrowId})"/><text x="135" y="${y-3}" text-anchor="middle" font-size="7.7" fill="#475569">${label}</text>`;
     }
     const footer=opt.shape==='circular'
       ?`Ø${fmt(opt.pileX,0)} in circular · center→edge ${fmt(opt.edgeCenterX,0)} in (${fmt(opt.edgeCenterX/12,2)} ft)`
       :`${fmt(opt.pileX,0)}×${fmt(opt.pileY,0)} in precast · center→edge X/Y ${fmt(opt.edgeCenterX,0)}/${fmt(opt.edgeCenterY,0)} in`;
-    return `<svg viewBox="0 0 270 235" role="img" aria-label="${esc(arrangementName(n))}"><defs><marker id="${arrowId}" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse"><path d="M6,0 L0,3 L6,6" fill="none" stroke="#64748b" stroke-width="1"/></marker></defs>${outline}${piles}${col}${edgeDim}${ccDim}<text x="135" y="229" text-anchor="middle" font-size="8.4" fill="#64748b">${footer}</text></svg>`;
+    return `<svg viewBox="0 0 270 235" role="img" aria-label="${esc(arrangementName(n))}"><defs><marker id="${arrowId}" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse"><path d="M6,0 L0,3 L6,6" fill="none" stroke="#64748b" stroke-width="1"/></marker></defs>${outline}${piles}${col}${edgeDim}${angularDim}${ccDim}<text x="135" y="229" text-anchor="middle" font-size="8.4" fill="#64748b">${footer}</text></svg>`;
   }
 
   function readOpt(){
@@ -8899,11 +8963,19 @@ html[data-theme="glass-frost"] #panelBeamDesign :is(.brd-fit,.brd-warnings,.brd-
   function pileLabel(opt){
     return opt.shape==='circular' ? `Ø${fmt(opt.pileX,0)} in circular` : `${fmt(opt.pileX,0)}×${fmt(opt.pileY,0)} in rectangular precast`;
   }
-  function geometryBlock(opt){
+  function geometryBlock(opt,lay){
     const cc=opt.shape==='circular' ? inchFt(opt.spacingX) : `X ${inchFt(opt.spacingX)} · Y ${inchFt(opt.spacingY)}`;
     const ce=opt.shape==='circular' ? inchFt(opt.edgeCenterX) : `X ${inchFt(opt.edgeCenterX)} · Y ${inchFt(opt.edgeCenterY)}`;
     const spacingTag=opt.spacingFactor>=3?'3B+ recommended practice':(opt.spacingFactor>=2.5?'BNBC 2.5B minimum range':'Below BNBC screen');
-    return `<div><small>Pile C/C spacing</small><strong>${cc}</strong></div><div><small>Spacing basis</small><strong>${spacingTag}</strong></div><div><small>Center → cap edge</small><strong>${ce}</strong></div><div><small>Pile face → cap edge</small><strong>${inchFt(opt.edgeFace)}</strong></div>`;
+    let angular='';
+    if(lay?.angular?.active){
+      const a=lay.angular;
+      const vert=a.alignedVertical
+        ?`${inchFt(a.verticalPitch)} staggered · ${inchFt(a.alignedVertical)} aligned`
+        :inchFt(a.verticalPitch);
+      angular=`<div><small>Angular / diagonal C/C</small><strong>${inchFt(a.diagonalCC)}</strong></div><div><small>Staggered geometry (X offset / vertical)</small><strong>${inchFt(a.staggerOffset)} offset · ${vert} vertical</strong></div>`;
+    }
+    return `<div><small>Pile C/C spacing basis</small><strong>${cc}</strong></div>${angular}<div><small>Spacing basis</small><strong>${spacingTag}</strong></div><div><small>Center → cap edge</small><strong>${ce}</strong></div><div><small>Pile face → cap edge</small><strong>${inchFt(opt.edgeFace)}</strong></div>`;
   }
 
   function calculate(){
@@ -8935,19 +9007,26 @@ html[data-theme="glass-frost"] #panelBeamDesign :is(.brd-fit,.brd-warnings,.brd-
       const d=g.design, deep=g.n<=3;
       const cardBadge=deep?'<span class="pc-badge warn">STM review</span>':'<span class="pc-badge">Preliminary OK</span>';
       if(d.failed){
-        return `<div class="pc-cap-card"><div class="pc-cap-head"><div><h3>${g.mark} · ${esc(arrangementName(g.n))}</h3><div class="pc-note">${g.rows.length} load(s), max = ${fmt(g.maxKip,2)} kip</div></div><span class="pc-badge warn">Thickness &gt; limit</span></div><div class="pc-card-grid"><div class="pc-diagram">${diagramSVG(g.n,d.lay,opt,d)}</div><div><div class="pc-kv"><div><small>Piles</small><strong>${g.n} × ${pileLabel(opt)}</strong></div><div><small>Arrangement rows</small><strong>${esc(d.lay.pattern)}</strong></div><div><small>Cap plan</small><strong>${fmt(d.Lx/12,2)} × ${fmt(d.Ly/12,2)} ft</strong></div>${geometryBlock(opt)}<div><small>Factored Pu</small><strong>${fmt(d.Pu,1)} kip</strong></div><div><small>Pile reaction</small><strong>${fmt(d.Ru,1)} kip</strong></div></div><div class="pc-rebar"><b>No trial thickness up to ${fmt(opt.maxH,0)} in passed the simplified checks.</b> Increase cap dimensions/thickness search limit or perform a detailed strut-and-tie design.</div></div></div></div>`;
+        return `<div class="pc-cap-card"><div class="pc-cap-head"><div><h3>${g.mark} · ${esc(arrangementName(g.n))}</h3><div class="pc-note">${g.rows.length} load(s), max = ${fmt(g.maxKip,2)} kip</div></div><span class="pc-badge warn">Thickness &gt; limit</span></div><div class="pc-card-grid"><div class="pc-diagram">${diagramSVG(g.n,d.lay,opt,d)}</div><div><div class="pc-kv"><div><small>Piles</small><strong>${g.n} × ${pileLabel(opt)}</strong></div><div><small>Arrangement rows</small><strong>${esc(d.lay.pattern)}</strong></div><div><small>Cap plan</small><strong>${fmt(d.Lx/12,2)} × ${fmt(d.Ly/12,2)} ft</strong></div>${geometryBlock(opt,d.lay)}<div><small>Factored Pu</small><strong>${fmt(d.Pu,1)} kip</strong></div><div><small>Pile reaction</small><strong>${fmt(d.Ru,1)} kip</strong></div></div><div class="pc-rebar"><b>No trial thickness up to ${fmt(opt.maxH,0)} in passed the simplified checks.</b> Increase cap dimensions/thickness search limit or perform a detailed strut-and-tie design.</div></div></div></div>`;
       }
       const bx=d.barsX,by=d.barsY;
       const utilMax=Math.max(d.VuPunch/Math.max(d.phiPunch,1e-9),d.VuX/Math.max(d.phiVx,1e-9),d.VuY/Math.max(d.phiVy,1e-9),d.VuPile/Math.max(d.phiPile,1e-9));
-      return `<div class="pc-cap-card"><div class="pc-cap-head"><div><h3>${g.mark} · ${esc(arrangementName(g.n))}</h3><div class="pc-note">${g.rows.length} load(s), max service load = ${fmt(g.maxKip,2)} kip</div></div>${cardBadge}</div><div class="pc-card-grid"><div class="pc-diagram">${diagramSVG(g.n,d.lay,opt,d)}</div><div><div class="pc-kv"><div><small>Piles</small><strong>${g.n} × ${pileLabel(opt)}</strong></div><div><small>Arrangement rows</small><strong>${esc(d.lay.pattern)}</strong></div><div><small>Cap plan (adopted)</small><strong>${fmt(d.Lx/12,2)} × ${fmt(d.Ly/12,2)} ft</strong></div>${geometryBlock(opt)}<div><small>Thickness h</small><strong>${fmt(d.h,0)} in</strong></div><div><small>Effective d</small><strong>${fmt(d.d,1)} in</strong></div><div><small>Factored Pu</small><strong>${fmt(d.Pu,1)} kip</strong></div><div><small>Each pile Ru</small><strong>${fmt(d.Ru,1)} kip</strong></div><div><small>Max shear utilization</small><strong>${fmt(utilMax*100,0)}%</strong></div><div><small>Total pile length</small><strong>${fmt(g.n*opt.pileLen,0)} ft / cap</strong></div></div><div class="pc-rebar"><b>Bottom reinforcement</b><br>X-direction: <b>${bx.n}–Ø${fmt(bx.mm,0)} mm</b> @ ${fmt(bx.spacing,1)} in c/c (As req ${fmt(d.AsX,2)} in², prov ${fmt(bx.AsProv,2)} in²)<br>Y-direction: <b>${by.n}–Ø${fmt(by.mm,0)} mm</b> @ ${fmt(by.spacing,1)} in c/c (As req ${fmt(d.AsY,2)} in², prov ${fmt(by.AsProv,2)} in²)<br><span style="color:var(--muted)">Flexural Mu: X ${fmt(d.MuX,1)} kip-in, Y ${fmt(d.MuY,1)} kip-in. Top/local bars, pile anchorage, column dowels and development length are not designed here.</span></div></div></div></div>`;
+      return `<div class="pc-cap-card"><div class="pc-cap-head"><div><h3>${g.mark} · ${esc(arrangementName(g.n))}</h3><div class="pc-note">${g.rows.length} load(s), max service load = ${fmt(g.maxKip,2)} kip</div></div>${cardBadge}</div><div class="pc-card-grid"><div class="pc-diagram">${diagramSVG(g.n,d.lay,opt,d)}</div><div><div class="pc-kv"><div><small>Piles</small><strong>${g.n} × ${pileLabel(opt)}</strong></div><div><small>Arrangement rows</small><strong>${esc(d.lay.pattern)}</strong></div><div><small>Cap plan (adopted)</small><strong>${fmt(d.Lx/12,2)} × ${fmt(d.Ly/12,2)} ft</strong></div>${geometryBlock(opt,d.lay)}<div><small>Thickness h</small><strong>${fmt(d.h,0)} in</strong></div><div><small>Effective d</small><strong>${fmt(d.d,1)} in</strong></div><div><small>Factored Pu</small><strong>${fmt(d.Pu,1)} kip</strong></div><div><small>Each pile Ru</small><strong>${fmt(d.Ru,1)} kip</strong></div><div><small>Max shear utilization</small><strong>${fmt(utilMax*100,0)}%</strong></div><div><small>Total pile length</small><strong>${fmt(g.n*opt.pileLen,0)} ft / cap</strong></div></div><div class="pc-rebar"><b>Bottom reinforcement</b><br>X-direction: <b>${bx.n}–Ø${fmt(bx.mm,0)} mm</b> @ ${fmt(bx.spacing,1)} in c/c (As req ${fmt(d.AsX,2)} in², prov ${fmt(bx.AsProv,2)} in²)<br>Y-direction: <b>${by.n}–Ø${fmt(by.mm,0)} mm</b> @ ${fmt(by.spacing,1)} in c/c (As req ${fmt(d.AsY,2)} in², prov ${fmt(by.AsProv,2)} in²)<br><span style="color:var(--muted)">Flexural Mu: X ${fmt(d.MuX,1)} kip-in, Y ${fmt(d.MuY,1)} kip-in. Top/local bars, pile anchorage, column dowels and development length are not designed here.</span></div></div></div></div>`;
     }).join('');
+    const angularGroups=groups.filter(g=>g.design?.lay?.angular?.active);
+    const angularStatus=angularGroups.length?(()=>{
+      const a=angularGroups[0].design.lay.angular;
+      return ` Angular/staggered geometry: horizontal X ${inchFt(a.horizontalPitch)}, row offset ${inchFt(a.staggerOffset)}, vertical ${inchFt(a.verticalPitch)}, diagonal C/C ${inchFt(a.diagonalCC)}.`;
+    })():'';
     const geomStatus=opt.shape==='circular'
-      ?`c/c ${inchFt(opt.spacingX)}, center→edge ${inchFt(opt.edgeCenterX)}`
-      :`c/c X/Y ${inchFt(opt.spacingX)} / ${inchFt(opt.spacingY)}, center→edge X/Y ${inchFt(opt.edgeCenterX)} / ${inchFt(opt.edgeCenterY)}`;
-    els.status.innerHTML=`Calculated <b>${rows.length}</b> load(s) into <b>${groups.length}</b> unique pile-cap mark(s). Pile: <b>${pileLabel(opt)}</b>; ${geomStatus}. Pile count uses ${fmt(opt.capTon,1)} ton allowable capacity per pile.`;
+      ?`c/c basis ${inchFt(opt.spacingX)}, center→edge ${inchFt(opt.edgeCenterX)}`
+      :`c/c basis X/Y ${inchFt(opt.spacingX)} / ${inchFt(opt.spacingY)}, center→edge X/Y ${inchFt(opt.edgeCenterX)} / ${inchFt(opt.edgeCenterY)}`;
+    els.status.innerHTML=`Calculated <b>${rows.length}</b> load(s) into <b>${groups.length}</b> unique pile-cap mark(s). Pile: <b>${pileLabel(opt)}</b>; ${geomStatus}.${angularStatus} Pile count uses ${fmt(opt.capTon,1)} ton allowable capacity per pile.`;
     window.__pileCapMarks=groups.map(g=>({
       mark:g.mark,piles:g.n,count:g.rows.length,maxLoadKip:g.maxKip,pileType:opt.shape,pileDiaIn:opt.shape==='circular'?opt.pileX:null,
       pileWidthIn:opt.pileX,pileDepthIn:opt.pileY,pileLengthFt:opt.pileLen,spacingXIn:opt.spacingX,spacingYIn:opt.spacingY,
+      angularDiagonalCCIn:g.design.lay.angular?.diagonalCC??null,staggerOffsetIn:g.design.lay.angular?.staggerOffset??null,
+      staggerVerticalIn:g.design.lay.angular?.verticalPitch??null,alignedVerticalIn:g.design.lay.angular?.alignedVertical??null,
       centerEdgeXIn:opt.edgeCenterX,centerEdgeYIn:opt.edgeCenterY,capLengthFt:g.design.Lx/12,capWidthFt:g.design.Ly/12,
       thicknessIn:g.design.failed?null:g.design.h,rebarX:g.design.failed?null:g.design.barsX,rebarY:g.design.failed?null:g.design.barsY
     }));
