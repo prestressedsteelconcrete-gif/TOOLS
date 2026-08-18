@@ -2372,10 +2372,10 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
           <button type="button" id="pcImportBtn" style="background:#4338ca;">Import OCR Loads</button>
           <button type="button" id="pcCalcBtn">Calculate Pile Caps</button>
         </div>
-        <div id="pcStatus" class="pc-note">OCR footing loads in this suite are normally treated as <b>kips</b>. You can change the load unit below if your source numbers are in tons.</div>
+        <div id="pcStatus" class="pc-note">OCR footing loads in this suite are normally treated as <b>kips</b>. Change the load unit below only if your source numbers are in <b>metric ton-force (tonf)</b>.</div>
       </div>
       <div class="pc-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));">
-        <div class="pc-field"><label>Load Unit</label><select id="pcLoadUnit"><option value="kip">Kips</option><option value="ton">Tons</option></select></div>
+        <div class="pc-field"><label>Load Unit</label><select id="pcLoadUnit"><option value="kip">Kips</option><option value="ton">Metric tons (tonf)</option></select></div>
         <div class="pc-field">
           <label>Pile Section / Type</label>
           <input id="pcPileShape" type="hidden" value="circular">
@@ -2387,8 +2387,9 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
         <div class="pc-field" id="pcDiaField"><label>Pile Diameter, D (in)</label><input id="pcPileDia" type="number" min="4" step="1" value="18"></div>
         <div class="pc-field" id="pcRectBField" style="display:none;"><label>Precast Pile Width, Bx (in)</label><input id="pcPileB" type="number" min="4" step="1" value="12"></div>
         <div class="pc-field" id="pcRectHField" style="display:none;"><label>Precast Pile Depth, By (in)</label><input id="pcPileH" type="number" min="4" step="1" value="12"></div>
-        <div class="pc-field"><label>Allowable Pile Capacity (ton/pile)</label><input id="pcPileCap" type="number" min="0.1" step="0.1" value="35"></div>
+        <div class="pc-field"><label>Allowable Pile Capacity (ton/pile)</label><input id="pcPileCap" type="number" min="0.1" step="0.1" value="35"><div class="pc-dim-note">Metric ton-force: 1 ton = 2.20462 kip.</div></div>
         <div class="pc-field"><label>Pile Length (ft)</label><input id="pcPileLen" type="number" min="1" step="1" value="50"></div>
+        <div class="pc-field"><label>Axial Pile Spring, K = EA/L (kip/in)</label><input id="pcPileSpring" type="text" value="—" readonly aria-readonly="true"><div class="pc-dim-note" id="pcPileSpringNote">Excel convention: Ec = 4700√f'c (MPa), K = EA/L.</div></div>
       </div>
     </div>
 
@@ -8719,7 +8720,7 @@ html[data-theme="glass-frost"] #panelBeamDesign :is(.brd-fit,.brd-warnings,.brd-
   const $=id=>document.getElementById(id);
   const els={
     loadList:$('pcLoadList'), importBtn:$('pcImportBtn'), calcBtn:$('pcCalcBtn'), status:$('pcStatus'),
-    loadUnit:$('pcLoadUnit'), shape:$('pcPileShape'), dia:$('pcPileDia'), pileB:$('pcPileB'), pileH:$('pcPileH'), cap:$('pcPileCap'), len:$('pcPileLen'),
+    loadUnit:$('pcLoadUnit'), shape:$('pcPileShape'), dia:$('pcPileDia'), pileB:$('pcPileB'), pileH:$('pcPileH'), cap:$('pcPileCap'), len:$('pcPileLen'), spring:$('pcPileSpring'), springNote:$('pcPileSpringNote'),
     diaField:$('pcDiaField'), rectBField:$('pcRectBField'), rectHField:$('pcRectHField'), shapeBtns:[...document.querySelectorAll('[data-pc-shape]')],
     fc:$('pcFc'), fy:$('pcFy'), colX:$('pcColX'), colY:$('pcColY'), spacingD:$('pcSpacingD'), edgeFace:$('pcEdgeFace'), cover:$('pcCover'), minH:$('pcMinH'),
     loadFactor:$('pcLoadFactor'), barMM:$('pcBarMM'), maxSp:$('pcMaxSp'), maxH:$('pcMaxH'), loadWrap:$('pcLoadTableWrap'),
@@ -8728,6 +8729,12 @@ html[data-theme="glass-frost"] #panelBeamDesign :is(.brd-fit,.brd-warnings,.brd-
   if(!els.calcBtn) return;
 
   const fmt=(v,d=2)=>Number.isFinite(v)?Number(v).toFixed(d):'—';
+  const TONF_TO_KIP=2.20462262185;
+  // Preserve the source workbook's rounded unit-conversion constants so the HTML reproduces its spring values.
+  const WB_M_TO_IN=3.281*12;
+  const WB_MPA_TO_KSI=0.145038;
+  const WB_M2_TO_IN2=1550;
+  const WB_KNM_TO_KIPIN=0.0057101486;
   const ceilTo=(v,step)=>Math.ceil((v-1e-9)/step)*step;
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const inchFt=v=>`${fmt(v,1)} in (${fmt(v/12,2)} ft)`;
@@ -9080,14 +9087,34 @@ html[data-theme="glass-frost"] #panelBeamDesign :is(.brd-fit,.brd-warnings,.brd-
     const D=num(els.dia,18), B=num(els.pileB,12), H=num(els.pileH,12);
     const pileX=shape==='circular'?D:B, pileY=shape==='circular'?D:H;
     const spacingFactor=num(els.spacingD,3), edgeFace=num(els.edgeFace,4);
+    const capTon=num(els.cap,35), pileLen=num(els.len,50), fcKsi=num(els.fc,3), fyKsi=num(els.fy,60);
+    // Source workbook convention: Ec(MPa)=4700*sqrt(f'c in MPa), K(kN/m)=Ec*1000*A/L, then convert to kip/in.
+    const Dm=D/WB_M_TO_IN, Bm=B/WB_M_TO_IN, Hm=H/WB_M_TO_IN, pileLenM=(pileLen*12)/WB_M_TO_IN;
+    const pileAreaM2=shape==='circular'?Math.PI*Dm*Dm/4:Bm*Hm;
+    const pileAreaIn2=pileAreaM2*WB_M2_TO_IN2;
+    const fcMpa=fcKsi/WB_MPA_TO_KSI;
+    const ecMpa=fcMpa>0?4700*Math.sqrt(fcMpa):NaN;
+    const ecKsi=ecMpa*WB_MPA_TO_KSI;
+    const springKNm=pileAreaM2>0&&pileLenM>0&&ecMpa>0?(ecMpa*1000*pileAreaM2)/pileLenM:NaN;
+    const springKipIn=springKNm*WB_KNM_TO_KIPIN;
     return {
       shape,D,pileX,pileY,spacingFactor,edgeFace,
       spacingX:spacingFactor*pileX, spacingY:spacingFactor*pileY,
       edgeCenterX:pileX/2+edgeFace, edgeCenterY:pileY/2+edgeFace,
-      capTon:num(els.cap,35), pileLen:num(els.len,50), fcKsi:num(els.fc,3), fyKsi:num(els.fy,60),
+      capTon,pileLen,fcKsi,fyKsi,pileAreaIn2,pileAreaM2,fcMpa,ecMpa,ecKsi,springKNm,springKipIn,
       colX:num(els.colX,12), colY:num(els.colY,12), cover:num(els.cover,3),
       minH:num(els.minH,18), loadFactor:num(els.loadFactor,1.5), preferredMM:num(els.barMM,0), maxSpacing:num(els.maxSp,12), maxH:num(els.maxH,72)
     };
+  }
+
+  function updatePileSpring(){
+    if(!els.spring) return;
+    const opt=readOpt();
+    els.spring.value=Number.isFinite(opt.springKipIn)?fmt(opt.springKipIn,2):'—';
+    if(els.springNote){
+      const areaLabel=opt.shape==='circular'?`A = πD²/4 = ${fmt(opt.pileAreaIn2,2)} in²`:`A = Bx×By = ${fmt(opt.pileAreaIn2,2)} in²`;
+      els.springNote.innerHTML=`Excel EA/L · ${areaLabel} · Ec = ${fmt(opt.ecKsi,1)} ksi · L = ${fmt(opt.pileLen*12,1)} in · axial material stiffness`;
+    }
   }
 
   function pileLabel(opt){
@@ -9110,16 +9137,18 @@ html[data-theme="glass-frost"] #panelBeamDesign :is(.brd-fit,.brd-warnings,.brd-
 
   function calculate(){
     const opt=readOpt();
-    if(opt.pileX<=0||opt.pileY<=0||opt.capTon<=0||opt.fcKsi<=0||opt.fyKsi<=0||opt.spacingFactor<2.5||opt.edgeFace<3.94){
+    updatePileSpring();
+    if(opt.pileX<=0||opt.pileY<=0||opt.capTon<=0||opt.pileLen<=0||opt.fcKsi<=0||opt.fyKsi<=0||!Number.isFinite(opt.springKipIn)||opt.spacingFactor<2.5||opt.edgeFace<3.94){
       els.status.textContent='Please enter valid positive pile/material inputs. C/C factor must be at least 2.5 and pile-face cap overhang at least 3.94 in (≈100 mm).';return;
     }
     const values=els.loadList.value.split(/\n+/).map(s=>parseFloat(s.trim())).filter(v=>Number.isFinite(v)&&v>0);
     if(!values.length){els.status.textContent='Enter at least one positive load, or import the OCR load list first.';return;}
     const isTon=els.loadUnit.value==='ton';
     const rows=values.map((raw,idx)=>{
-      const kip=isTon?raw*2:raw;
-      const n=Math.max(1,Math.ceil(kip/(opt.capTon*2)));
-      return {idx,raw,kip,n,util:kip/(n*opt.capTon*2)};
+      const kip=isTon?raw*TONF_TO_KIP:raw;
+      const pileAllowKip=opt.capTon*TONF_TO_KIP;
+      const n=Math.max(1,Math.ceil(kip/pileAllowKip));
+      return {idx,raw,kip,n,util:kip/(n*pileAllowKip)};
     });
     const groupsMap=new Map();
     rows.forEach(r=>{
@@ -9141,7 +9170,7 @@ html[data-theme="glass-frost"] #panelBeamDesign :is(.brd-fit,.brd-warnings,.brd-
       }
       const bx=d.barsX,by=d.barsY;
       const utilMax=Math.max(d.VuPunch/Math.max(d.phiPunch,1e-9),d.VuX/Math.max(d.phiVx,1e-9),d.VuY/Math.max(d.phiVy,1e-9),d.VuPile/Math.max(d.phiPile,1e-9));
-      return `<div class="pc-cap-card"><div class="pc-cap-head"><div><h3>${g.mark} · ${esc(arrangementName(g.n))}</h3><div class="pc-note">${g.rows.length} load(s), max service load = ${fmt(g.maxKip,2)} kip</div></div>${cardBadge}</div><div class="pc-card-grid"><div class="pc-diagram">${diagramSVG(g.n,d.lay,opt,d)}</div><div><div class="pc-kv"><div><small>Piles</small><strong>${g.n} × ${pileLabel(opt)}</strong></div><div><small>Arrangement rows</small><strong>${esc(d.lay.pattern)}</strong></div><div><small>Cap plan (adopted)</small><strong>${fmt(d.Lx/12,2)} × ${fmt(d.Ly/12,2)} ft</strong></div>${geometryBlock(opt,d.lay)}<div><small>Thickness h</small><strong>${fmt(d.h,0)} in</strong></div><div><small>Effective d</small><strong>${fmt(d.d,1)} in</strong></div><div><small>Factored Pu</small><strong>${fmt(d.Pu,1)} kip</strong></div><div><small>Each pile Ru</small><strong>${fmt(d.Ru,1)} kip</strong></div><div><small>Max shear utilization</small><strong>${fmt(utilMax*100,0)}%</strong></div><div><small>Total pile length</small><strong>${fmt(g.n*opt.pileLen,0)} ft / cap</strong></div></div><div class="pc-rebar"><b>Bottom reinforcement</b><br>X-direction: <b>${bx.n}–Ø${fmt(bx.mm,0)} mm</b> @ ${fmt(bx.spacing,1)} in c/c (As req ${fmt(d.AsX,2)} in², prov ${fmt(bx.AsProv,2)} in²)<br>Y-direction: <b>${by.n}–Ø${fmt(by.mm,0)} mm</b> @ ${fmt(by.spacing,1)} in c/c (As req ${fmt(d.AsY,2)} in², prov ${fmt(by.AsProv,2)} in²)<br><span style="color:var(--muted)">Flexural Mu: X ${fmt(d.MuX,1)} kip-in, Y ${fmt(d.MuY,1)} kip-in. Top/local bars, pile anchorage, column dowels and development length are not designed here.</span></div></div></div></div>`;
+      return `<div class="pc-cap-card"><div class="pc-cap-head"><div><h3>${g.mark} · ${esc(arrangementName(g.n))}</h3><div class="pc-note">${g.rows.length} load(s), max service load = ${fmt(g.maxKip,2)} kip</div></div>${cardBadge}</div><div class="pc-card-grid"><div class="pc-diagram">${diagramSVG(g.n,d.lay,opt,d)}</div><div><div class="pc-kv"><div><small>Piles</small><strong>${g.n} × ${pileLabel(opt)}</strong></div><div><small>Arrangement rows</small><strong>${esc(d.lay.pattern)}</strong></div><div><small>Cap plan (adopted)</small><strong>${fmt(d.Lx/12,2)} × ${fmt(d.Ly/12,2)} ft</strong></div>${geometryBlock(opt,d.lay)}<div><small>Thickness h</small><strong>${fmt(d.h,0)} in</strong></div><div><small>Effective d</small><strong>${fmt(d.d,1)} in</strong></div><div><small>Factored Pu</small><strong>${fmt(d.Pu,1)} kip</strong></div><div><small>Each pile Ru</small><strong>${fmt(d.Ru,1)} kip</strong></div><div><small>Max shear utilization</small><strong>${fmt(utilMax*100,0)}%</strong></div><div><small>Total pile length</small><strong>${fmt(g.n*opt.pileLen,0)} ft / cap</strong></div><div><small>Axial spring K (each pile)</small><strong>${fmt(opt.springKipIn,2)} kip/in</strong></div></div><div class="pc-rebar"><b>Bottom reinforcement</b><br>X-direction: <b>${bx.n}–Ø${fmt(bx.mm,0)} mm</b> @ ${fmt(bx.spacing,1)} in c/c (As req ${fmt(d.AsX,2)} in², prov ${fmt(bx.AsProv,2)} in²)<br>Y-direction: <b>${by.n}–Ø${fmt(by.mm,0)} mm</b> @ ${fmt(by.spacing,1)} in c/c (As req ${fmt(d.AsY,2)} in², prov ${fmt(by.AsProv,2)} in²)<br><span style="color:var(--muted)">Flexural Mu: X ${fmt(d.MuX,1)} kip-in, Y ${fmt(d.MuY,1)} kip-in. Top/local bars, pile anchorage, column dowels and development length are not designed here.</span></div></div></div></div>`;
     }).join('');
     const angularGroups=groups.filter(g=>g.design?.lay?.angular?.active);
     const angularStatus=angularGroups.length?(()=>{
@@ -9151,10 +9180,11 @@ html[data-theme="glass-frost"] #panelBeamDesign :is(.brd-fit,.brd-warnings,.brd-
     const geomStatus=opt.shape==='circular'
       ?`c/c basis ${inchFt(opt.spacingX)}, center→edge ${inchFt(opt.edgeCenterX)}`
       :`c/c basis X/Y ${inchFt(opt.spacingX)} / ${inchFt(opt.spacingY)}, center→edge X/Y ${inchFt(opt.edgeCenterX)} / ${inchFt(opt.edgeCenterY)}`;
-    els.status.innerHTML=`Calculated <b>${rows.length}</b> load(s) into <b>${groups.length}</b> unique pile-cap mark(s). Pile: <b>${pileLabel(opt)}</b>; ${geomStatus}.${angularStatus} Pile count uses ${fmt(opt.capTon,1)} ton allowable capacity per pile.`;
+    els.status.innerHTML=`Calculated <b>${rows.length}</b> load(s) into <b>${groups.length}</b> unique pile-cap mark(s). Pile: <b>${pileLabel(opt)}</b>; ${geomStatus}.${angularStatus} Pile count uses ${fmt(opt.capTon,1)} metric ton-force allowable capacity per pile (${fmt(opt.capTon*TONF_TO_KIP,1)} kip). Axial spring K = <b>${fmt(opt.springKipIn,2)} kip/in</b> per pile.`;
     window.__pileCapMarks=groups.map(g=>({
       mark:g.mark,piles:g.n,count:g.rows.length,maxLoadKip:g.maxKip,pileType:opt.shape,pileDiaIn:opt.shape==='circular'?opt.pileX:null,
-      pileWidthIn:opt.pileX,pileDepthIn:opt.pileY,pileLengthFt:opt.pileLen,spacingXIn:opt.spacingX,spacingYIn:opt.spacingY,
+      pileWidthIn:opt.pileX,pileDepthIn:opt.pileY,pileLengthFt:opt.pileLen,pileCapacityTon:opt.capTon,pileCapacityKip:opt.capTon*TONF_TO_KIP,
+      pileAreaIn2:opt.pileAreaIn2,pileEcKsi:opt.ecKsi,springKipIn:opt.springKipIn,spacingXIn:opt.spacingX,spacingYIn:opt.spacingY,
       angularDiagonalCCIn:g.design.lay.angular?.diagonalCC??null,staggerOffsetIn:g.design.lay.angular?.staggerOffset??null,
       staggerVerticalIn:g.design.lay.angular?.verticalPitch??null,alignedVerticalIn:g.design.lay.angular?.alignedVertical??null,
       centerEdgeXIn:opt.edgeCenterX,centerEdgeYIn:opt.edgeCenterY,capLengthFt:g.design.Lx/12,capWidthFt:g.design.Ly/12,
@@ -9162,6 +9192,12 @@ html[data-theme="glass-frost"] #panelBeamDesign :is(.brd-fit,.brd-warnings,.brd-
     }));
     window.dispatchEvent(new CustomEvent('pileCapMarksUpdated'));
   }
+  [els.dia,els.pileB,els.pileH,els.len,els.fc].filter(Boolean).forEach(el=>{
+    el.addEventListener('input',updatePileSpring);
+    el.addEventListener('change',updatePileSpring);
+  });
+  els.shapeBtns.forEach(btn=>btn.addEventListener('click',updatePileSpring));
+  updatePileSpring();
   els.calcBtn.addEventListener('click',calculate);
 })();
 
