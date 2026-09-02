@@ -2054,6 +2054,98 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
 }
 </style>
 
+
+<style id="structural-suite-global-search-style-v1">
+.suite-search-launcher{
+  width:100%;min-height:42px;margin:2px 0 10px;padding:8px 10px!important;
+  display:flex;align-items:center;gap:9px;text-align:left;
+  border:1px solid rgba(255,255,255,.13)!important;border-radius:12px!important;
+  background:rgba(255,255,255,.07)!important;color:rgba(255,255,255,.9)!important;
+  box-shadow:none!important;
+}
+.suite-search-launcher:hover{background:rgba(255,255,255,.11)!important;border-color:rgba(255,255,255,.22)!important;transform:none!important;}
+.suite-search-launcher svg{width:17px;height:17px;flex:0 0 auto;}
+.suite-search-launcher span{min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px;font-weight:700;}
+.suite-search-launcher kbd{padding:2px 5px;border:1px solid rgba(255,255,255,.18);border-radius:6px;background:rgba(0,0,0,.13);font:700 8px/1.4 var(--mono,monospace);color:rgba(255,255,255,.68);}
+
+#globalSearchOverlay{
+  position:fixed;inset:0;z-index:10050;display:none;align-items:flex-start;justify-content:center;
+  padding:clamp(76px,12vh,130px) 16px 24px;background:rgba(5,10,24,.56);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+#globalSearchOverlay.open{display:flex;}
+.global-search-dialog{
+  width:min(720px,100%);max-height:min(76vh,720px);display:flex;flex-direction:column;overflow:hidden;
+  border:1px solid var(--card-border);border-radius:20px;background:var(--card);
+  box-shadow:0 30px 90px rgba(0,0,0,.34);color:var(--ink);
+}
+.global-search-head{display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--card-border);}
+.global-search-head svg{width:21px;height:21px;flex:0 0 auto;color:var(--accent);}
+#globalSearchInput{
+  flex:1;min-width:0;border:0!important;outline:0!important;background:transparent!important;
+  box-shadow:none!important;color:var(--ink)!important;font-size:15px!important;padding:8px 2px!important;
+}
+.global-search-close{
+  width:34px!important;height:34px!important;padding:0!important;border-radius:9px!important;
+  background:var(--card-soft)!important;color:var(--muted)!important;border:1px solid var(--card-border)!important;
+}
+#globalSearchResults{overflow:auto;padding:8px;overscroll-behavior:contain;}
+.global-search-result{
+  width:100%;display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:10px;
+  padding:10px!important;margin:0 0 5px!important;text-align:left;border:1px solid transparent!important;
+  border-radius:13px!important;background:transparent!important;color:var(--ink)!important;box-shadow:none!important;
+}
+.global-search-result:hover,.global-search-result.is-active{
+  background:var(--accent-soft)!important;border-color:color-mix(in srgb,var(--accent) 28%,var(--card-border))!important;
+  transform:none!important;
+}
+.global-search-result-icon{
+  width:36px;height:36px;display:grid;place-items:center;border-radius:10px;
+  background:var(--card-soft);border:1px solid var(--card-border);color:var(--accent);font-size:16px;font-weight:900;
+}
+.global-search-result-copy{min-width:0;}
+.global-search-result-copy strong{display:block;font-size:13.5px;line-height:1.35;color:var(--ink);}
+.global-search-result-copy span{display:block;margin-top:2px;font-size:11.5px;line-height:1.4;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.global-search-result-tag{font-size:9px;font-weight:800;letter-spacing:.04em;color:var(--accent);background:var(--accent-soft);padding:4px 7px;border-radius:999px;}
+.global-search-empty{padding:28px 16px;text-align:center;color:var(--muted);}
+.global-search-foot{display:flex;gap:14px;flex-wrap:wrap;padding:9px 12px;border-top:1px solid var(--card-border);font-size:10px;color:var(--muted);background:var(--card-soft);}
+.global-search-foot kbd{font:700 9px/1.2 var(--mono,monospace);border:1px solid var(--card-border);border-radius:5px;padding:2px 5px;background:var(--card);}
+
+.bnbc-load-quickref{
+  width:100%;margin:0 0 14px;padding:13px 14px;border:1px solid color-mix(in srgb,var(--accent) 28%,var(--card-border));
+  border-radius:16px;background:color-mix(in srgb,var(--accent-soft) 55%,var(--card));box-shadow:var(--shadow-sm);
+}
+.bnbc-load-quickref-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.bnbc-load-quickref-head>div{min-width:0;}
+.bnbc-load-quickref-head strong{display:block;font-size:13px;color:var(--ink);}
+.bnbc-load-quickref-head span{display:block;margin-top:2px;font-size:11.5px;color:var(--muted);line-height:1.45;}
+.bnbc-load-quickref-head button{white-space:nowrap;margin:0!important;padding:8px 11px!important;font-size:11px!important;}
+.bnbc-load-quickref-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.bnbc-load-quickref-grid>div{padding:9px 10px;border:1px solid var(--card-border);border-radius:11px;background:var(--card);}
+.bnbc-load-quickref-grid b{display:block;font-size:11px;color:var(--ink);}
+.bnbc-load-quickref-grid span{display:block;margin-top:2px;font:700 10.5px/1.35 var(--mono,monospace);color:var(--accent);}
+.bnbc-load-quickref>small{display:block;margin-top:8px;color:var(--muted);font-size:10.5px;line-height:1.45;}
+
+#mobileGlobalSearchQuick{display:none;}
+@media(max-width:900px){
+  #globalToolSearchBtn{display:none!important;}
+  #mobileGlobalSearchQuick{display:grid!important;}
+  .global-search-dialog{max-height:82dvh;border-radius:18px;}
+  #globalSearchOverlay{padding:72px 10px 96px;align-items:flex-start;}
+  .global-search-result{grid-template-columns:36px minmax(0,1fr);padding:9px!important;}
+  .global-search-result-tag{display:none;}
+  .bnbc-load-quickref-head{align-items:flex-start;flex-direction:column;}
+  .bnbc-load-quickref-head button{width:100%!important;}
+  .bnbc-load-quickref-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:520px){
+  .bnbc-load-quickref-grid{grid-template-columns:1fr;}
+}
+@media print{
+  #globalSearchOverlay,#globalToolSearchBtn,#mobileGlobalSearchQuick{display:none!important;}
+}
+</style>
+
 </head>
 <body>
 
@@ -2101,6 +2193,15 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
 
 <div id="sidebar">
   <div id="sidebarBrand"><img alt="AVASH" class="brand-logo" src="data:image/png;base64,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"/>Structural Suite</div>
+
+  <button type="button" id="globalToolSearchBtn" class="suite-search-launcher" data-i18n-skip
+          aria-haspopup="dialog" aria-controls="globalSearchOverlay" title="Search tools, BNBC loads, sections">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path>
+    </svg>
+    <span>Search tool / BNBC load…</span><kbd>Ctrl K</kbd>
+  </button>
+
   <nav class="sidebar-nav" aria-label="Structural Suite navigation" data-i18n-skip>
     <div class="side-section-title">Workspace</div>
     <button type="button" class="page-tab-btn side-link active" data-page="footing" data-i18n-skip><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M6 20V8h12v12M9 8V4h6v4M9 12h6M9 16h6"/></svg><span class="side-link-label">Footing Design</span></button>
@@ -2119,13 +2220,13 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
       </div>
     </section>
 
-    <section class="side-group" data-side-group="bnbc">
-      <button type="button" class="side-link side-group-toggle" aria-expanded="false">
+    <section class="side-group open" data-side-group="bnbc">
+      <button type="button" class="side-link side-group-toggle" aria-expanded="true">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4.5A2.5 2.5 0 017.5 2H20v18H7.5A2.5 2.5 0 015 17.5v-13z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg><span class="side-link-label">BNBC 2020</span><svg class="side-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
       </button>
       <div class="side-group-body">
         <button type="button" class="page-tab-btn side-link" data-page="bnbc" data-i18n-skip title="BNBC 2020 detailing assistant"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4.5A2.5 2.5 0 017.5 2H20v18H7.5A2.5 2.5 0 015 17.5v-13z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg><span class="side-link-label">Code Assistant</span></button>
-        <button type="button" class="page-tab-btn side-link" data-page="bnbcload" data-i18n-skip title="BNBC 2020 building load calculator"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M6 20V10l6-5 6 5v10M8 11h8M9 20v-5h6v5"/></svg><span class="side-link-label">Load Calculator</span></button>
+        <button type="button" class="page-tab-btn side-link" data-page="bnbcload" data-i18n-skip title="BNBC 2020 slab, occupancy live load and dead load calculator in psf / kN/m²"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M6 20V10l6-5 6 5v10M8 11h8M9 20v-5h6v5"/></svg><span class="side-link-label">Slab / Live Load</span></button>
       </div>
     </section>
 
@@ -3092,6 +3193,24 @@ html[data-theme="glass-frost"] :is(.tree,.etabs-path){background:rgba(25,36,70,.
     <div><span class="bnbc-load-feature-icon">↔</span><strong>Line Load</strong><small>kN/m ও plf</small></div>
     <div><span class="bnbc-load-feature-icon">⌂</span><strong>Occupancy Preset</strong><small>BNBC minimum live load</small></div>
   </div>
+
+  <div class="bnbc-load-quickref" data-i18n-skip>
+    <div class="bnbc-load-quickref-head">
+      <div>
+        <strong>Quick BNBC live-load locator · Table 6.2.3</strong>
+        <span>Slab type নয়—floor/area use অনুযায়ী minimum occupancy live load select করুন। Calculator-এ kN/m² ও psf দুটোই দেখাবে।</span>
+      </div>
+      <button type="button" id="openBnbcLiveLoadSearch">⌕ Find slab load</button>
+    </div>
+    <div class="bnbc-load-quickref-grid" aria-label="Common load presets already included in this calculator">
+      <div><b>Dwelling</b><span>2.00 kN/m² ≈ 41.77 psf</span></div>
+      <div><b>Office area</b><span>2.40 kN/m² ≈ 50.13 psf</span></div>
+      <div><b>Ordinary flat roof</b><span>1.00 kN/m² ≈ 20.89 psf</span></div>
+      <div><b>1st-floor corridor</b><span>4.80 kN/m² ≈ 100.25 psf</span></div>
+    </div>
+    <small>এই চারটি শুধু quick examples; exact occupancy/use select করে embedded calculator-এর Table 6.2.3 preset ব্যবহার করুন।</small>
+  </div>
+
   <div class="bnbc-frame-shell bnbc-load-frame-shell">
     <div class="bnbc-frame-toolbar">
       <div><strong>BNBC 2020 Load Workspace</strong><span id="bnbcLoadSyncState">Calculator module loading…</span></div>
@@ -13032,5 +13151,192 @@ function soil_exportCSV(){
 soil_addBorehole('BH-01');
 window.addEventListener('structural-theme-change',function(){const panel=document.getElementById('page-soil');if(panel)panel.dataset.themeRefresh=String(Date.now())});
 </script>
+
+<div id="globalSearchOverlay" aria-hidden="true" data-i18n-skip>
+  <div class="global-search-dialog" role="dialog" aria-modal="true" aria-labelledby="globalSearchTitle">
+    <div class="global-search-head">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
+      <input id="globalSearchInput" type="search" autocomplete="off" spellcheck="false"
+             placeholder="Search: slab load, psf, footing, ETABS, BNBC…" aria-label="Search Structural Suite">
+      <button type="button" class="global-search-close" id="globalSearchClose" aria-label="Close search">×</button>
+    </div>
+    <div id="globalSearchResults" role="listbox" aria-label="Search results"></div>
+    <div class="global-search-foot"><span><kbd>↑</kbd> <kbd>↓</kbd> select</span><span><kbd>Enter</kbd> open</span><span><kbd>Esc</kbd> close</span><span id="globalSearchTitle">Ctrl/Cmd + K</span></div>
+  </div>
+</div>
+
+<script id="structural-suite-global-search-v1">
+(function(){
+  'use strict';
+  const overlay=document.getElementById('globalSearchOverlay');
+  const input=document.getElementById('globalSearchInput');
+  const results=document.getElementById('globalSearchResults');
+  const launcher=document.getElementById('globalToolSearchBtn');
+  if(!overlay||!input||!results)return;
+
+  const PAGE_META={
+    footing:{desc:'Footing size, OCR load extraction and structural footing design',keys:'footing foundation bearing soil pressure column load size design'},
+    pilecap:{desc:'Pile count, pile-cap layout, thickness and reinforcement',keys:'pile pilecap pile cap foundation'},
+    soil:{desc:'SPT, borehole, bearing capacity and soil screening',keys:'soil spt borehole bearing capacity geotechnical'},
+    etabs:{desc:'BNBC 2020 ETABS earthquake, wind and related inputs',keys:'etabs input earthquake wind seismic soft storey spring'},
+    modifier:{desc:'ETABS stiffness modifier and local-axis checker',keys:'modifier stiffness local axis etabs'},
+    shearwall:{desc:'ETABS shear-wall reinforcement workspace',keys:'shear wall rebar reinforcement etabs wall'},
+    etabsfailure:{desc:'Beam shear/torsion failure diagnosis and reinforcement advice',keys:'failure diagnosis shear torsion beam etabs fail'},
+    bnbc:{desc:'BNBC 2020 beam, column and footing detailing assistant',keys:'bnbc code clause beam column footing detailing checklist'},
+    bnbcload:{desc:'BNBC slab/dead/live load calculator · kN/m² + psf',keys:'bnbc load slab live dead occupancy psf floor roof corridor table 6.2.1 6.2.2 6.2.3'},
+    estimate:{desc:'Full-building quantity, material and cost estimator',keys:'estimate quantity material cost slab beam column footing'},
+    compare:{desc:'Compare structural member options side by side',keys:'compare comparison column beam footing cost strength'},
+    tanks:{desc:'Septic tank and underground reservoir utilities',keys:'tank septic ugr underground reservoir water'}
+  };
+
+  const FEATURE_ENTRIES=[
+    {page:'bnbcload',target:'occTitle',label:'BNBC Live Load / Slab Load (psf)',desc:'Table 6.2.3 occupancy minimums · dwelling, office, corridor, roof',keys:'slab load live load occupancy psf bnbc table 6.2.3 residential dwelling office corridor roof floor load লাইভ লোড স্ল্যাব লোড'},
+    {page:'bnbcload',target:'slabTitle',label:'Slab Self-Weight',desc:'RCC/material density × slab thickness · result in kN/m² and psf',keys:'slab self weight dead load thickness density psf rcc concrete'},
+    {page:'bnbcload',target:'ffTitle',label:'Floor Finish / Area Dead Load',desc:'Floor finish, ceiling/services and project allowance in psf',keys:'floor finish dead load ceiling service 25 psf tiles mortar'},
+    {page:'bnbcload',target:'wallTitle',label:'Partition Wall Load',desc:'Actual wall line load and eligible equivalent partition UDL',keys:'partition wall line load udl brick glass grill'},
+    {page:'bnbcload',target:'summaryTitle',label:'Slab Service Load Summary (psf)',desc:'Self-weight + finish + partition + occupancy live load total',keys:'total service load slab summary psf dead live load total'},
+    {page:'bnbc',label:'BNBC Code / Clause Search',desc:'Open the BNBC beam-column-footing code assistant',keys:'bnbc clause search code assistant detailing'},
+    {page:'etabs',label:'ETABS Input',desc:'Earthquake, wind, soft-storey and spring inputs',keys:'earthquake seismic wind etabs load input'}
+  ];
+
+  const navButtons=[...document.querySelectorAll('#sidebar .page-tab-btn[data-page]')];
+  const pageEntries=navButtons.map(btn=>{
+    const page=btn.dataset.page, label=(btn.querySelector('.side-link-label,.nav-label')?.textContent||btn.title||page).trim();
+    const meta=PAGE_META[page]||{};
+    return {page,label,desc:meta.desc||btn.title||'Open workspace',keys:(meta.keys||'')+' '+btn.title,kind:'Tool'};
+  });
+  const entries=[...FEATURE_ENTRIES.map(x=>({...x,kind:'Quick jump'})),...pageEntries];
+
+  const norm=s=>(s||'').toString().toLowerCase().normalize('NFKD').replace(/[^\p{L}\p{N}.]+/gu,' ').trim();
+  let visible=[],active=0;
+
+  function scoreEntry(entry,q){
+    if(!q)return entry.kind==='Quick jump'?3:2;
+    const nq=norm(q), tokens=nq.split(/\s+/).filter(Boolean);
+    const label=norm(entry.label), hay=norm([entry.label,entry.desc,entry.keys,entry.page].join(' '));
+    let score=0;
+    if(label===nq)score+=100;
+    if(label.startsWith(nq))score+=55;
+    if(label.includes(nq))score+=38;
+    if(hay.includes(nq))score+=28;
+    tokens.forEach(t=>{
+      if(label===t)score+=20;
+      else if(label.startsWith(t))score+=13;
+      else if(label.includes(t))score+=9;
+      if(hay.includes(t))score+=5;
+    });
+    if(entry.page==='bnbcload'&&tokens.some(t=>['load','slab','psf','live','dead','bnbc','roof','office','corridor'].includes(t)))score+=6;
+    return score;
+  }
+
+  function iconFor(entry){
+    if(entry.page==='bnbcload')return 'psf';
+    if(entry.page==='bnbc')return '§';
+    if(entry.page==='etabs')return 'E';
+    if(entry.page==='footing')return 'F';
+    if(entry.page==='soil')return 'S';
+    if(entry.page==='pilecap')return 'P';
+    if(entry.page==='estimate')return '৳';
+    if(entry.page==='compare')return '↔';
+    if(entry.page==='tanks')return '◉';
+    return '⌘';
+  }
+  function escapeHtml(s){return (s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+
+  function render(q=''){
+    visible=entries.map((e,i)=>({e,i,s:scoreEntry(e,q)})).filter(x=>x.s>0)
+      .sort((a,b)=>b.s-a.s||a.i-b.i).slice(0,12).map(x=>x.e);
+    active=Math.min(active,Math.max(0,visible.length-1));
+    if(!visible.length){
+      results.innerHTML='<div class="global-search-empty">কিছু পাওয়া যায়নি। “slab load”, “psf”, “BNBC”, “ETABS”, “footing” লিখে দেখুন।</div>';return;
+    }
+    results.innerHTML=visible.map((e,i)=>`<button type="button" class="global-search-result${i===active?' is-active':''}" data-search-index="${i}" role="option" aria-selected="${i===active}">
+      <span class="global-search-result-icon">${escapeHtml(iconFor(e))}</span>
+      <span class="global-search-result-copy"><strong>${escapeHtml(e.label)}</strong><span>${escapeHtml(e.desc||'Open workspace')}</span></span>
+      <span class="global-search-result-tag">${escapeHtml(e.kind||'Tool')}</span>
+    </button>`).join('');
+    results.querySelectorAll('[data-search-index]').forEach(btn=>btn.addEventListener('click',()=>openEntry(visible[Number(btn.dataset.searchIndex)])));
+  }
+
+  function openSearch(seed=''){
+    overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');
+    input.value=seed;active=0;render(seed);
+    requestAnimationFrame(()=>{input.focus();input.select();});
+  }
+  function closeSearch(){
+    overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');
+  }
+
+  function jumpIframe(target){
+    if(!target)return;
+    let tries=0;
+    const run=()=>{
+      tries++;
+      const frame=document.getElementById('bnbcLoadIntegratedFrame');
+      try{
+        const doc=frame?.contentDocument;
+        const el=doc?.getElementById(target);
+        if(el){
+          el.scrollIntoView({behavior:'smooth',block:'start'});
+          const section=el.closest('section,.card')||el;
+          section.animate?.([{outline:'0 solid transparent'},{outline:'3px solid rgba(8,102,198,.38)'},{outline:'0 solid transparent'}],{duration:1200});
+          return;
+        }
+      }catch(_){}
+      if(tries<40)setTimeout(run,100);
+    };
+    setTimeout(run,80);
+  }
+
+  function openEntry(entry){
+    if(!entry)return;
+    const btn=document.querySelector(`#sidebar .page-tab-btn[data-page="${entry.page}"]`);
+    btn?.click();
+    closeSearch();
+    if(entry.target)jumpIframe(entry.target);
+  }
+
+  function move(delta){
+    if(!visible.length)return;
+    active=(active+delta+visible.length)%visible.length;
+    render(input.value);
+    results.querySelector('.is-active')?.scrollIntoView({block:'nearest'});
+  }
+
+  launcher?.addEventListener('click',()=>openSearch());
+  document.getElementById('globalSearchClose')?.addEventListener('click',closeSearch);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeSearch();});
+  input.addEventListener('input',()=>{active=0;render(input.value);});
+  input.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'){e.preventDefault();move(1)}
+    else if(e.key==='ArrowUp'){e.preventDefault();move(-1)}
+    else if(e.key==='Enter'){e.preventDefault();openEntry(visible[active])}
+    else if(e.key==='Escape'){e.preventDefault();closeSearch()}
+  });
+  document.addEventListener('keydown',e=>{
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();overlay.classList.contains('open')?closeSearch():openSearch()}
+    else if(e.key==='/'&&!overlay.classList.contains('open')&&!/input|textarea|select/i.test(document.activeElement?.tagName||'')){e.preventDefault();openSearch()}
+    else if(e.key==='Escape'&&overlay.classList.contains('open'))closeSearch();
+  });
+
+  // Quick button on BNBC load page.
+  document.getElementById('openBnbcLiveLoadSearch')?.addEventListener('click',()=>openSearch('slab load psf'));
+
+  // Add search to the generated mobile top bar without crowding the bottom dock.
+  const mobileTop=document.getElementById('mobileTopBar');
+  const themeQuick=document.getElementById('mobileThemeQuick');
+  if(mobileTop&&!document.getElementById('mobileGlobalSearchQuick')){
+    const b=document.createElement('button');
+    b.type='button';b.className='mobile-top-action';b.id='mobileGlobalSearchQuick';b.setAttribute('aria-label','Search tools and BNBC loads');
+    b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/></svg>';
+    b.addEventListener('click',()=>openSearch());
+    mobileTop.insertBefore(b,themeQuick||null);
+  }
+
+  window.StructuralSuiteSearch={open:openSearch,close:closeSearch};
+  render('');
+})();
+</script>
+
 </body>
 </html>
