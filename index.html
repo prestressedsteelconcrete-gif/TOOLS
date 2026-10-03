@@ -2777,6 +2777,30 @@ body,#mainContent,#gateOverlay,.page-panel,.card,.hero,.estimate-hero,.sg-hero,.
 .rx-auto-load small{font-size:9.5px;line-height:1.45;color:var(--muted)}
 @media(max-width:700px){.rx-auto-loads{grid-template-columns:1fr}}
 </style>
+
+<style id="driftSwayAutoCheckStyles">
+  .ds-upload-zone{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 15px;margin:10px 0 12px;border:1px solid var(--card-border);border-radius:14px;background:var(--card-soft)}
+  .ds-upload-zone strong{display:block;font-size:13px;margin-bottom:4px}.ds-upload-zone span{display:block;color:var(--muted);font-size:11.5px;line-height:1.55}
+  .ds-file-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ds-file-actions input[type=file]{max-width:320px}
+  .ds-status{min-height:19px;font-size:12px;color:var(--muted);margin:5px 0 12px}.ds-status.bad{color:#dc2626}.ds-status.good{color:#15803d}
+  .ds-requirements{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 14px}
+  .ds-req{padding:10px 11px;border:1px solid var(--card-border);border-radius:12px;background:var(--card)}
+  .ds-req strong{display:block;font-size:11px}.ds-req span{display:block;color:var(--muted);font-size:10.5px;line-height:1.5;margin-top:3px}
+  .ds-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:12px 0}
+  .ds-kpi{padding:12px;border:1px solid var(--card-border);border-radius:13px;background:var(--card-soft)}
+  .ds-kpi span{display:block;color:var(--muted);font-size:9.5px;text-transform:uppercase;letter-spacing:.04em}.ds-kpi strong{display:block;margin-top:5px;font-size:15px}.ds-kpi small{display:block;color:var(--muted);font-size:10.5px;margin-top:3px;line-height:1.4}
+  .ds-section{margin-top:19px}.ds-section h3{margin:0 0 8px;font-size:14px}
+  .ds-table-wrap{overflow:auto;border:1px solid var(--card-border);border-radius:12px}
+  .ds-table{width:100%;min-width:760px;border-collapse:collapse;font-size:11.5px}.ds-table th,.ds-table td{padding:7px 8px;border-bottom:1px solid var(--card-border);text-align:center;white-space:nowrap}
+  .ds-table th{background:var(--card-soft);font-size:10.5px}.ds-table td:first-child,.ds-table th:first-child{text-align:left}.ds-table tr:last-child td{border-bottom:0}
+  .ds-badge{display:inline-flex;align-items:center;justify-content:center;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:800}
+  .ds-pass{background:rgba(34,197,94,.16);color:#15803d}.ds-fail{background:rgba(239,68,68,.15);color:#dc2626}.ds-review{background:rgba(245,158,11,.17);color:#b45309}
+  .ds-audit{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0 4px}.ds-audit span{padding:4px 8px;border-radius:999px;border:1px solid var(--card-border);background:var(--card);font-size:10.5px;color:var(--muted)}
+  .ds-note-list{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:11.5px;line-height:1.6}
+  @media(max-width:850px){.ds-upload-zone{grid-template-columns:1fr}.ds-requirements{grid-template-columns:1fr}.ds-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:520px){.ds-summary{grid-template-columns:1fr}.ds-file-actions{align-items:stretch}.ds-file-actions input[type=file],.ds-file-actions button{width:100%;max-width:none}}
+</style>
+
 </head>
 <body>
 <div class="orb orb1"></div>
@@ -2837,6 +2861,7 @@ body,#mainContent,#gateOverlay,.page-panel,.card,.hero,.estimate-hero,.sg-hero,.
 </button>
 <div class="side-group-body">
 <button class="page-tab-btn side-link" data-i18n-skip="" data-page="etabs" title="BNBC 2020 ETABS input calculator" type="button"><svg class="ic" fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 19V5m5 14V8m5 11V3m5 16v-9M2 19h20"></path></svg><span class="side-link-label">ETABS Input</span></button>
+<button class="side-link" data-i18n-skip="" id="baseShearShortcut" title="Open Earthquake Base Shear Check" type="button"><svg class="ic" fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 19h16M6 16l4-5 3 2 5-7"></path><path d="M6 5v11M18 6v10"></path></svg><span class="side-link-label">Base Shear Check</span></button>
 <button class="page-tab-btn side-link" data-i18n-skip="" data-page="modifier" title="ETABS stiffness modifier and local axis checker" type="button"><svg class="ic" fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 6h16M7 12h10M9 18h6"></path><circle cx="7" cy="6" r="2"></circle><circle cx="15" cy="12" r="2"></circle><circle cx="11" cy="18" r="2"></circle></svg><span class="side-link-label">Modifier Checker</span></button>
 <button class="page-tab-btn side-link" data-i18n-skip="" data-page="shearwall" title="ETABS shear wall reinforcement designer" type="button"><svg class="ic" fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M5 21V3h14v18M8 3v18M16 3v18M5 8h14M5 15h14"></path></svg><span class="side-link-label">Shear Wall</span></button>
 <button class="page-tab-btn side-link" data-i18n-skip="" data-page="slabdraw" title="ETABS slab drawing coordinate generator from DXF" type="button"><svg class="ic" fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 7l8-4 8 4v10l-8 4-8-4z"></path><path d="M4 7l8 4 8-4M12 11v10"></path></svg><span class="side-link-label">ETABS Slab Draw</span></button>
@@ -3278,7 +3303,7 @@ body,#mainContent,#gateOverlay,.page-panel,.card,.hero,.estimate-hero,.sg-hero,.
 </div>
 <div class="page-panel" id="page-etabs">
 <h1>BNBC 2020 ETABS Input Calculator</h1>
-<p class="sub">Earthquake, Wind, Soft Storey, Subgrade Modulus &amp; Beam Design — ETABS input parameter generator</p>
+<p class="sub">Earthquake, Wind, Drift &amp; Sway, Soft Storey, Subgrade Modulus &amp; Beam Design — ETABS input parameter generator</p>
 <div class="smart-link-banner">
 <div aria-hidden="true" class="smart-link-icon">
 <svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M10 13a5 5 0 007.07 0l2-2a5 5 0 00-7.07-7.07l-1.15 1.15"></path><path d="M14 11a5 5 0 00-7.07 0l-2 2A5 5 0 0012 20.07l1.15-1.15"></path></svg>
@@ -3289,9 +3314,62 @@ body,#mainContent,#gateOverlay,.page-panel,.card,.hero,.estimate-hero,.sg-hero,.
 </div>
 <div id="globalDimSyncStatus">60 ft × 30 ft · Auto</div>
 </div>
+
+<!-- ================= ETABS ONE-CLICK EXPORT EXCEL ================= -->
+<section class="e2k-master-card" data-i18n-skip="" id="e2kMasterCard">
+  <div class="e2k-master-head">
+    <div>
+      <span class="e2k-kicker">ETABS ONE-CLICK EXPORTER · SINGLE EXCEL</span>
+      <h2>Full BNBC Check from One ETABS Export Excel</h2>
+      <p>ETABS plugin-এর <b>Export BNBC Check Data</b> থেকে তৈরি একটাই .xlsx upload করুন। .e2k, আলাদা Story Drift Excel বা manual value লাগবে না। Workbook থেকে model metadata + analyzed result data auto-read হবে।</p>
+    </div>
+    <span class="e2k-ready-badge" id="e2kReadyBadge">WAITING</span>
+  </div>
+  <div class="e2k-upload-row e2k-results-upload-grid e2k-oneclick-grid">
+    <div class="e2k-file-slot"><label>BNBC ETABS Exporter Excel (.xlsx)</label><input accept=".xlsx,.xlsm" id="e2kResultsFile" type="file"/></div>
+    <button disabled id="e2kRunFullBtn" type="button">Run Full Check</button>
+    <button class="ghost" id="e2kClearBtn" type="button">Clear</button>
+  </div>
+  <div class="e2k-status" id="e2kStatus">ETABS plugin 1.1+ → Export BNBC Check Data → generated .xlsx upload করুন।</div>
+  <div class="e2k-results-state" id="e2kResultsState">ONE-CLICK EXPORT EXCEL: NOT LOADED</div>
+  <div class="e2k-summary" id="e2kSummary" hidden>
+    <div><span>ETABS model</span><strong id="e2kModelInfo">—</strong></div>
+    <div><span>Detected story levels</span><strong id="e2kStoryCount">—</strong></div>
+    <div><span>Max elevation / height</span><strong id="e2kTotalHeight">—</strong></div>
+    <div><span>Export units</span><strong id="e2kLengthUnit">—</strong></div>
+    <div><span>Wind cases</span><strong id="e2kWindCount">—</strong></div>
+    <div><span>Seismic cases</span><strong id="e2kSeismicCount">—</strong></div>
+    <div><span>Result cases</span><strong id="e2kCaseCount">—</strong></div>
+    <div><span>Decoded tables</span><strong id="e2kComboCount">—</strong></div>
+  </div>
+  <details class="e2k-details" id="e2kDetails" hidden>
+    <summary>Detected exporter data / coverage</summary>
+    <div class="e2k-detail-grid">
+      <div><h3>Story levels recovered from result tables</h3><div class="e2k-scroll"><table><thead><tr><th>Story</th><th>Elevation</th><th>Detected in</th></tr></thead><tbody id="e2kStoryBody"></tbody></table></div></div>
+      <div><h3>Wind cases</h3><div class="e2k-chip-list" id="e2kPatternList"></div><h3>Seismic cases</h3><div class="e2k-chip-list" id="e2kCaseList"></div><h3>Decoded ETABS tables</h3><div class="e2k-chip-list" id="e2kComboList"></div></div>
+    </div>
+  </details>
+  <details class="e2k-bridge-help" data-i18n-skip="" open>
+    <summary>এখন ETABS থেকে কী করতে হবে?</summary>
+    <p>Model Analyze করার পর শুধু <b>Tools → BNBC ETABS Exporter → Export BNBC Check Data</b> চাপুন। যে workbook তৈরি হবে সেটাই উপরে upload করবেন। Show Tables থেকে আলাদা table select/export করতে হবে না। বর্তমান Exporter v1-এর flattened table format-ও এই HTML auto-recover করতে পারে এবং অসম্পূর্ণ coverage হলে স্পষ্টভাবে <b>PARTIAL DATA</b> দেখাবে।</p>
+  </details>
+  <section class="e2k-full-result" id="e2kFullResult" hidden data-i18n-skip="">
+    <div class="e2k-full-head"><div><span class="e2k-kicker">ETABS EXPORTER EXCEL → YOUR REFERENCE WORKBOOK RULES</span><h2>Full Structural Check</h2><p id="e2kFullMeta">—</p></div><span class="e2k-ready-badge" id="e2kFullOverall">WAITING</span></div>
+    <div class="e2k-check-grid" id="e2kCheckGrid"></div>
+    <details class="e2k-result-details" open><summary>Seismic Drift / Drift Ratio — B6 workbook logic</summary><div class="e2k-table-wrap"><table><thead><tr><th>Story</th><th>Case</th><th>Dir</th><th>Elastic drift ratio</th><th>Cd/I</th><th>Amplified ratio</th><th>Allowable</th><th>Status</th></tr></thead><tbody id="e2kDriftRows"></tbody></table></div></details>
+    <details class="e2k-result-details"><summary>Wind Displacement / Hi÷500 — B3 workbook logic (all stories)</summary><div class="e2k-table-wrap"><table><thead><tr><th>Story</th><th>Case</th><th>Dir</th><th>Displacement</th><th>Cum. H (Hi)</th><th>Hi/500</th><th>Utilization</th><th>Status</th></tr></thead><tbody id="e2kWindRows"></tbody></table></div></details>
+    <details class="e2k-result-details"><summary>Torsional Irregularity — B5 workbook logic</summary><div class="e2k-table-wrap"><table><thead><tr><th>Story</th><th>Case</th><th>Dir</th><th>Δmax</th><th>Δavg</th><th>Δmax/Δavg</th><th>Classification</th></tr></thead><tbody id="e2kTorsionRows"></tbody></table></div></details>
+    <details class="e2k-result-details"><summary>Soft / Extreme Soft Storey — existing Structural Suite logic</summary><div class="e2k-table-wrap"><table><thead><tr><th>Story</th><th>Case / Step</th><th>Dir</th><th>Ki</th><th>Ki/K above</th><th>Ki/Kmi (3 above)</th><th>Classification</th></tr></thead><tbody id="e2kSoftRows"></tbody></table></div></details>
+    <details class="e2k-result-details"><summary>Base Shear — ETABS result extraction</summary><div class="e2k-table-wrap"><table><thead><tr><th>Output Case</th><th>FX / VX</th><th>FY / VY</th><th>Type</th><th>Governing story/source</th><th>Code ratio</th><th>Status</th></tr></thead><tbody id="e2kBaseRows"></tbody></table></div><div class="e2k-trace" id="e2kBaseNote"></div></details>
+    <details class="e2k-result-details"><summary>Decoded tables &amp; coverage notes</summary><div class="e2k-chip-list" id="e2kReceivedTables"></div><div class="e2k-trace" id="e2kAnalysisNotes"></div></details>
+  </section>
+  <div class="e2k-note"><strong>Reference basis from your supplied workbooks:</strong> B6 → amplified seismic drift with <b>Cd/I</b>; when Exporter v1 does not contain Cd/I, the supplied B6 reference values <b>Cd = 5, I = 1</b> are used and identified as a fallback. B6 allowable ratios used here: <b>X = 0.020</b>, <b>Y = 0.015</b>. B5 → torsion <b>1.2 / 1.4</b>. B3 → story-wise wind sway <b>Hi/500</b> (cumulative height at each storey). Soft-storey uses the thresholds already present in Structural Suite. Base shear is never given a fake unit or PASS/FAIL when the exporter has lost its field-unit header.</div>
+</section>
+
 <div class="tabs etabs-tabs">
 <button class="tab-btn active" id="tabEqBtn">Earthquake</button>
 <button class="tab-btn" id="tabWindBtn">Wind</button>
+<button class="tab-btn" id="tabDriftBtn">Drift &amp; Sway Check</button>
 <button class="tab-btn" id="tabSoftBtn">Soft Storey Check</button>
 <button class="tab-btn" id="tabSubgradeBtn">Subgrade Modulus</button>
 <button class="tab-btn" id="tabBeamBtn">Beam Reinforcement</button>
@@ -3360,6 +3438,20 @@ body,#mainContent,#gateOverlay,.page-panel,.card,.hero,.estimate-hero,.sg-hero,.
 <div id="storyRows"></div>
 <button id="rebuildStoriesBtn" style="background:transparent; border:1px solid var(--teal); color:var(--teal);">Update rows to match story count</button>
 <button id="calcEqBtn" style="margin-top:16px;">Calculate</button>
+<section class="base-shear-check-card" data-i18n-skip="" id="baseShearCheckCard">
+<div class="base-shear-check-head">
+<div><span class="base-shear-kicker">ETABS VERIFICATION</span><h2>Base Shear Check</h2><p>Earthquake tab-এর calculated static base shear-কে reference ধরে ETABS X/Y base shear compare করুন।</p></div>
+<div class="base-shear-ref"><span>Reference V</span><strong id="baseShearRefValue">Calculate earthquake first</strong></div>
+</div>
+<div class="base-shear-check-grid">
+<div class="field"><label for="baseShearEtabsX">ETABS Base Shear — X (Kips)</label><input id="baseShearEtabsX" min="0" step="0.01" type="number" placeholder="e.g. 250"/></div>
+<div class="field"><label for="baseShearEtabsY">ETABS Base Shear — Y (Kips)</label><input id="baseShearEtabsY" min="0" step="0.01" type="number" placeholder="e.g. 245"/></div>
+<div class="field"><label for="baseShearMinRatio">Minimum required ratio (%)</label><input id="baseShearMinRatio" min="0" max="200" step="1" type="number" value="100"/></div>
+<div class="base-shear-action"><button id="runBaseShearCheckBtn" type="button">Run Base Shear Check</button></div>
+</div>
+<p class="base-shear-help">Reference V = এই Earthquake calculator-এর calculated base shear। Minimum ratio ইচ্ছামতো দিন; এখানে কোনো code-specific dynamic/static percentage hard-code করা হয়নি। Scale factor = required minimum V ÷ ETABS V (minimum 1.00)।</p>
+<div class="base-shear-summary" id="baseShearCheckSummary"><div class="base-shear-empty">Earthquake calculation চালান, তারপর ETABS X/Y base shear দিন।</div></div>
+</section>
 <div class="result-wrap" id="eqResult">
 <section aria-labelledby="bdMapTitle" class="eq-map-card">
 <div class="eq-map-copy">
@@ -3404,6 +3496,7 @@ body,#mainContent,#gateOverlay,.page-panel,.card,.hero,.estimate-hero,.sg-hero,.
 <div class="out-grid" id="eqUserCoeffOut"></div>
 <h2 class="section">Base Shear</h2>
 <div class="out-grid" id="eqBaseShearOut"></div>
+
 <h2 class="section">Base Shear Distribution</h2>
 <table>
 <thead><tr><th>Story</th><th>Height (ft)</th><th>Cum. Ht (ft)</th><th>Fx (Kips)</th><th>Fx (kN)</th></tr></thead>
@@ -3469,6 +3562,68 @@ body,#mainContent,#gateOverlay,.page-panel,.card,.hero,.estimate-hero,.sg-hero,.
 </div>
 <div class="note">Every Output Case and Step Number is evaluated independently. A step is marked <strong>Pass</strong> only when all available storeys pass both checks. Ki/Ki+1 &gt; 0.7 (Soft-Storey) / &gt;= 0.6 (Extreme) checks stiffness against the storey immediately above. Ki/Kmi &gt;= 0.8 (Soft-Storey) / &gt;= 0.7 (Extreme) checks stiffness against the average of the 3 storeys above. Missing storey data remains blank and is not compared across a gap.</div>
 </div>
+
+<!-- ================= DRIFT & SWAY CHECK PANEL ================= -->
+<div class="card panel" id="panelDrift">
+<h2 class="section">BNBC 2020 Drift &amp; Wind Sway — ETABS Excel Auto Check</h2>
+<p class="sub" style="margin-top:-6px;">Manual value entry লাগবে না। ETABS Tables to Excel থেকে প্রয়োজনীয় tables এক workbook-এ export করে upload করুন; tool table/header নিজে খুঁজে নেবে, unit convert করবে এবং story-wise X/Y result দেখাবে।</p>
+
+<div class="ds-upload-zone">
+  <div>
+    <strong>Upload ETABS Tables to Excel workbook</strong>
+    <span>Best result: Story Drifts + Story Max Over Avg Displacements + Story Definitions + Load Pattern Definitions + Load Combination Definitions. Auto-Seismic period table থাকলে period used-ও auto-detect হবে.</span>
+  </div>
+  <div class="ds-file-actions">
+    <input accept=".xlsx,.xls,.xlsm" id="driftSwayFile" type="file"/>
+    <button id="driftSwayRunBtn" type="button">Run BNBC Check</button>
+    <button class="ghost" id="driftSwayClearBtn" type="button">Clear</button>
+  </div>
+</div>
+<div class="ds-status" id="driftSwayStatus"></div>
+
+<div class="ds-requirements">
+  <div class="ds-req"><strong>Required · Story Drifts</strong><span>Story, Output Case, Direction, Drift — non-earthquake/wind storey-drift ratio check.</span></div>
+  <div class="ds-req"><strong>Required · Story Max Over Avg Displacements</strong><span>Story-wise X/Y maximum displacement — each storey is checked against cumulative height Hi/500, matching the B3 workbook logic.</span></div>
+  <div class="ds-req"><strong>Required for exact H · Story Definitions</strong><span>Story height + unit থেকে total structural height automatically পাওয়া যাবে.</span></div>
+  <div class="ds-req"><strong>Recommended · Load Pattern Definitions</strong><span>Wind/Seismic load names automatically classify করতে সাহায্য করে.</span></div>
+  <div class="ds-req"><strong>Recommended · Load Combination Definitions</strong><span>Wind-containing service combinations automatically identify করতে সাহায্য করে.</span></div>
+  <div class="ds-req"><strong>Recommended · Auto Seismic / Modal Period</strong><span>Base-shear period পাওয়া গেলে 0.005/0.004 drift limit নির্বাচন করা হবে; না পেলে conservative 0.004 used.</span></div>
+</div>
+
+<div id="driftSwayResults" style="display:none">
+  <div class="ds-audit" id="driftSwayAudit"></div>
+  <div class="ds-summary">
+    <div class="ds-kpi"><span>Total structural height</span><strong id="dsHeightKpi">—</strong><small id="dsHeightSource">—</small></div>
+    <div class="ds-kpi"><span>Period used for limit</span><strong id="dsPeriodKpi">—</strong><small id="dsPeriodSource">—</small></div>
+    <div class="ds-kpi"><span>Non-EQ drift limit</span><strong id="dsDriftLimitKpi">—</strong><small>BNBC Part 6 Ch.1 Sec. 1.5.6.1</small></div>
+    <div class="ds-kpi"><span>Roof wind sway limit</span><strong id="dsSwayLimitKpi">—</strong><small>Roof row uses H/500; table below checks every storey with Hi/500</small></div>
+  </div>
+
+  <div class="ds-section">
+    <h3>Storey Drift — Wind / non-earthquake cases</h3>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th>Output Case</th><th>Direction</th><th>Governing Story</th><th>Max ETABS Drift</th><th>Allowable Ratio</th><th>Utilization</th><th>Check</th></tr></thead>
+      <tbody id="dsDriftBody"></tbody>
+    </table></div>
+  </div>
+
+  <div class="ds-section">
+    <h3>Wind Sway — story-by-story displacement / Hi÷500</h3>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th>Output Case</th><th>Direction</th><th>Story</th><th>ETABS Max Disp.</th><th>Cum. H (Hi)</th><th>Hi/500 Limit</th><th>Utilization</th><th>Check</th></tr></thead>
+      <tbody id="dsSwayBody"></tbody>
+    </table></div>
+  </div>
+
+  <div class="note" id="dsWarnings" style="margin-top:14px;"></div>
+  <ul class="ds-note-list">
+    <li>This module reproduces the uploaded reference sheet's intended <strong>non-earthquake storey drift + wind sway</strong> checks, but fixes its unit/comparison issues.</li>
+    <li><strong>Earthquake design storey drift is not checked here.</strong> BNBC 2020 Sec. 2.5.14.1 / Table 6.2.21 has separate seismic drift limits and additional deflection rules.</li>
+    <li>Unreinforced masonry has a separate 0.0025h non-earthquake limit; ETABS result tables do not reliably identify that construction type automatically, so this module flags that as an engineer review item.</li>
+  </ul>
+</div>
+</div>
+
 <!-- ================= SUBGRADE MODULUS PANEL ================= -->
 <div class="card panel" id="panelSubgrade">
 <div class="sg-hero">
@@ -5922,7 +6077,7 @@ document.getElementById('rebuildStoriesBtn').addEventListener('click', buildStor
 
 /* ---- Tabs ---- */
 function activateEtabsTab(which){
-  const tabs = {eq:['tabEqBtn','panelEq'], wind:['tabWindBtn','panelWind'], soft:['tabSoftBtn','panelSoft'], subgrade:['tabSubgradeBtn','panelSubgrade'], beam:['tabBeamBtn','panelBeamDesign']};
+  const tabs = {eq:['tabEqBtn','panelEq'], wind:['tabWindBtn','panelWind'], drift:['tabDriftBtn','panelDrift'], soft:['tabSoftBtn','panelSoft'], subgrade:['tabSubgradeBtn','panelSubgrade'], beam:['tabBeamBtn','panelBeamDesign']};
   Object.keys(tabs).forEach(k=>{
     const [btnId, panelId] = tabs[k];
     document.getElementById(btnId).classList.toggle('active', k===which);
@@ -5935,6 +6090,9 @@ document.getElementById('tabEqBtn').addEventListener('click', ()=>{
 document.getElementById('tabWindBtn').addEventListener('click', ()=>{
   if(windDimensionMode === 'auto') syncWindDimensions({force:true});
   activateEtabsTab('wind');
+});
+document.getElementById('tabDriftBtn').addEventListener('click', ()=>{
+  activateEtabsTab('drift');
 });
 document.getElementById('tabSoftBtn').addEventListener('click', ()=>{
   activateEtabsTab('soft');
@@ -6215,6 +6373,8 @@ function renderBangladeshSeismicMap(town, result){
 document.getElementById('calcEqBtn').addEventListener('click', ()=>{
   const r = calcEQ();
   if(!r) return;
+  window.__lastStructuralSuiteEQResult = r;
+  if(typeof window.__updateBaseShearCheck === 'function') window.__updateBaseShearCheck(r);
   const selectedTown = eqTownSel.value;
   renderBangladeshSeismicMap(selectedTown, r);
 
@@ -7373,6 +7533,333 @@ document.getElementById('calcCompareBtn').addEventListener('click', ()=>{
 
 })();
 </script>
+
+<script data-ss-order="4.5" id="etabs-drift-sway-autocheck-v1" type="text/x-structural-suite-deferred">
+(function(){
+'use strict';
+const el=id=>document.getElementById(id);
+const fileInput=el('driftSwayFile'), runBtn=el('driftSwayRunBtn'), clearBtn=el('driftSwayClearBtn');
+const statusEl=el('driftSwayStatus'), resultsEl=el('driftSwayResults');
+if(!fileInput||!runBtn||!statusEl||!resultsEl)return;
+
+let parsed=null;
+const norm=v=>String(v==null?'':v).trim().toLowerCase().replace(/[\u00a0\s]+/g,' ').replace(/[._\-\/()]/g,'');
+const txt=v=>String(v==null?'':v).trim();
+const num=v=>{if(v==null||v==='')return null; const n=Number(String(v).replace(/,/g,'')); return Number.isFinite(n)?n:null;};
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const fmt=(v,d=4)=>Number.isFinite(v)?v.toLocaleString('en-US',{maximumFractionDigits:d}):'—';
+const status=(m,bad=false,good=false)=>{statusEl.textContent=m;statusEl.className='ds-status'+(bad?' bad':good?' good':'');};
+
+function keyIndex(header,cands){
+  const keys=header.map(norm), wanted=cands.map(norm);
+  return keys.findIndex(k=>wanted.includes(k));
+}
+function unitFactorToMm(u){
+  const k=txt(u).toLowerCase().replace(/\s/g,'');
+  if(k==='mm'||k.includes('millimeter'))return 1;
+  if(k==='cm')return 10;
+  if(k==='m'||k==='meter'||k==='metre')return 1000;
+  if(k==='in'||k==='inch'||k==='inches')return 25.4;
+  if(k==='ft'||k==='feet'||k==='foot')return 304.8;
+  return null;
+}
+function looksLikeUnitsRow(row){
+  const s=(row||[]).map(txt).filter(Boolean).join(' ').toLowerCase();
+  return /\b(mm|cm|m|in|ft|sec|cyc\/sec|rad\/sec|kn|kip)\b/.test(s);
+}
+function nextTableRow(row){return /^table\s*:/i.test(txt((row||[])[0]));}
+
+function tableCandidates(rows, signature){
+  const out=[];
+  for(let i=0;i<rows.length;i++){
+    const r=rows[i]||[];
+    if(signature(r.map(norm))){
+      let title='';
+      for(let j=i-1;j>=Math.max(0,i-4);j--){
+        if(/^table\s*:/i.test(txt((rows[j]||[])[0]))){title=txt((rows[j]||[])[0]).replace(/^table\s*:\s*/i,'');break;}
+      }
+      out.push({headerIdx:i,header:r.map(txt),title});
+    }
+  }
+  return out;
+}
+function dataRows(rows, cand, keyCol){
+  const h=cand.headerIdx, header=cand.header, units={};
+  let start=h+1;
+  if(looksLikeUnitsRow(rows[start])){
+    (rows[start]||[]).forEach((v,i)=>{if(txt(v))units[i]=txt(v);});
+    start++;
+  }
+  const out=[]; let blanks=0;
+  for(let i=start;i<rows.length;i++){
+    const r=rows[i]||[];
+    if(nextTableRow(r))break;
+    const nonempty=r.some(v=>txt(v)!=='');
+    if(!nonempty){blanks++; if(blanks>=2)break; else continue;}
+    blanks=0;
+    if(keyCol>=0 && !txt(r[keyCol])){
+      // Some ETABS combo tables repeat rows reliably; a blank key usually marks end/notes.
+      if(i>start+1)break;
+      continue;
+    }
+    out.push(r);
+  }
+  return {rows:out,units};
+}
+function scanWorkbook(wb){
+  const storyDrifts=[], disps=[], stories=[], patterns=[], combos=[], modalPeriods=[], autoPeriods=[];
+  const found=new Set();
+
+  wb.SheetNames.forEach(sn=>{
+    const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});
+
+    // Story Drifts
+    tableCandidates(rows,h=>h.includes('story')&&h.includes('direction')&&h.includes('drift')&&(h.includes('output case')||h.includes('load casecombo')||h.includes('load case'))).forEach(c=>{
+      if(/max over avg/i.test(c.title))return;
+      const cs=keyIndex(c.header,['story']), co=keyIndex(c.header,['output case','load case/combo','load casecombo','load case']), cd=keyIndex(c.header,['direction']), cr=keyIndex(c.header,['drift']);
+      if([cs,co,cd,cr].some(x=>x<0))return;
+      const block=dataRows(rows,c,cs); found.add('Story Drifts');
+      block.rows.forEach(r=>{const v=num(r[cr]);if(txt(r[cs])&&txt(r[co])&&txt(r[cd])&&v!=null)storyDrifts.push({story:txt(r[cs]),caseName:txt(r[co]),dir:txt(r[cd]).toUpperCase(),drift:Math.abs(v)});});
+    });
+
+    // Story Max Over Avg Displacements
+    tableCandidates(rows,h=>h.includes('story')&&h.includes('direction')&&h.includes('maximum')&&h.includes('average')&&h.includes('ratio')&&(h.includes('output case')||h.includes('load casecombo')||h.includes('load case'))).forEach(c=>{
+      const title=(c.title||'').toLowerCase();
+      if(title && !/displacement/.test(title))return;
+      const cs=keyIndex(c.header,['story']), co=keyIndex(c.header,['output case','load case/combo','load casecombo','load case']), cd=keyIndex(c.header,['direction']), cm=keyIndex(c.header,['maximum','max']);
+      if([cs,co,cd,cm].some(x=>x<0))return;
+      const block=dataRows(rows,c,cs); found.add('Story Max Over Avg Displacements');
+      const factor=unitFactorToMm(block.units[cm]) || 1; // ETABS default report exports often carry an explicit units row.
+      block.rows.forEach(r=>{const v=num(r[cm]);if(txt(r[cs])&&txt(r[co])&&txt(r[cd])&&v!=null)disps.push({story:txt(r[cs]),caseName:txt(r[co]),dir:txt(r[cd]).toUpperCase(),maxMm:Math.abs(v)*factor,unitKnown:!!unitFactorToMm(block.units[cm])});});
+    });
+
+    // Story Definitions
+    tableCandidates(rows,h=>h.includes('tower')&&h.includes('name')&&h.includes('height')&&h.includes('master story')).forEach(c=>{
+      const ct=keyIndex(c.header,['tower']), cn=keyIndex(c.header,['name','story']), ch=keyIndex(c.header,['height']);
+      if([cn,ch].some(x=>x<0))return;
+      const block=dataRows(rows,c,cn); found.add('Story Definitions');
+      const factor=unitFactorToMm(block.units[ch]) || 1;
+      block.rows.forEach((r,idx)=>{const hv=num(r[ch]);if(txt(r[cn])&&hv!=null)stories.push({tower:ct>=0?txt(r[ct]):'T1',name:txt(r[cn]),heightMm:Math.abs(hv)*factor,unitKnown:!!unitFactorToMm(block.units[ch]),order:idx});});
+    });
+
+    // Load Pattern Definitions
+    tableCandidates(rows,h=>h.includes('name')&&h.includes('type')&&(h.includes('self weight multiplier')||h.includes('selfweight multiplier')||h.includes('auto load'))).forEach(c=>{
+      const cn=keyIndex(c.header,['name']), ct=keyIndex(c.header,['type']);
+      if(cn<0||ct<0)return; const block=dataRows(rows,c,cn); found.add('Load Pattern Definitions');
+      block.rows.forEach(r=>{if(txt(r[cn]))patterns.push({name:txt(r[cn]),type:txt(r[ct])});});
+    });
+
+    // Load Combination Definitions
+    tableCandidates(rows,h=>h.includes('name')&&h.includes('type')&&h.includes('load name')&&(h.includes('sf')||h.includes('scale factor'))).forEach(c=>{
+      const cn=keyIndex(c.header,['name']), cl=keyIndex(c.header,['load name']), cs=keyIndex(c.header,['sf','scale factor']);
+      if(cn<0||cl<0)return; const block=dataRows(rows,c,cn); found.add('Load Combination Definitions');
+      block.rows.forEach(r=>{if(txt(r[cn])&&txt(r[cl]))combos.push({name:txt(r[cn]),load:txt(r[cl]),sf:cs>=0?num(r[cs]):null});});
+    });
+
+    // Modal Periods And Frequencies
+    tableCandidates(rows,h=>h.includes('case')&&h.includes('mode')&&h.includes('period')&&h.includes('frequency')).forEach(c=>{
+      if(c.title && !/modal periods/i.test(c.title))return;
+      const cp=keyIndex(c.header,['period']); if(cp<0)return; const cc=keyIndex(c.header,['case']);
+      const block=dataRows(rows,c,cc>=0?cc:0); found.add('Modal Periods And Frequencies');
+      block.rows.forEach(r=>{const p=num(r[cp]);if(p>0)modalPeriods.push(p);});
+    });
+
+    // Any auto-seismic definition carrying a Period Used / Period field.
+    tableCandidates(rows,h=>h.includes('name')&&(h.includes('period used')||h.includes('periodused'))).forEach(c=>{
+      if(c.title && !/auto seismic/i.test(c.title))return;
+      const cp=keyIndex(c.header,['period used','periodused']); const cn=keyIndex(c.header,['name']);
+      if(cp<0)return; const block=dataRows(rows,c,cn>=0?cn:0); found.add('Auto Seismic Period');
+      block.rows.forEach(r=>{const p=num(r[cp]);if(p>0)autoPeriods.push(p);});
+    });
+  });
+
+  return {storyDrifts,disps,stories,patterns,combos,modalPeriods,autoPeriods,found:[...found]};
+}
+
+function e2kModelForResults(){return window.StructuralSuiteE2KModel||null;}
+function patternTypeMap(data){
+  const m=new Map();
+  (data.patterns||[]).forEach(p=>m.set(String(p.name||'').toLowerCase(),String(p.type||'').toLowerCase()));
+  const em=e2kModelForResults();
+  if(em) (em.patterns||[]).forEach(p=>{const k=String(p.name||'').toLowerCase();if(k&&!m.has(k))m.set(k,String(p.type||'').toLowerCase());});
+  return m;
+}
+function comboMap(data){
+  const m=new Map(); const add=c=>{const k=String(c.name||'').toLowerCase();if(!k)return;if(!m.has(k))m.set(k,[]);m.get(k).push(c);};
+  (data.combos||[]).forEach(add);
+  const em=e2kModelForResults(); if(em) (em.combos||[]).forEach(add);
+  return m;
+}
+function classifyCases(data){
+  const pmap=patternTypeMap(data), cmap=comboMap(data), memo=new Map();
+  function cls(name,stack=new Set()){
+    const key=name.toLowerCase();
+    if(memo.has(key))return memo.get(key);
+    if(stack.has(key))return {wind:false,seismic:false,serviceWind:false,why:'recursive'};
+    stack.add(key);
+    const ptype=pmap.get(key)||'';
+    let wind=/wind/.test(ptype), seismic=/seismic|quake/.test(ptype), why=ptype?`pattern: ${ptype}`:'';
+    let serviceWind=false;
+    const parts=cmap.get(key)||[];
+    if(parts.length){
+      let windFactors=[], deadFactors=[], liveFactors=[];
+      parts.forEach(part=>{
+        const childType=(pmap.get(part.load.toLowerCase())||'').toLowerCase();
+        const child=cls(part.load,new Set(stack));
+        wind=wind||child.wind; seismic=seismic||child.seismic;
+        if(/wind/.test(childType)||child.wind)windFactors.push(Math.abs(part.sf==null?NaN:part.sf));
+        if(/dead|super dead/.test(childType))deadFactors.push(Math.abs(part.sf==null?NaN:part.sf));
+        if(/live/.test(childType))liveFactors.push(Math.abs(part.sf==null?NaN:part.sf));
+      });
+      const near=(arr,x,t=.03)=>arr.some(v=>Number.isFinite(v)&&Math.abs(v-x)<=t);
+      serviceWind=wind && !seismic && near(windFactors,.7,.04) && (deadFactors.length===0||near(deadFactors,1,.04)) && (liveFactors.length===0||near(liveFactors,.5,.06));
+      why='combo definition';
+    }
+    if(!wind&&!seismic){
+      if(/(^|[^a-z])(wind|wnd|wx|wy)([^a-z]|$)/i.test(name))wind=true;
+      if(/(^|[^a-z])(eqx|eqy|eq|seis|quake|rsx|rsy|specx|specy)([^a-z]|$)/i.test(name))seismic=true;
+    }
+    const res={wind,seismic,serviceWind,why}; memo.set(key,res); return res;
+  }
+  return cls;
+}
+function storyGeometry(data){
+  let sourceStories=(data.stories||[]).slice();
+  if(!sourceStories.length){
+    const em=e2kModelForResults();
+    if(em&&em.lengthUnitKnown&&(em.stories||[]).length){
+      sourceStories=em.stories.filter(s=>!s.isBase).map((st,idx)=>({tower:'E2K',name:st.name,heightMm:st.heightMm,unitKnown:true,order:idx}));
+    }
+  }
+  if(!sourceStories.length)return null;
+  const towers=new Map();
+  sourceStories.forEach(s=>{if(!towers.has(s.tower))towers.set(s.tower,[]);towers.get(s.tower).push(s);});
+  let best=null;
+  towers.forEach((arr,tower)=>{
+    // ETABS Story Definitions is normally top-to-bottom. Reverse accumulation converts interstory heights to elevations.
+    let elev=0; const elevations=new Map();
+    for(let i=arr.length-1;i>=0;i--){elev+=arr[i].heightMm;elevations.set(arr[i].name,elev);}
+    const cand={tower,totalHeightMm:elev,elevations,topStory:arr[0].name,unitKnown:arr.every(x=>x.unitKnown)};
+    if(!best||cand.totalHeightMm>best.totalHeightMm)best=cand;
+  });
+  return best;
+}
+function periodInfo(data){
+  if(data.autoPeriods.length){
+    const p=Math.max(...data.autoPeriods);
+    return {period:p,limit:p<.7?.005:.004,source:'ETABS Auto-Seismic “Period Used”',exact:true};
+  }
+  if(data.modalPeriods.length){
+    const p=Math.max(...data.modalPeriods);
+    // Without the base-shear period, never relax to 0.005 solely from modal output.
+    return {period:p,limit:.004,source:p>=.7?'Modal fundamental period; 0.004 also governs':'Modal period found, but base-shear period not confirmed — conservative 0.004',exact:false};
+  }
+  return {period:null,limit:.004,source:'Base-shear period not found — conservative 0.004',exact:false};
+}
+function groupMaxDrift(data,classifier){
+  const map=new Map();
+  data.storyDrifts.forEach(r=>{
+    const c=classifier(r.caseName);
+    if(c.seismic||!c.wind)return;
+    const key=r.caseName+'\u0001'+r.dir;
+    if(!map.has(key)||r.drift>map.get(key).drift)map.set(key,{...r,classInfo:c});
+  });
+  return [...map.values()].sort((a,b)=>a.caseName.localeCompare(b.caseName)||a.dir.localeCompare(b.dir));
+}
+function groupStorySway(data,classifier,geom){
+  if(!geom)return [];
+  const map=new Map();
+  data.disps.forEach(r=>{
+    const c=classifier(r.caseName);
+    if(c.seismic||!c.wind)return;
+    const h=geom.elevations.get(r.story);
+    if(!Number.isFinite(h)||h<=0)return;
+    const key=r.story+'\u0001'+r.caseName+'\u0001'+r.dir;
+    const old=map.get(key);
+    if(!old||r.maxMm>old.maxMm)map.set(key,{...r,classInfo:c,heightMm:h,limitMm:h/500});
+  });
+  return [...map.values()].sort((a,b)=>b.heightMm-a.heightMm||a.caseName.localeCompare(b.caseName)||a.dir.localeCompare(b.dir));
+}
+function badge(pass,review=false){
+  if(review)return '<span class="ds-badge ds-review">REVIEW</span>';
+  return pass?'<span class="ds-badge ds-pass">PASS</span>':'<span class="ds-badge ds-fail">FAIL</span>';
+}
+function render(data){
+  const classifier=classifyCases(data), geom=storyGeometry(data), pinfo=periodInfo(data);
+  const driftRows=groupMaxDrift(data,classifier), swayRows=groupStorySway(data,classifier,geom);
+  const roofSwayHeight=swayRows.length?Math.max(...swayRows.map(r=>r.heightMm).filter(Number.isFinite)):null;
+  const swayLimit=(geom&&geom.unitKnown&&Number.isFinite(roofSwayHeight))?roofSwayHeight/500:null;
+
+  el('driftSwayAudit').innerHTML=data.found.map(x=>`<span>✓ ${esc(x)}</span>`).join('') || '<span>No target tables detected</span>';
+  el('dsHeightKpi').textContent=geom?(geom.unitKnown?`${fmt(geom.totalHeightMm/1000,3)} m`:`${fmt(geom.totalHeightMm,3)} raw units`):'Not detected';
+  el('dsHeightSource').textContent=geom?`${data.stories.length?'Story Definitions':'Imported .e2k'} · story elevations are accumulated bottom-up${geom.unitKnown?'':' · unit not confirmed; sway check withheld'}`:'Export Story Definitions or import .e2k for exact Hi/500.';
+  el('dsPeriodKpi').textContent=pinfo.period!=null?`${fmt(pinfo.period,3)} s`:'Not detected';
+  el('dsPeriodSource').textContent=pinfo.source;
+  el('dsDriftLimitKpi').textContent=fmt(pinfo.limit,4);
+  el('dsSwayLimitKpi').textContent=swayLimit!=null?`${fmt(swayLimit,2)} mm`:'Need building height';
+
+  const preferredService=driftRows.some(r=>r.classInfo.serviceWind);
+  const driftUse=preferredService?driftRows.filter(r=>r.classInfo.serviceWind):driftRows;
+  el('dsDriftBody').innerHTML=driftUse.length?driftUse.map(r=>{
+    const util=r.drift/pinfo.limit, pass=r.drift<=pinfo.limit;
+    return `<tr><td>${esc(r.caseName)}${r.classInfo.serviceWind?' <span class="ds-badge ds-pass">SLS WIND</span>':''}</td><td>${esc(r.dir)}</td><td>${esc(r.story)}</td><td>${fmt(r.drift,6)}</td><td>${fmt(pinfo.limit,4)}</td><td>${fmt(util,3)}</td><td>${badge(pass,!pinfo.exact&&pinfo.period!=null&&pinfo.period<.7)}</td></tr>`;
+  }).join(''):`<tr><td colspan="7">No automatically identifiable wind Story Drifts found. Include Load Pattern + Load Combination Definitions, or use WIND/WX/WY naming.</td></tr>`;
+
+  const preferredSway=swayRows.some(r=>r.classInfo.serviceWind);
+  const swayUse=preferredSway?swayRows.filter(r=>r.classInfo.serviceWind):swayRows;
+  el('dsSwayBody').innerHTML=(swayUse.length&&geom&&geom.unitKnown)?swayUse.map(r=>{
+    const limit=r.limitMm, util=r.maxMm/limit, pass=r.maxMm<=limit, unitReview=!r.unitKnown||!geom.unitKnown;
+    return `<tr><td>${esc(r.caseName)}${r.classInfo.serviceWind?' <span class="ds-badge ds-pass">SLS WIND</span>':''}</td><td>${esc(r.dir)}</td><td>${esc(r.story)}</td><td>${fmt(r.maxMm,2)} mm</td><td>${fmt(r.heightMm,2)} mm</td><td>${fmt(limit,2)} mm</td><td>${fmt(util,3)}</td><td>${badge(pass,unitReview)}</td></tr>`;
+  }).join(''):`<tr><td colspan="8">${geom?'No automatically identifiable story-wise wind displacement rows found.':'Story Definitions missing, so Hi/500 cannot be calculated automatically.'}</td></tr>`;
+
+  const allCases=[...new Set([...data.storyDrifts.map(r=>r.caseName),...data.disps.map(r=>r.caseName)])];
+  const unknown=allCases.filter(n=>{const c=classifier(n);return !c.wind&&!c.seismic;});
+  const warns=[];
+  if(!data.storyDrifts.length)warns.push('Story Drifts table was not found.');
+  if(!data.disps.length)warns.push('Story Max Over Avg Displacements table was not found.');
+  if(!geom)warns.push('Story Definitions was not found and no usable .e2k story geometry is loaded; exact total height and sway limit are unavailable.');
+  if(geom&&!geom.unitKnown)warns.push('Story Definitions length unit row was not detected. Re-export with ETABS units row visible; Hi/500 sway check is withheld instead of guessing the unit.');
+  if(!pinfo.exact)warns.push(pinfo.source+'.');
+  if(!preferredService&&driftRows.length)warns.push('A D + 0.5L ± 0.7W-type service wind combination was not identified from the combination table; displayed wind cases may include other wind levels.');
+  if(unknown.length)warns.push(`${unknown.length} output case(s) were unclassified and excluded from automatic BNBC wind checks: ${unknown.slice(0,6).join(', ')}${unknown.length>6?'…':''}`);
+  warns.push('Reference workbook issue fixed: ETABS Story Drift is treated as a drift ratio; it is not compared directly with a total-height displacement in metres/mm.');
+  warns.push('B3 workbook logic: each available storey displacement is checked against its cumulative storey height Hi/500; the roof row is therefore only one of the checked rows.');
+  el('dsWarnings').innerHTML='<strong>Engineering audit / warnings</strong><br>'+warns.map(esc).join('<br>');
+
+  resultsEl.style.display='block';
+  const passN=driftUse.filter(r=>r.drift<=pinfo.limit).length + (geom&&geom.unitKnown?swayUse.filter(r=>r.maxMm<=r.limitMm).length:0);
+  const totalN=driftUse.length+(geom&&geom.unitKnown?swayUse.length:0);
+  status(`Check complete: ${totalN} governing wind result(s) evaluated; ${passN} within the automated screening limit. Review warnings before design sign-off.`,false,true);
+}
+
+fileInput.addEventListener('change',async()=>{
+  parsed=null;resultsEl.style.display='none';
+  const f=fileInput.files&&fileInput.files[0]; if(!f){status('');return;}
+  status('Loading Excel reader…');
+  try{await window.StructuralSuiteDeps.ensureXLSX();}catch(err){status(err.message||'Excel reader could not be loaded.',true);return;}
+  status('Reading '+f.name+' …');
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+      parsed=scanWorkbook(wb);
+      status(`Workbook read: ${parsed.storyDrifts.length} Story Drift row(s), ${parsed.disps.length} displacement row(s), ${parsed.stories.length} story definition row(s). Click “Run BNBC Check”.`);
+    }catch(err){console.error(err);status('Could not read this ETABS Excel workbook.',true);}
+  };
+  reader.readAsArrayBuffer(f);
+});
+runBtn.addEventListener('click',()=>{
+  if(!parsed){status('Please upload the ETABS Tables to Excel workbook first.',true);return;}
+  if(!parsed.storyDrifts.length&&!parsed.disps.length){status('No supported ETABS drift/displacement tables were found.',true);return;}
+  render(parsed);
+});
+clearBtn.addEventListener('click',()=>{
+  fileInput.value='';parsed=null;resultsEl.style.display='none';status('');
+  ['dsDriftBody','dsSwayBody','driftSwayAudit'].forEach(id=>{if(el(id))el(id).innerHTML='';});
+});
+})();
+</script>
+
 <script data-ss-order="5" type="text/x-structural-suite-deferred">
 (function(){
   'use strict';
@@ -14911,5 +15398,304 @@ html[data-theme="index4-single"] .gate-contact span{ color:var(--copper) !import
 })();
 </script>
 
+<style id="structural-suite-navigation-base-shear-repair-v1">
+/* Final repair layer: keep tool discovery readable and Base Shear Check usable without disturbing existing calculators. */
+#baseShearShortcut{color:var(--sidebar-muted,#c5cada)}
+#baseShearShortcut:hover{color:#fff!important}
+.base-shear-check-card{margin-top:18px;padding:18px;border:1px solid var(--card-border);border-radius:16px;background:var(--card);box-shadow:var(--shadow-sm)}
+.base-shear-check-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:14px}
+.base-shear-check-head h2{margin:3px 0 5px;font-size:20px}
+.base-shear-check-head p{margin:0;max-width:760px;color:var(--muted);font-size:12px;line-height:1.5}
+.base-shear-kicker{display:inline-flex;color:var(--accent);font-size:9px;font-weight:850;letter-spacing:.12em}
+.base-shear-ref{min-width:180px;padding:10px 12px;border:1px solid var(--card-border);border-radius:12px;background:var(--card-soft);display:grid;gap:3px;text-align:right}
+.base-shear-ref span{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.base-shear-ref strong{font:800 13px/1.3 var(--mono,monospace);color:var(--ink)}
+.base-shear-check-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;align-items:end}
+.base-shear-action{display:flex;align-items:flex-end}.base-shear-action button{min-height:42px;white-space:nowrap}
+.base-shear-help{margin:10px 0 0;color:var(--muted);font-size:10.5px;line-height:1.5}
+.base-shear-summary{margin-top:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.base-shear-empty{grid-column:1/-1;padding:14px;border:1px dashed var(--card-border);border-radius:12px;background:var(--card-soft);color:var(--muted);font-size:11px;text-align:center}
+.base-shear-result{padding:13px;border:1px solid var(--card-border);border-radius:13px;background:var(--card-soft);display:grid;gap:8px}
+.base-shear-result.pass{border-color:color-mix(in srgb,#16a34a 46%,var(--card-border));background:color-mix(in srgb,#16a34a 7%,var(--card))}
+.base-shear-result.fail{border-color:color-mix(in srgb,#dc2626 46%,var(--card-border));background:color-mix(in srgb,#dc2626 7%,var(--card))}
+.base-shear-result.pending{opacity:.78}
+.base-shear-result-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.base-shear-result-head strong{font-size:13px;color:var(--ink)}
+.base-shear-status{padding:4px 8px;border-radius:999px;font-size:9px;font-weight:850;letter-spacing:.05em;background:var(--card);border:1px solid var(--card-border)}
+.base-shear-result.pass .base-shear-status{color:#15803d;border-color:rgba(21,128,61,.25)}
+.base-shear-result.fail .base-shear-status{color:#b91c1c;border-color:rgba(185,28,28,.25)}
+.base-shear-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.base-shear-metrics div{padding:7px 8px;border-radius:9px;background:var(--card);border:1px solid var(--card-border);display:grid;gap:2px}
+.base-shear-metrics span{font-size:8.5px;color:var(--muted);font-weight:700}.base-shear-metrics b{font:800 11px/1.2 var(--mono,monospace);color:var(--ink)}
+#mobileToolFilterWrap{margin:0 0 9px;padding:0 1px}
+#mobileToolFilter{width:100%!important;min-height:40px!important;margin:0!important;padding:8px 11px!important;border-radius:12px!important;font-size:11px!important}
+.mobile-sheet-tool.tool-filter-hidden{display:none!important}
+@media(min-width:901px){
+  html[data-theme="index4-single"] #sidebar .side-link-label{display:inline!important;font-size:inherit!important;opacity:1!important;max-width:none!important}
+}
+@media(max-width:900px){
+  .base-shear-check-card{padding:13px;border-radius:14px}
+  .base-shear-check-head{display:grid;gap:9px}.base-shear-ref{min-width:0;text-align:left}
+  .base-shear-check-grid{grid-template-columns:1fr 1fr}.base-shear-action{grid-column:1/-1}.base-shear-action button{width:100%!important}
+  .base-shear-summary{grid-template-columns:1fr}.base-shear-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #mobileNavSheet .mobile-sheet-tool span:last-child{display:block!important;max-width:100%!important;overflow:visible!important;text-overflow:clip!important;white-space:normal!important;line-height:1.2!important}
+}
+@media(max-width:520px){.base-shear-check-grid{grid-template-columns:1fr}.base-shear-metrics{grid-template-columns:1fr 1fr 1fr}}
+
+/* Master ETABS .e2k importer */
+.e2k-master-card{margin:0 0 14px;padding:18px;border:1px solid color-mix(in srgb,var(--teal) 32%,var(--line));border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,var(--teal) 8%,var(--card)),color-mix(in srgb,var(--card) 94%,transparent));box-shadow:0 10px 28px rgba(15,23,42,.06)}
+.e2k-master-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}.e2k-master-head h2{margin:2px 0 5px;font-size:18px}.e2k-master-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.55;max-width:900px}.e2k-kicker{font-size:9px;letter-spacing:.12em;font-weight:850;color:var(--teal)}
+.e2k-ready-badge{flex:0 0 auto;padding:7px 10px;border-radius:999px;border:1px solid var(--line);font-size:9px;font-weight:900;letter-spacing:.08em;color:var(--muted);background:var(--card)}.e2k-ready-badge.ready{color:#166534;border-color:#86efac;background:#f0fdf4}.e2k-ready-badge.warn{color:#92400e;border-color:#fcd34d;background:#fffbeb}
+.e2k-upload-row{display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:8px;align-items:center;margin-top:14px}.e2k-upload-row input{min-width:0}.e2k-upload-row button{margin:0!important;white-space:nowrap}
+.e2k-status{margin-top:9px;padding:9px 11px;border-radius:11px;background:color-mix(in srgb,var(--card) 72%,transparent);border:1px solid var(--line);font-size:11px;color:var(--muted);line-height:1.45}.e2k-status.ok{color:#166534;border-color:#bbf7d0;background:#f0fdf4}.e2k-status.err{color:#991b1b;border-color:#fecaca;background:#fff1f2}.e2k-status.warn{color:#92400e;border-color:#fde68a;background:#fffbeb}
+.e2k-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.e2k-summary>div{padding:10px 11px;border:1px solid var(--line);border-radius:12px;background:var(--card)}.e2k-summary span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}.e2k-summary strong{display:block;margin-top:3px;font-size:13px;overflow-wrap:anywhere}
+.e2k-details{margin-top:10px;border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden}.e2k-details>summary{cursor:pointer;padding:10px 12px;font-size:11px;font-weight:850}.e2k-detail-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:12px;padding:0 12px 12px}.e2k-detail-grid h3{font-size:11px;margin:8px 0 6px}.e2k-scroll{max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:9px}.e2k-scroll table{margin:0}.e2k-scroll th,.e2k-scroll td{font-size:10px;padding:6px 8px}.e2k-chip-list{display:flex;gap:5px;flex-wrap:wrap;max-height:100px;overflow:auto}.e2k-chip-list span{padding:4px 7px;border-radius:999px;background:color-mix(in srgb,var(--teal) 9%,var(--card));border:1px solid color-mix(in srgb,var(--teal) 24%,var(--line));font-size:9px;font-weight:750}
+.e2k-note{margin-top:10px;font-size:10.5px;color:var(--muted);line-height:1.5}.e2k-note strong{color:var(--ink)}
+@media(max-width:900px){.e2k-master-head{display:block}.e2k-ready-badge{display:inline-block;margin-top:9px}.e2k-upload-row{grid-template-columns:1fr 1fr}.e2k-upload-row input{grid-column:1/-1}.e2k-summary{grid-template-columns:1fr 1fr}.e2k-detail-grid{grid-template-columns:1fr}}
+@media(max-width:520px){.e2k-summary{grid-template-columns:1fr 1fr}.e2k-upload-row{grid-template-columns:1fr}.e2k-upload-row input{grid-column:auto}}
+
+
+/* Full E2K analysis checker */
+.e2k-upload-row-full{grid-template-columns:minmax(220px,1fr) auto auto auto}.e2k-upload-row-full .e2k-secondary-action{grid-column:2/3;font-size:10px;padding:7px 10px}
+.e2k-full-toolbar{display:flex;align-items:center;gap:8px;margin-top:12px;padding:10px 11px;border:1px solid var(--line);border-radius:12px;background:var(--card)}.e2k-full-toolbar>div{min-width:160px;margin-right:auto}.e2k-full-toolbar strong{display:block;font-size:11px}.e2k-full-toolbar span{display:block;font-size:10px;color:var(--muted);margin-top:2px}.e2k-full-toolbar span.ok{color:#15803d}.e2k-full-toolbar span.err{color:#b91c1c}.e2k-full-toolbar span.busy{color:#b45309}
+.e2k-bridge-help{margin-top:8px;border:1px dashed var(--line);border-radius:12px;padding:9px 11px;font-size:10.5px;color:var(--muted)}.e2k-bridge-help summary{cursor:pointer;font-weight:850;color:var(--ink)}.e2k-bridge-help ol{margin:8px 0 5px;padding-left:19px}.e2k-bridge-help li{margin:4px 0}.e2k-bridge-help code{font-family:var(--mono,monospace);font-size:10px}
+.e2k-full-result{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}.e2k-full-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.e2k-full-head h2{margin:2px 0 3px;font-size:18px}.e2k-full-head p{margin:0;color:var(--muted);font-size:10.5px}.e2k-check-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:11px}.e2k-check-card{border:1px solid var(--line);border-radius:13px;background:var(--card);padding:11px;min-height:100px}.e2k-check-card .top{display:flex;align-items:center;justify-content:space-between;gap:8px}.e2k-check-card h3{margin:0;font-size:11px}.e2k-check-card .status{font-size:8.5px;font-weight:900;letter-spacing:.06em;padding:4px 7px;border-radius:999px;background:#f3f4f6;color:#4b5563}.e2k-check-card.pass{border-color:#bbf7d0;background:color-mix(in srgb,#f0fdf4 68%,var(--card))}.e2k-check-card.pass .status{background:#dcfce7;color:#166534}.e2k-check-card.fail{border-color:#fecaca;background:color-mix(in srgb,#fff1f2 68%,var(--card))}.e2k-check-card.fail .status{background:#fee2e2;color:#991b1b}.e2k-check-card.warn{border-color:#fde68a}.e2k-check-card.warn .status{background:#fef3c7;color:#92400e}.e2k-check-card.info .status{background:#e0f2fe;color:#075985}.e2k-check-card .metric{font-size:18px;font-weight:900;margin:8px 0 2px}.e2k-check-card .sub{font-size:9.5px;color:var(--muted);line-height:1.4}
+.e2k-result-details{margin-top:8px;border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden}.e2k-result-details>summary{cursor:pointer;padding:10px 12px;font-size:10.5px;font-weight:850}.e2k-table-wrap{overflow:auto;max-height:360px;border-top:1px solid var(--line)}.e2k-result-details table{margin:0;min-width:760px}.e2k-result-details th,.e2k-result-details td{font-size:9.5px;padding:6px 8px;white-space:nowrap}.e2k-result-details td.pass{color:#15803d;font-weight:850}.e2k-result-details td.fail{color:#b91c1c;font-weight:850}.e2k-result-details td.warn{color:#b45309;font-weight:850}.e2k-trace{padding:9px 11px;font-size:9.5px;color:var(--muted);line-height:1.45;white-space:pre-wrap}.e2k-full-result .e2k-chip-list{padding:0 11px 10px;max-height:none}
+@media(max-width:900px){.e2k-upload-row-full{grid-template-columns:1fr 1fr}.e2k-upload-row-full input{grid-column:1/-1}.e2k-upload-row-full .e2k-secondary-action{grid-column:auto}.e2k-check-grid{grid-template-columns:1fr 1fr}.e2k-full-toolbar{flex-wrap:wrap}.e2k-full-toolbar>div{width:100%;margin:0}.e2k-full-head{display:block}.e2k-full-head .e2k-ready-badge{margin-top:7px}}
+@media(max-width:520px){.e2k-upload-row-full{grid-template-columns:1fr}.e2k-upload-row-full input{grid-column:auto}.e2k-check-grid{grid-template-columns:1fr}.e2k-full-toolbar button{width:100%!important}}
+
+</style>
+
+
+
+
+<style id="e2k-results-excel-fix-v2">
+.e2k-results-upload-grid{grid-template-columns:minmax(280px,1fr) auto auto!important;align-items:end!important}
+.e2k-file-slot{display:grid;gap:5px}.e2k-file-slot label{font-size:9px;font-weight:850;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.e2k-results-state{margin-top:8px;padding:9px 11px;border:1px solid var(--line);border-radius:11px;background:var(--card);font-size:10.5px;font-weight:800;color:var(--muted)}
+.e2k-results-state.ok{color:#166534;border-color:#bbf7d0;background:#f0fdf4}.e2k-results-state.err{color:#991b1b;border-color:#fecaca;background:#fff1f2}.e2k-results-state.busy{color:#92400e;border-color:#fde68a;background:#fffbeb}
+@media(max-width:900px){.e2k-results-upload-grid{grid-template-columns:1fr 1fr!important}.e2k-file-slot{grid-column:1/-1}.e2k-results-upload-grid button{width:100%!important}}
+@media(max-width:560px){.e2k-results-upload-grid{grid-template-columns:1fr!important}.e2k-file-slot{grid-column:auto!important}}
+</style>
+<script data-ss-order="3.8" id="structural-suite-etabs-oneclick-analysis-v3" type="text/x-structural-suite-deferred">
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const runBtn=$('e2kRunFullBtn'), resultsFile=$('e2kResultsFile'), resultsState=$('e2kResultsState'), result=$('e2kFullResult');
+if(!runBtn||!resultsFile)return;
+let parsedPayload=null;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>{if(v===null||v===undefined||v==='')return null;const n=Number(String(v).replace(/,/g,''));return Number.isFinite(n)?n:null};
+const nk=s=>String(s??'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const fmt=(v,d=4)=>Number.isFinite(v)?Number(v).toLocaleString(undefined,{maximumFractionDigits:d}):'—';
+const pct=v=>Number.isFinite(v)?fmt(v*100,1)+'%':'—';
+const uniq=a=>[...new Set((a||[]).filter(v=>v!==null&&v!==undefined&&String(v)!==''))];
+function setResultsState(msg,kind=''){resultsState.textContent=msg;resultsState.className='e2k-results-state'+(kind?' '+kind:'')}
+function setStatus(msg,kind=''){const el=$('e2kStatus');if(!el)return;el.textContent=msg;el.className='e2k-status'+(kind?' '+kind:'')}
+function get(row,names){const m=new Map(Object.keys(row||{}).map(k=>[nk(k),row[k]]));for(const n of names){const k=nk(n);if(m.has(k))return m.get(k)}return null}
+function canonicalName(raw){
+  const s=String(raw||'').replace(/^table\s*:?\s*/i,'').trim(),k=nk(s);
+  const defs=[
+    ['Diaphragm Center Of Mass Displacements',['diaphragmcenterofmassdisplacements','diaphragmcenterofmassdispla']],
+    ['Diaphragm Max Over Avg Drifts',['diaphragmmaxoveravgdrifts']],
+    ['Story Max Over Avg Displacements',['storymaxoveravgdisplacements','storymaxavgdisplacements','storymaxoveravgdisplacement']],
+    ['Story Max Over Avg Drifts',['storymaxoveravgdrifts','storymaxavgdrifts']],
+    ['Modal Participating Mass Ratios',['modalparticipatingmassratios']],
+    ['Modal Periods And Frequencies',['modalperiodsandfrequencies']],
+    ['Centers Of Mass And Rigidity',['centersofmassandrigidity']],
+    ['Load Case Definitions - Summary',['loadcasedefinitionssummary']],
+    ['Load Combination Definitions',['loadcombinationdefinitions']],
+    ['Load Pattern Definitions',['loadpatterndefinitions']],
+    ['Story Definitions',['storydefinitions']],
+    ['Story Stiffness',['storystiffness']],
+    ['Story Drifts',['storydrifts']],
+    ['Story Forces',['storyforces']],
+    ['Base Reactions',['basereactions']]
+  ];
+  for(const [name,keys] of defs)if(keys.some(q=>k===q||k.includes(q)))return name;
+  return s||'Unknown Table';
+}
+function firstTableTitle(rows,sheetName){const a=String(rows?.[0]?.[0]??'').trim();return /^table\s*:/i.test(a)?a.replace(/^table\s*:?\s*/i,'').trim():sheetName}
+function flatValues(rows){const out=[];for(let r=3;r<(rows||[]).length;r++){for(const v of rows[r]||[]){const t=String(v??'').trim();if(t!=='')out.push(t)}}return out}
+function looksHeader(row){const vals=(row||[]).map(v=>String(v??'').trim()).filter(Boolean);if(vals.length<2)return false;const keys=vals.map(nk);const markers=['story','tower','outputcase','case','casetype','steptype','stepnumber','direction','drift','stiffx','stiffy','fx','fy','vx','vy','ux','uy','maxdrift','avgdrift','ratio','height','elevation','location','mode','period','frequency','circfreq','eigenvalue'];let n=0;for(const k of keys)if(markers.some(m=>k===m||k.includes(m)))n++;return n>=2}
+function parseStandardRows(rows){let hi=-1;for(let i=0;i<Math.min(rows.length,12);i++)if(looksHeader(rows[i])){hi=i;break}if(hi<0)return null;const fields=(rows[hi]||[]).map((v,i)=>String(v??'').trim()||`Column ${i+1}`),data=[];for(let r=hi+1;r<rows.length;r++){const row=rows[r]||[];if(!row.some(v=>String(v??'').trim()!==''))continue;const obj={};let any=false;for(let c=0;c<fields.length;c++){const v=row[c]??'';obj[fields[c]]=v;if(String(v).trim()!=='')any=true}if(any)data.push(obj)}return {fields,rows:data}}
+function isCaseType(v){const k=nk(v);return k==='linmodeigen'||k==='linstatic'||k==='combination'||k==='nonlinstatic'||k==='nonlinearstatic'||k==='linrespspec'||k==='responsespectrum'||k==='lindirecthist'||k==='nondirecthist'||k==='buckling'||k==='hyperstatic'||k==='steadystate'||k==='powerspectraldensity'}
+function segments(vals,startPred){const starts=[];for(let i=0;i<vals.length;i++)if(startPred(vals,i))starts.push(i);const out=[];for(let j=0;j<starts.length;j++){const a=starts[j],b=j+1<starts.length?starts[j+1]:vals.length;if(b>a)out.push(vals.slice(a,b))}return out}
+function decodeStoryDrifts(v){const out=[];for(const s of segments(v,(a,i)=>i+2<a.length&&isCaseType(a[i+2]))){const di=s.findIndex((x,i)=>i>=3&&/^[XY]$/i.test(x));if(di<0||s.length<di+7)continue;const drift=num(s[di+1]),z=num(s[di+6]);if(drift===null)continue;out.push({story:s[0],case:s[1],caseType:s[2],stepType:s[3]&&di>3?s[3]:'',stepNumber:di>4?s[4]:'',axis:String(s[di]).toUpperCase(),drift,ratioText:s[di+2]||'',label:s[di+3]||'',x:num(s[di+4]),y:num(s[di+5]),z})}return out}
+function decodeStoryMaxAvg(v,kind){const out=[];for(const s of segments(v,(a,i)=>i+2<a.length&&isCaseType(a[i+2]))){const di=s.findIndex((x,i)=>i>=3&&/^[XY]$/i.test(x));if(di<0||s.length<di+4)continue;const max=num(s[di+1]),avg=num(s[di+2]),ratio=num(s[di+3]);if(max===null&&ratio===null)continue;out.push({kind,story:s[0],case:s[1],caseType:s[2],stepType:di>3?s[3]||'':'',stepNumber:di>4?s[4]||'':'',axis:String(s[di]).toUpperCase(),max,avg,ratio})}return out}
+function decodeDiaphCom(v){const out=[];for(const s of segments(v,(a,i)=>i+3<a.length&&isCaseType(a[i+3]))){if(s.length<11)continue;const tail=s.slice(-7);if(tail.length<7)continue;const ux=num(tail[0]),uy=num(tail[1]),rz=num(tail[2]),z=num(tail[6]);if(ux===null&&uy===null)continue;const meta=s.slice(4,-7);out.push({story:s[0],diaphragm:s[1],case:s[2],caseType:s[3],stepType:meta[0]||'',stepNumber:meta[1]||'',ux,uy,rz,label:tail[3]||'',x:num(tail[4]),y:num(tail[5]),z})}return out}
+function decodeDiaphMaxAvg(v){const out=[];for(const s of segments(v,(a,i)=>i+2<a.length&&isCaseType(a[i+2]))){if(s.length<11)continue;const item=s[s.length-8]||'',tail=s.slice(-7),max=num(tail[0]),avg=num(tail[1]),ratio=num(tail[2]),z=num(tail[6]);if(ratio===null&&max===null)continue;const am=String(item).match(/\b([XY])\s*$/i);out.push({story:s[0],case:s[1],caseType:s[2],stepType:s.slice(3,-8)[0]||'',stepNumber:s.slice(3,-8)[1]||'',item,axis:am?am[1].toUpperCase():'',max,avg,ratio,label:tail[3]||'',x:num(tail[4]),y:num(tail[5]),z})}return out}
+function decodeStiffness(v){const out=[];for(const s of segments(v,(a,i)=>i+2<a.length&&isCaseType(a[i+2]))){if(s.length<9)continue;const t=s.slice(-6),vals=t.map(num);if(vals.slice(0,3).every(x=>x===null)&&vals.slice(3).every(x=>x===null))continue;const meta=s.slice(3,-6);out.push({story:s[0],case:s[1],caseType:s[2],stepType:meta[0]||'',stepNumber:meta[1]||'',shearX:vals[0],driftX:vals[1],stiffX:vals[2],shearY:vals[3],driftY:vals[4],stiffY:vals[5],sourceOrder:out.length})}return out}
+function decodeStoryForces(v){const out=[];for(const s of segments(v,(a,i)=>i+2<a.length&&isCaseType(a[i+2]))){if(s.length<10)continue;const t=s.slice(-7),loc=String(t[0]||'');if(!/^(Top|Bottom)$/i.test(loc))continue;const vals=t.slice(1).map(num);const meta=s.slice(3,-7);out.push({story:s[0],case:s[1],caseType:s[2],stepType:meta[0]||'',stepNumber:meta[1]||'',location:loc,p:vals[0],vx:vals[1],vy:vals[2],t:vals[3],mx:vals[4],my:vals[5]})}return out}
+function decodeBaseReactions(v){const out=[];for(const s of segments(v,(a,i)=>i+1<a.length&&isCaseType(a[i+1]))){if(s.length<11)continue;const t=s.slice(-9),vals=t.map(num);const meta=s.slice(2,-9);out.push({case:s[0],caseType:s[1],stepType:meta[0]||'',stepNumber:meta[1]||'',fx:vals[0],fy:vals[1],fz:vals[2],mx:vals[3],my:vals[4],mz:vals[5],gx:vals[6],gy:vals[7],gz:vals[8]})}return out}
+function decodeModalPeriods(v){const out=[];for(let i=0;i+5<v.length;i++){if(num(v[i+1])===null||num(v[i+2])===null||num(v[i+3])===null)continue;out.push({case:v[i],mode:num(v[i+1]),period:num(v[i+2]),frequency:num(v[i+3]),circFreq:num(v[i+4]),eigenvalue:num(v[i+5])});i+=5}return out}
+function decodeStoryDefinitions(v){const out=[];for(let i=0;i+7<v.length;i+=8){const height=num(v[i+2]);if(!v[i+1]||height===null)continue;out.push({tower:v[i],story:v[i+1],height,master:v[i+3],similar:v[i+4],splice:v[i+5],color:v[i+6],guid:v[i+7]})}return out}
+function normalizeStandard(name,rows){const out=[];for(const r of rows||[]){if(name==='Story Drifts'){const story=String(get(r,['Story'])||''),c=String(get(r,['Output Case','OutputCase','Case'])||''),axis=String(get(r,['Direction','Dir'])||'').toUpperCase(),drift=num(get(r,['Drift','Story Drift']));if(story&&c&&/^[XY]$/.test(axis)&&drift!==null)out.push({story,case:c,caseType:String(get(r,['Case Type','CaseType'])||''),stepType:String(get(r,['Step Type','StepType'])||''),stepNumber:String(get(r,['Step Number','StepNumber'])||''),axis,drift,ratioText:String(get(r,['Drift Ratio','DriftRatio'])||''),label:String(get(r,['Label','Point'])||''),x:num(get(r,['X'])),y:num(get(r,['Y'])),z:num(get(r,['Z','Elevation']))})}
+ else if(name==='Diaphragm Center Of Mass Displacements'){const story=String(get(r,['Story'])||''),c=String(get(r,['Output Case','OutputCase','Case'])||'');if(story&&c)out.push({story,diaphragm:String(get(r,['Diaphragm','Diaph'])||''),case:c,caseType:String(get(r,['Case Type','CaseType'])||''),stepType:String(get(r,['Step Type','StepType'])||''),stepNumber:String(get(r,['Step Number','StepNumber'])||''),ux:num(get(r,['UX','U1'])),uy:num(get(r,['UY','U2'])),rz:num(get(r,['RZ','R3'])),label:String(get(r,['Label','Point'])||''),x:num(get(r,['X'])),y:num(get(r,['Y'])),z:num(get(r,['Z','Elevation']))})}
+ else if(name==='Diaphragm Max Over Avg Drifts'){const story=String(get(r,['Story'])||''),c=String(get(r,['Output Case','OutputCase','Case'])||''),item=String(get(r,['Item','Diaphragm Item'])||''),am=item.match(/\b([XY])\s*$/i);if(story&&c)out.push({story,case:c,caseType:String(get(r,['Case Type','CaseType'])||''),stepType:String(get(r,['Step Type','StepType'])||''),stepNumber:String(get(r,['Step Number','StepNumber'])||''),item,axis:am?am[1].toUpperCase():String(get(r,['Direction','Dir'])||'').toUpperCase(),max:num(get(r,['Max Drift','Max'])),avg:num(get(r,['Avg Drift','Average Drift','Avg'])),ratio:num(get(r,['Ratio','Max/Avg','Max Avg Ratio'])),label:String(get(r,['Label','Point'])||''),x:num(get(r,['X'])),y:num(get(r,['Y'])),z:num(get(r,['Z','Elevation']))})}
+ else if(name==='Story Max Over Avg Drifts'||name==='Story Max Over Avg Displacements'){const story=String(get(r,['Story'])||''),c=String(get(r,['Output Case','OutputCase','Case'])||''),axis=String(get(r,['Direction','Dir'])||'').toUpperCase();if(story&&c)out.push({story,case:c,caseType:String(get(r,['Case Type','CaseType'])||''),stepType:String(get(r,['Step Type','StepType'])||''),stepNumber:String(get(r,['Step Number','StepNumber'])||''),axis,max:num(get(r,[name.includes('Displacement')?'Max Displacement':'Max Drift','Maximum','Max'])),avg:num(get(r,[name.includes('Displacement')?'Avg Displacement':'Avg Drift','Average','Avg'])),ratio:num(get(r,['Ratio','Max/Avg','Max Avg Ratio'])),z:num(get(r,['Z','Elevation']))})}
+ else if(name==='Story Stiffness'){const story=String(get(r,['Story'])||''),c=String(get(r,['Output Case','OutputCase','Case'])||'');if(story&&c)out.push({story,case:c,caseType:String(get(r,['Case Type','CaseType'])||''),stepType:String(get(r,['Step Type','StepType'])||''),stepNumber:String(get(r,['Step Number','StepNumber'])||''),shearX:num(get(r,['ShearX','Shear X'])),driftX:num(get(r,['DriftX','Drift X'])),stiffX:num(get(r,['StiffX','Stiff X','Stiffness X'])),shearY:num(get(r,['ShearY','Shear Y'])),driftY:num(get(r,['DriftY','Drift Y'])),stiffY:num(get(r,['StiffY','Stiff Y','Stiffness Y'])),sourceOrder:out.length})}
+ else if(name==='Story Forces'){const story=String(get(r,['Story'])||''),c=String(get(r,['Output Case','OutputCase','Case'])||'');if(story&&c)out.push({story,case:c,caseType:String(get(r,['Case Type','CaseType'])||''),stepType:String(get(r,['Step Type','StepType'])||''),stepNumber:String(get(r,['Step Number','StepNumber'])||''),location:String(get(r,['Location','Loc'])||''),p:num(get(r,['P'])),vx:num(get(r,['VX','FX'])),vy:num(get(r,['VY','FY'])),t:num(get(r,['T'])),mx:num(get(r,['MX'])),my:num(get(r,['MY']))})}
+ else if(name==='Base Reactions'){const c=String(get(r,['Output Case','OutputCase','Case'])||'');if(c)out.push({case:c,caseType:String(get(r,['Case Type','CaseType'])||''),stepType:String(get(r,['Step Type','StepType'])||''),stepNumber:String(get(r,['Step Number','StepNumber'])||''),fx:num(get(r,['FX','F1'])),fy:num(get(r,['FY','F2'])),fz:num(get(r,['FZ','F3'])),mx:num(get(r,['MX','M1'])),my:num(get(r,['MY','M2'])),mz:num(get(r,['MZ','M3']))})}
+ else if(name==='Modal Periods And Frequencies'){const c=String(get(r,['Output Case','OutputCase','Case'])||'');const mode=num(get(r,['Mode'])),period=num(get(r,['Period']));if(c&&mode!==null&&period!==null)out.push({case:c,mode,period,frequency:num(get(r,['Frequency'])),circFreq:num(get(r,['Circular Frequency','CircFreq'])),eigenvalue:num(get(r,['Eigenvalue','Eigen Value']))})}
+ else if(name==='Story Definitions'){const story=String(get(r,['Story','Story Name'])||'');const height=num(get(r,['Height','Story Height']));if(story&&height!==null)out.push({tower:String(get(r,['Tower','Tower Name'])||''),story,height,master:String(get(r,['Master Story','MasterStory'])||''),similar:String(get(r,['Similar To','SimilarTo'])||''),splice:String(get(r,['Splice'])||''),color:String(get(r,['Color'])||''),guid:String(get(r,['GUID','Guid'])||'')})}
+ }
+ return out}
+function parseMeta(rows){const m={};for(const r of rows||[]){const k=String(r?.[0]??'').trim(),v=String(r?.[1]??'').trim();if(k&&v&&nk(k)!=='key')m[k]=v}return m}
+function parseSummary(rows){const out=[];for(let i=1;i<(rows||[]).length;i++){const r=rows[i]||[];if(!String(r[0]??'').trim())continue;out.push({sheet:String(r[0]??''),table:String(r[1]??''),key:String(r[2]??''),rows:num(r[3]),status:String(r[4]??''),notes:String(r[5]??'')})}return out}
+function decodeSheet(name,vals){if(name==='Story Drifts')return decodeStoryDrifts(vals);if(name==='Story Max Over Avg Drifts')return decodeStoryMaxAvg(vals,'drift');if(name==='Story Max Over Avg Displacements')return decodeStoryMaxAvg(vals,'displacement');if(name==='Diaphragm Center Of Mass Displacements')return decodeDiaphCom(vals);if(name==='Diaphragm Max Over Avg Drifts')return decodeDiaphMaxAvg(vals);if(name==='Story Stiffness')return decodeStiffness(vals);if(name==='Story Forces')return decodeStoryForces(vals);if(name==='Base Reactions')return decodeBaseReactions(vals);if(name==='Modal Periods And Frequencies')return decodeModalPeriods(vals);if(name==='Story Definitions')return decodeStoryDefinitions(vals);return[]}
+async function parseWorkbook(file){
+  await window.StructuralSuiteDeps.ensureXLSX();const buf=await file.arrayBuffer();const wb=XLSX.read(new Uint8Array(buf),{type:'array'});
+  const payload={fileName:file.name,meta:{},summary:[],tables:{},decoded:{storyDrifts:[],storyMaxAvgDrifts:[],storyMaxAvgDisplacements:[],diaphCom:[],diaphMaxAvg:[],stiffness:[],storyForces:[],baseReactions:[],modalPeriods:[],storyDefinitions:[]},notes:[],flatV1:false,parserFallback:false,exporterIssue:''};
+  const targetMap={'Story Drifts':'storyDrifts','Story Max Over Avg Drifts':'storyMaxAvgDrifts','Story Max Over Avg Displacements':'storyMaxAvgDisplacements','Diaphragm Center Of Mass Displacements':'diaphCom','Diaphragm Max Over Avg Drifts':'diaphMaxAvg','Story Stiffness':'stiffness','Story Forces':'storyForces','Base Reactions':'baseReactions','Modal Periods And Frequencies':'modalPeriods','Story Definitions':'storyDefinitions'};
+  for(const sn of wb.SheetNames){const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});if(nk(sn)==='bnbcexportmeta'){payload.meta=parseMeta(rows);continue}if(nk(sn)==='exportsummary'){payload.summary=parseSummary(rows);continue}
+    const name=canonicalName(firstTableTitle(rows,sn)),standard=parseStandardRows(rows);let recs=[],mode='unread';
+    const key=targetMap[name];
+    if(standard){recs=normalizeStandard(name,standard.rows);mode='header'}else if(key){const vals=flatValues(rows);if(vals.length){recs=decodeSheet(name,vals);mode='compat-fallback';if(recs.length)payload.parserFallback=true}}else{mode='unmapped'}
+    if(key&&recs.length)payload.decoded[key].push(...recs);payload.tables[name]={name,sheet:sn,mode,records:recs.length,rawRows:Math.max(0,rows.length-3)};
+  }
+  const exported=String(payload.meta['Exporter']||''),ver=String(payload.meta['Exporter Version']||'').trim();if(exported&&!/BNBC ETABS Data Exporter/i.test(exported))payload.notes.push('Workbook metadata does not identify the expected BNBC ETABS Data Exporter.');
+  const vp=ver.split('.').map(x=>parseInt(x,10)||0),modernV12=(vp[0]>1)||(vp[0]===1&&vp[1]>=2);
+  if(ver==='1.1.0'){payload.flatV1=true;payload.exporterIssue='v1.1-null-collapse';payload.notes.push('Exporter 1.1.0 detected. This release could remove ETABS null/blank placeholders from TableData, shifting later records even though headers exist. Re-export with BNBC ETABS Exporter 1.2.0+.');}
+  else if(!modernV12&&payload.parserFallback){payload.flatV1=true;payload.exporterIssue='legacy-flat';payload.notes.push('Legacy/unknown exporter layout detected. Some tables required compatibility decoding; re-export with a null-preserving exporter for complete checks.');}
+  else if(modernV12){payload.flatV1=false;payload.exporterIssue='';if(payload.parserFallback)payload.notes.push('Exporter 1.2+ metadata confirmed. A compatibility parser was used for one or more table layouts, but this workbook is not classified as a legacy export.');}
+  return payload;
+}
+function presentUnits(meta){const raw=String(meta?.['Present Units']||'').trim(),p=raw.split(/[_\-\s]+/).filter(Boolean);let length='';for(const x of p){const u=x.toLowerCase();if(['in','ft','mm','cm','m'].includes(u)){length=u;break}}return {raw,length:length||''}}
+function isWindCase(n){return /windservice|(^|[^a-z])w[xy](?:[+\-]|\b)|\bwind\b/i.test(String(n||''))}
+function isSeisCase(n){return /(^|[^a-z])(ex|ey|eqx|eqy|sx|sy)\d*(?:\b|[+\-])|seis|earthquake/i.test(String(n||''))}
+function isDirectSeis(n){return /^(?:EX|EY|EQX|EQY|SX|SY)\d*$/i.test(String(n||'').trim())}
+function axisFromCase(n){const s=String(n||'').toUpperCase();if(/(?:^|[^A-Z])(EX|EQX|SX|WX)/.test(s)||/WINDSERVICE[^A-Z]*WX/.test(s))return'X';if(/(?:^|[^A-Z])(EY|EQY|SY|WY)/.test(s)||/WINDSERVICE[^A-Z]*WY/.test(s))return'Y';return''}
+function lengthFactorToMm(unit){return {mm:1,cm:10,m:1000,in:25.4,ft:304.8}[String(unit||'').toLowerCase()]||null}
+function lengthText(v,unit){if(!Number.isFinite(v))return'—';const u=String(unit||'').toLowerCase();const mmf=lengthFactorToMm(u);if(!mmf)return`${fmt(v,3)} raw`;const mm=v*mmf;if(u==='in'||u==='ft')return`${fmt(v,3)} ${u} (${fmt(mm/304.8,2)} ft / ${fmt(mm/1000,2)} m)`;return`${fmt(v,3)} ${u} (${fmt(mm/1000,2)} m)`}
+function buildContext(p){const d=p.decoded,storyZ=new Map(),seenBy=new Map(),register=(story,z,src)=>{if(!story)return;const zz=num(z);if(zz!==null){const old=storyZ.get(story);if(old===undefined||zz>old)storyZ.set(story,zz)}if(!seenBy.has(story))seenBy.set(story,new Set());seenBy.get(story).add(src)};
+  for(const r of d.storyDrifts)register(r.story,r.z,'Drift');for(const r of d.diaphCom)register(r.story,r.z,'Displ');for(const r of d.diaphMaxAvg)register(r.story,r.z,'Torsion');for(const r of d.storyForces)register(r.story,null,'Forces');for(const r of d.stiffness)register(r.story,null,'Stiffness');for(const r of d.storyMaxAvgDrifts)register(r.story,null,'Max/Avg Drift');for(const r of d.storyMaxAvgDisplacements)register(r.story,null,'Max/Avg Disp');
+  const defsByTower=new Map();for(const r of d.storyDefinitions){const tower=r.tower||'__DEFAULT__';if(!defsByTower.has(tower))defsByTower.set(tower,[]);defsByTower.get(tower).push(r)}for(const arr of defsByTower.values()){let fallbackElev=0;for(let i=arr.length-1;i>=0;i--){const r=arr[i];fallbackElev+=Number(r.height)||0;if(!storyZ.has(r.story))storyZ.set(r.story,fallbackElev)}for(const r of arr)register(r.story,storyZ.get(r.story),'Definition')}
+  const stories=uniq([...storyZ.keys(),...seenBy.keys()]).map(name=>({name,z:storyZ.get(name)??null,seen:[...(seenBy.get(name)||[])]}));stories.sort((a,b)=>{if(a.z!==null&&b.z!==null)return b.z-a.z;if(a.z!==null)return-1;if(b.z!==null)return 1;return a.name.localeCompare(b.name,undefined,{numeric:true})});
+  const allCases=uniq([d.storyDrifts,d.diaphCom,d.diaphMaxAvg,d.storyMaxAvgDrifts,d.storyMaxAvgDisplacements,d.stiffness,d.storyForces,d.baseReactions].flat().map(r=>r.case));const windCases=allCases.filter(isWindCase),seismicCases=allCases.filter(isSeisCase);let maxZ=-Infinity;for(const r of [...d.storyDrifts,...d.diaphCom,...d.diaphMaxAvg])if(Number.isFinite(r.z))maxZ=Math.max(maxZ,r.z);if(!Number.isFinite(maxZ)){const zz=stories.map(s=>s.z).filter(Number.isFinite);maxZ=zz.length?Math.max(...zz):null}
+  const units=presentUnits(p.meta);return {stories,storyZ,seenBy,allCases,windCases,seismicCases,totalHeight:maxZ,units};}
+function directOrSeismic(rows){const s=rows.filter(r=>isSeisCase(r.case)),d=s.filter(r=>isDirectSeis(r.case));return d.length?d:s}
+function checkDrift(p,ctx){let rows=directOrSeismic(p.decoded.storyDrifts).filter(r=>{const a=axisFromCase(r.case);return !a||a===r.axis});const factor=5;return rows.map(r=>{const allow=r.axis==='Y'?0.015:0.020,elastic=Math.abs(r.drift),amp=elastic*factor;return {...r,elastic,factor,allow,amp,pass:amp<=allow+1e-12,factorSource:'B6 fallback Cd/I = 5/1'}})}
+function checkWind(p,ctx){let rows=p.decoded.diaphCom.filter(r=>isWindCase(r.case));const service=rows.filter(r=>/windservice/i.test(r.case));if(service.length)rows=service;const by=new Map();for(const r of rows){const axis=axisFromCase(r.case);if(!axis)continue;const disp=Math.abs(axis==='X'?r.ux:r.uy);if(!Number.isFinite(disp))continue;const key=r.story+'|'+r.case+'|'+axis,old=by.get(key);const oldDisp=old?Math.abs(axis==='X'?old.ux:old.uy):-Infinity;if(!old||disp>oldDisp)by.set(key,r)}const out=[];for(const r of by.values()){const axis=axisFromCase(r.case),disp=Math.abs(axis==='X'?r.ux:r.uy),h=Number.isFinite(r.z)&&r.z>0?r.z:ctx.storyZ.get(r.story),limit=Number.isFinite(h)&&h>0?h/500:null;if(Number.isFinite(disp)&&Number.isFinite(limit)&&limit>0)out.push({...r,axis,disp,height:h,limit,util:disp/limit,pass:disp<=limit+1e-12,source:'Diaphragm CM displacement · story-wise Hi/500'})}
+  if(out.length)return out;
+  let alt=p.decoded.storyMaxAvgDisplacements.filter(r=>isWindCase(r.case));const svc=alt.filter(r=>/windservice/i.test(r.case));if(svc.length)alt=svc;const g=new Map();for(const r of alt){const axis=axisFromCase(r.case)||r.axis;if(!axis||!Number.isFinite(r.max))continue;const key=r.story+'|'+r.case+'|'+axis,old=g.get(key);if(!old||Math.abs(r.max)>Math.abs(old.max))g.set(key,r)}for(const r of g.values()){const axis=axisFromCase(r.case)||r.axis,disp=Math.abs(r.max),h=ctx.storyZ.get(r.story),limit=Number.isFinite(h)&&h>0?h/500:null;if(Number.isFinite(limit)&&limit>0)out.push({...r,axis,disp,height:h,limit,util:disp/limit,pass:disp<=limit+1e-12,source:'Story max displacement · story-wise Hi/500'})}return out}
+function checkTorsion(p){let src=p.decoded.diaphMaxAvg.length?p.decoded.diaphMaxAvg:p.decoded.storyMaxAvgDrifts;let rows=directOrSeismic(src);return rows.filter(r=>{const a=axisFromCase(r.case),ra=r.axis||a;return !a||!ra||a===ra}).map(r=>{const ratio=Number.isFinite(r.ratio)?Math.abs(r.ratio):(Number.isFinite(r.max)&&Number.isFinite(r.avg)&&Math.abs(r.avg)>1e-15?Math.abs(r.max/r.avg):null);if(!Number.isFinite(ratio))return null;const classif=ratio>1.4?'Extreme Irregular':ratio>1.2?'Irregular':'Regular';return {...r,axis:r.axis||axisFromCase(r.case),ratio,classif,pass:ratio<=1.2+1e-12}}).filter(Boolean)}
+function checkSoft(p,ctx){const recs=directOrSeismic(p.decoded.stiffness),groups=new Map();for(const r of recs){const ca=axisFromCase(r.case);for(const axis of ['X','Y']){if(ca&&ca!==axis)continue;const k=axis==='X'?r.stiffX:r.stiffY;if(!(k>0))continue;const key=[r.case,r.stepType,r.stepNumber,axis].join('|');if(!groups.has(key))groups.set(key,{case:r.case,stepType:r.stepType,stepNumber:r.stepNumber,axis,vals:new Map(),order:[]});const g=groups.get(key),old=g.vals.get(r.story);if(old==null)g.order.push(r.story);g.vals.set(r.story,old==null?k:Math.min(old,k))}}
+  const out=[];for(const g of groups.values()){let order=g.order.slice();const known=order.every(s=>Number.isFinite(ctx.storyZ.get(s)));if(known)order.sort((a,b)=>ctx.storyZ.get(b)-ctx.storyZ.get(a));const vals=order.map(s=>g.vals.get(s)??null);for(let i=1;i<order.length;i++){const k=vals[i];if(!(k>0))continue;let ra=null,rav=null;if(vals[i-1]>0)ra=k/vals[i-1];if(i>=3&&vals[i-1]>0&&vals[i-2]>0&&vals[i-3]>0)rav=k/((vals[i-1]+vals[i-2]+vals[i-3])/3);if(ra===null&&rav===null)continue;let classif='Regular';if((ra!==null&&ra<0.6)||(rav!==null&&rav<0.7))classif='Extreme Soft Storey';else if((ra!==null&&ra<=0.7)||(rav!==null&&rav<0.8))classif='Soft Storey';out.push({story:order[i],case:g.case,step:[g.stepType,g.stepNumber].filter(Boolean).join(' '),axis:g.axis,k,ra,rav,classif,pass:classif==='Regular'})}}return out}
+function extractBase(p,ctx){const out=[];const br=p.decoded.baseReactions.filter(r=>isSeisCase(r.case)||isWindCase(r.case));if(br.length){for(const r of br)out.push({case:r.case,fx:r.fx,fy:r.fy,type:isSeisCase(r.case)?'Seismic':'Wind',story:'Base Reactions',status:'READ'})}
+  const have=new Set(out.map(r=>r.case));const groups=new Map();for(const r of p.decoded.storyForces){if(!/bottom/i.test(r.location)||(!isSeisCase(r.case)&&!isWindCase(r.case))||have.has(r.case))continue;const key=r.case;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(r)}for(const [c,rs] of groups){const axis=axisFromCase(c);let best=null,bestV=-1;for(const r of rs){const v=Math.abs(axis==='Y'?(r.vy??0):(r.vx??0));if(v>bestV){bestV=v;best=r}}if(best)out.push({case:c,fx:best.vx,fy:best.vy,type:isSeisCase(c)?'Seismic':'Wind',story:best.story,status:'READ'})}
+  const seis=out.filter(r=>r.type==='Seismic'),direct=seis.filter(r=>isDirectSeis(r.case)),wind=out.filter(r=>r.type==='Wind'),rawWind=wind.filter(r=>/^(?:WX|WY)[+\-]?$/i.test(String(r.case).trim())),serviceWind=wind.filter(r=>/windservice/i.test(r.case));return [...(direct.length?direct:seis),...(rawWind.length?rawWind:serviceWind.length?serviceWind:wind)].filter((r,i,a)=>a.findIndex(x=>x.case===r.case&&x.type===r.type)===i)}
+function tableEmpty(id,msg,cols=8){const el=$(id);if(el)el.innerHTML=`<tr><td colspan="${cols}" style="text-align:left;color:var(--muted)">${esc(msg)}</td></tr>`}
+function checkCard(title,status,metric,sub){const cls=status==='PASS'?'pass':status==='FAIL'?'fail':status==='WARN'||status==='PARTIAL'?'warn':'info';return `<article class="e2k-check-card ${cls}"><div class="top"><h3>${esc(title)}</h3><span class="status">${esc(status)}</span></div><div class="metric">${esc(metric)}</div><div class="sub">${esc(sub)}</div></article>`}
+function coverage(p,ctx,drift,tors,soft){const count=a=>new Set((a||[]).map(x=>x.story).filter(Boolean)).size,total=ctx.stories.length;return {total,drift:count(drift),torsion:count(tors),soft:count(p.decoded.stiffness),flat:p.flatV1,partial:p.flatV1||(total>0&&((count(drift)>0&&count(drift)<total)||(count(tors)>0&&count(tors)<total)||(count(p.decoded.stiffness)>0&&count(p.decoded.stiffness)<total)))}}
+function renderSummary(p,ctx){const model=p.meta['Model File']||p.fileName,version=p.meta['Exporter Version']||'—';$('e2kSummary').hidden=false;$('e2kDetails').hidden=false;$('e2kReadyBadge').textContent=p.exporterIssue==='v1.1-null-collapse'?'EXPORTER 1.1 · RE-EXPORT REQUIRED':p.flatV1?'LEGACY EXPORT · RE-EXPORT':('EXPORT READY'+(version&&version!=='—'?' · v'+version:''));$('e2kReadyBadge').className='e2k-ready-badge '+(p.flatV1?'warn':'ready');$('e2kModelInfo').textContent=model;$('e2kStoryCount').textContent=String(ctx.stories.length||'—');$('e2kTotalHeight').textContent=lengthText(ctx.totalHeight,ctx.units.length);$('e2kLengthUnit').textContent=p.meta['Present Units']||ctx.units.length||'Not reported';$('e2kWindCount').textContent=String(ctx.windCases.length);$('e2kSeismicCount').textContent=String(ctx.seismicCases.length);$('e2kCaseCount').textContent=String(ctx.allCases.length);$('e2kComboCount').textContent=String(Object.keys(p.tables).length);
+  $('e2kStoryBody').innerHTML=ctx.stories.length?ctx.stories.map(s=>`<tr><td>${esc(s.name)}</td><td>${s.z===null?'—':fmt(s.z,3)+' '+esc(ctx.units.length||'raw')}</td><td>${esc(s.seen.join(', ')||'—')}</td></tr>`).join(''):'<tr><td colspan="3">No story records recovered</td></tr>';
+  $('e2kPatternList').innerHTML=ctx.windCases.length?ctx.windCases.slice(0,80).map(x=>`<span>${esc(x)}</span>`).join(''):'<span>No wind case detected</span>';$('e2kCaseList').innerHTML=ctx.seismicCases.length?ctx.seismicCases.slice(0,80).map(x=>`<span>${esc(x)}</span>`).join(''):'<span>No seismic case detected</span>';$('e2kComboList').innerHTML=Object.values(p.tables).map(t=>`<span>${esc(t.name)} · ${t.records} · ${esc(t.mode)}</span>`).join('');
+}
+function renderAll(p){const ctx=buildContext(p),drift=checkDrift(p,ctx),wind=checkWind(p,ctx),tors=checkTorsion(p),soft=checkSoft(p,ctx),base=extractBase(p,ctx),cov=coverage(p,ctx,drift,tors,soft);renderSummary(p,ctx);
+  if(drift.length)$('e2kDriftRows').innerHTML=drift.slice().sort((a,b)=>b.amp-a.amp).map(r=>`<tr><td>${esc(r.story)}</td><td>${esc(r.case)}</td><td>${r.axis}</td><td>${fmt(r.elastic,6)}</td><td>${fmt(r.factor,2)}</td><td>${fmt(r.amp,6)}</td><td>${fmt(r.allow,4)}</td><td class="${r.pass?'pass':'fail'}">${r.pass?'PASS':'FAIL'}</td></tr>`).join('');else tableEmpty('e2kDriftRows','Seismic Story Drifts could not be recovered.');
+  if(wind.length)$('e2kWindRows').innerHTML=wind.slice().sort((a,b)=>b.height-a.height||a.case.localeCompare(b.case)||a.axis.localeCompare(b.axis)).map(r=>`<tr><td>${esc(r.story)}</td><td>${esc(r.case)}</td><td>${r.axis}</td><td>${fmt(r.disp,4)} ${esc(ctx.units.length||'raw')}</td><td>${fmt(r.height,3)} ${esc(ctx.units.length||'raw')}</td><td>${fmt(r.limit,4)} ${esc(ctx.units.length||'raw')}</td><td>${pct(r.util)}</td><td class="${r.pass?'pass':'fail'}">${r.pass?'PASS':'FAIL'}</td></tr>`).join('');else tableEmpty('e2kWindRows','Story-wise wind displacement / diaphragm CM result could not be recovered.');
+  if(tors.length)$('e2kTorsionRows').innerHTML=tors.slice().sort((a,b)=>b.ratio-a.ratio).map(r=>`<tr><td>${esc(r.story)}</td><td>${esc(r.case)}</td><td>${esc(r.axis||'—')}</td><td>${fmt(r.max,6)}</td><td>${fmt(r.avg,6)}</td><td>${fmt(r.ratio,3)}</td><td class="${r.pass?'pass':r.ratio>1.4?'fail':'warn'}">${esc(r.classif)}</td></tr>`).join('');else tableEmpty('e2kTorsionRows','Seismic diaphragm max/avg drift ratio could not be recovered.',7);
+  if(soft.length)$('e2kSoftRows').innerHTML=soft.slice().sort((a,b)=>a.pass===b.pass?0:a.pass?1:-1).map(r=>`<tr><td>${esc(r.story)}</td><td>${esc(r.case)}${r.step?' · '+esc(r.step):''}</td><td>${r.axis}</td><td>${fmt(r.k,2)}</td><td>${fmt(r.ra,3)}</td><td>${fmt(r.rav,3)}</td><td class="${r.pass?'pass':r.classif.startsWith('Extreme')?'fail':'warn'}">${esc(r.classif)}</td></tr>`).join('');else tableEmpty('e2kSoftRows','Story Stiffness could not be recovered.',7);
+  if(base.length)$('e2kBaseRows').innerHTML=base.map(r=>`<tr><td>${esc(r.case)}</td><td>${fmt(r.fx,3)}</td><td>${fmt(r.fy,3)}</td><td>${esc(r.type)}</td><td>${esc(r.story||'—')}</td><td>—</td><td>${r.status}</td></tr>`).join('');else tableEmpty('e2kBaseRows','Base Reactions / Story Forces could not be recovered.',7);
+  $('e2kBaseNote').textContent=p.exporterIssue==='v1.1-null-collapse'?'Exporter 1.1.0 may have shifted records by dropping blank/null ETABS fields. Base-shear values from this workbook are not treated as complete. Re-export with v1.2.0+.':p.flatV1?'Legacy exporter data are only partially recoverable; no base-shear PASS/FAIL is invented.':'Base-shear values are extracted from Base Reactions, with Story Forces as fallback. PASS/FAIL requires a valid code reference and known force units.';
+  const tableSpans=Object.values(p.tables).filter(t=>t.records>0).map(t=>`<span>${esc(t.name)} · ${t.records} record(s) · ${esc(t.mode)}</span>`);$('e2kReceivedTables').innerHTML=tableSpans.length?tableSpans.join(''):'<span>No populated result table recovered</span>';
+  const covLines=[`Detected story set: ${cov.total||0}. Seismic drift coverage: ${cov.drift||0} story(s). Torsion coverage: ${cov.torsion||0} story(s). Stiffness coverage: ${cov.soft||0} story(s).`,`Wind sway follows the B3 workbook row-by-row: each story displacement is compared with that story elevation Hi/500; RF is not the only checked row.`,...(p.notes||[])];$('e2kAnalysisNotes').textContent=covLines.join('\n');
+  const wd=drift.length?drift.reduce((a,b)=>b.amp>a.amp?b:a):null,ww=wind.length?wind.reduce((a,b)=>b.util>a.util?b:a):null,wt=tors.length?tors.reduce((a,b)=>b.ratio>a.ratio?b:a):null,ws=soft.find(x=>!x.pass)||soft[0],seisBase=base.filter(x=>x.type==='Seismic'),modal=p.decoded.modalPeriods.slice().sort((a,b)=>a.mode-b.mode)[0];
+  const cards=[];cards.push(checkCard('Seismic Drift',!drift.length?'INFO':drift.every(x=>x.pass)?'PASS':'FAIL',wd?fmt(wd.amp,5):'No result',wd?`${wd.story} · ${wd.case} · allow ${fmt(wd.allow,3)} · B6 Cd/I 5.0`:'Story Drifts required'));cards.push(checkCard('Wind Sway / Hi÷500',!wind.length?'INFO':wind.every(x=>x.pass)?'PASS':'FAIL',ww?pct(ww.util):'No result',ww?`${ww.story} · ${ww.case} · ${fmt(ww.disp,3)} / ${fmt(ww.limit,3)} ${ctx.units.length||'raw'} · story-wise`:'Diaphragm CM displacement required'));cards.push(checkCard('Torsional Irregularity',!tors.length?'INFO':tors.every(x=>x.pass)?'PASS':'FAIL',wt?fmt(wt.ratio,3):'No ratio',wt?`${wt.story} · ${wt.case} · ${wt.classif}`:'Diaphragm Max/Avg Drifts required'));cards.push(checkCard('Soft Storey',!soft.length?'INFO':soft.every(x=>x.pass)?'PASS':'FAIL',ws?ws.classif:'No stiffness',ws?`${ws.story} · ${ws.case} · ${ws.axis}`:'Story Stiffness required'));cards.push(checkCard('Base Shear',seisBase.length?'INFO':'INFO',seisBase.length?`${seisBase.length} seismic case(s)`:'No result',seisBase.length?'ETABS value read; v1 force unit header missing, so no false unit/PASS is shown.':'Base Reactions / Story Forces required'));cards.push(checkCard('Modal Period',modal?'INFO':'INFO',modal?`${fmt(modal.period,3)} s`:'No result',modal?`${modal.case} · Mode ${fmt(modal.mode,0)}`:'Modal Periods table optional'));cards.push(checkCard('Export Coverage',cov.partial?'PARTIAL':'PASS',cov.partial?'Check coverage':'Full headers',cov.partial?`${cov.drift}/${cov.total} drift · ${cov.torsion}/${cov.total} torsion · ${cov.soft}/${cov.total} stiffness stories recovered`:'No flat-v1 truncation warning detected'));$('e2kCheckGrid').innerHTML=cards.join('');
+  const anyFail=[...drift,...wind,...tors,...soft].some(x=>x.pass===false),any=[drift,wind,tors,soft,base].some(x=>x.length),overall=$('e2kFullOverall');overall.textContent=!any?'NO RESULTS':anyFail?'CHECK FAILURES':cov.partial?'PARTIAL DATA':'RESULTS READY';overall.className='e2k-ready-badge '+(!any||anyFail||cov.partial?'warn':'ready');$('e2kFullMeta').textContent=`${p.meta['Model File']||p.fileName} · exporter ${p.meta['Exporter Version']||'unknown'} · ${ctx.stories.length} detected story level(s) · ${Object.values(p.tables).filter(t=>t.records>0).length} decoded table(s)`;result.hidden=false;window.StructuralSuiteOneClickAnalysis={raw:p,context:ctx,drift,windDisplacement:wind,torsion:tors,softStorey:soft,baseShear:base,coverage:cov};
+}
+resultsFile.addEventListener('change',async()=>{parsedPayload=null;runBtn.disabled=true;if(result)result.hidden=true;const f=resultsFile.files&&resultsFile.files[0];if(!f){setResultsState('ONE-CLICK EXPORT EXCEL: NOT LOADED');setStatus('ETABS plugin থেকে Export BNBC Check Data করে তৈরি .xlsx upload করুন।');return}setResultsState('Reading '+f.name+' …','busy');setStatus('Plugin-exported workbook পড়ছি…');try{parsedPayload=await parseWorkbook(f);const decoded=Object.values(parsedPayload.decoded).reduce((a,x)=>a+x.length,0);if(!decoded)throw new Error('BNBC exporter result records were not detected in this workbook.');const ctx=buildContext(parsedPayload);renderSummary(parsedPayload,ctx);runBtn.disabled=false;setResultsState(parsedPayload.exporterIssue==='v1.1-null-collapse'?`EXPORTER 1.1 DATA-SHIFT RISK · ${parsedPayload.meta['Model File']||f.name} · RE-EXPORT REQUIRED`:parsedPayload.flatV1?`LEGACY EXPORT FORMAT · ${parsedPayload.meta['Model File']||f.name} · partial recovery only`:`EXPORT READY · ${parsedPayload.meta['Model File']||f.name} · ${decoded} structured record(s)`,parsedPayload.flatV1?'err':'ok');setStatus(parsedPayload.exporterIssue==='v1.1-null-collapse'?'এই workbook Exporter 1.1.0 দিয়ে তৈরি। v1.1 blank/null ETABS field বাদ দেওয়ায় later rows shift হতে পারে—সব result নির্ভরযোগ্যভাবে পেতে BNBC ETABS Exporter 1.2.0+ দিয়ে একই analyzed model আবার export করুন।':parsedPayload.flatV1?'Legacy exporter workbook detected. Complete checks-এর জন্য Exporter 1.2.0+ দিয়ে re-export করুন।':'Workbook ready. Run Full Check চাপুন।',parsedPayload.flatV1?'err':'ok')}catch(e){console.error(e);parsedPayload=null;runBtn.disabled=true;setResultsState(e.message||String(e),'err');setStatus('Workbook read করা যায়নি।','err')}});
+runBtn.addEventListener('click',()=>{if(!parsedPayload){alert('Please upload the BNBC ETABS Exporter Excel first.');return}try{renderAll(parsedPayload);result?.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){console.error(e);if(result)result.hidden=false;$('e2kCheckGrid').innerHTML=checkCard('Results Check','FAIL','Parser / data error',e.message||String(e));$('e2kFullMeta').textContent='No PASS/FAIL was fabricated for unavailable data.';$('e2kFullOverall').textContent='CHECK ERROR';$('e2kFullOverall').className='e2k-ready-badge warn'}});
+$('e2kClearBtn')?.addEventListener('click',()=>{resultsFile.value='';parsedPayload=null;runBtn.disabled=true;if(result)result.hidden=true;$('e2kSummary').hidden=true;$('e2kDetails').hidden=true;$('e2kReadyBadge').textContent='WAITING';$('e2kReadyBadge').className='e2k-ready-badge';setResultsState('ONE-CLICK EXPORT EXCEL: NOT LOADED');setStatus('ETABS plugin 1.1+ → Export BNBC Check Data → generated .xlsx upload করুন।')});
+runBtn.disabled=true;
+})();
+
+</script>
+
+<script data-ss-order="31" id="structural-suite-navigation-base-shear-repair-script-v1" type="text/x-structural-suite-deferred">
+(function(){
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const num=v=>{const n=parseFloat(v);return Number.isFinite(n)?n:null};
+  const fmt=(v,d=2)=>Number.isFinite(v)?Number(v).toFixed(d):'—';
+
+  function referenceResult(provided){
+    return provided||window.__lastStructuralSuiteEQResult||null;
+  }
+  function resultCard(axis,actual,refV,required){
+    if(actual===null||actual<0){
+      return `<div class="base-shear-result pending"><div class="base-shear-result-head"><strong>${axis}-Direction</strong><span class="base-shear-status">NOT ENTERED</span></div><div class="base-shear-metrics"><div><span>ETABS V</span><b>—</b></div><div><span>Ratio</span><b>—</b></div><div><span>Scale</span><b>—</b></div></div></div>`;
+    }
+    const ratio=refV>0?actual/refV*100:NaN;
+    const pass=actual+1e-9>=required;
+    const scale=actual>0?Math.max(1,required/actual):Infinity;
+    return `<div class="base-shear-result ${pass?'pass':'fail'}"><div class="base-shear-result-head"><strong>${axis}-Direction</strong><span class="base-shear-status">${pass?'PASS':'FAIL'}</span></div><div class="base-shear-metrics"><div><span>ETABS V</span><b>${fmt(actual)} kip</b></div><div><span>Vs. Reference</span><b>${fmt(ratio,1)}%</b></div><div><span>Scale Factor</span><b>${Number.isFinite(scale)?fmt(scale,3):'∞'}</b></div></div></div>`;
+  }
+  function updateBaseShearCheck(provided){
+    const r=referenceResult(provided), refEl=$('baseShearRefValue'), summary=$('baseShearCheckSummary');
+    if(!refEl||!summary)return;
+    if(!r||!Number.isFinite(r.V)||r.V<=0){
+      refEl.textContent='Calculate earthquake first';
+      summary.innerHTML='<div class="base-shear-empty">Earthquake calculation চালান, তারপর ETABS X/Y base shear দিন।</div>';
+      return;
+    }
+    window.__lastStructuralSuiteEQResult=r;
+    const ratioInput=num($('baseShearMinRatio')?.value);const minRatio=Math.max(0,ratioInput===null?100:ratioInput);
+    const required=r.V*minRatio/100;
+    const x=num($('baseShearEtabsX')?.value), y=num($('baseShearEtabsY')?.value);
+    refEl.textContent=`${fmt(r.V)} kip · minimum ${fmt(required)} kip (${fmt(minRatio,0)}%)`;
+    summary.innerHTML=resultCard('X',x,r.V,required)+resultCard('Y',y,r.V,required);
+  }
+  window.__updateBaseShearCheck=updateBaseShearCheck;
+
+  $('runBaseShearCheckBtn')?.addEventListener('click',()=>updateBaseShearCheck());
+  ['baseShearEtabsX','baseShearEtabsY','baseShearMinRatio'].forEach(id=>$(id)?.addEventListener('input',()=>updateBaseShearCheck()));
+
+  function openBaseShear(){
+    const etabs=[...document.querySelectorAll('.page-tab-btn[data-page="etabs"]')][0];
+    etabs?.click();
+    $('tabEqBtn')?.click();
+    setTimeout(()=>{
+      if(window.__lastStructuralSuiteEQResult){
+        $('baseShearCheckCard')?.scrollIntoView({behavior:'smooth',block:'start'});
+      }else{
+        $('calcEqBtn')?.scrollIntoView({behavior:'smooth',block:'center'});
+        $('calcEqBtn')?.focus({preventScroll:true});
+      }
+    },90);
+  }
+  $('baseShearShortcut')?.addEventListener('click',openBaseShear);
+
+  // Add a dedicated Base Shear item to the mobile "All tools" sheet.
+  const grid=$('mobileSheetGrid');
+  if(grid&&!$('mobileBaseShearTool')){
+    const b=document.createElement('button');b.type='button';b.id='mobileBaseShearTool';b.className='mobile-sheet-tool';
+    b.innerHTML='<span class="sheet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 19h16M6 16l4-5 3 2 5-7"/><path d="M6 5v11M18 6v10"/></svg></span><span>Base Shear Check</span>';
+    b.addEventListener('click',()=>{openBaseShear();$('mobileNavOverlay')?.classList.remove('open');$('mobileNavOverlay')?.setAttribute('aria-hidden','true')});
+    const etabsTool=grid.querySelector('[data-page="etabs"]');
+    if(etabsTool&&etabsTool.nextSibling)grid.insertBefore(b,etabsTool.nextSibling);else grid.appendChild(b);
+  }
+
+  // Search/filter inside All Tools so hidden/less-used modules can be found immediately.
+  const sheet=$('mobileNavSheet');
+  if(sheet&&grid&&!$('mobileToolFilter')){
+    const wrap=document.createElement('div');wrap.id='mobileToolFilterWrap';
+    wrap.innerHTML='<input id="mobileToolFilter" type="search" autocomplete="off" placeholder="Search all tools…" aria-label="Search all tools">';
+    const head=sheet.querySelector('.mobile-sheet-head');head?.insertAdjacentElement('afterend',wrap);
+    const input=$('mobileToolFilter');
+    const filter=()=>{
+      const q=(input.value||'').trim().toLowerCase();
+      grid.querySelectorAll('.mobile-sheet-tool').forEach(tool=>tool.classList.toggle('tool-filter-hidden',!!q&&!tool.textContent.toLowerCase().includes(q)));
+    };
+    input.addEventListener('input',filter);
+    $('mobileMoreBtn')?.addEventListener('click',()=>setTimeout(()=>{input.value='';filter();input.focus({preventScroll:true})},80));
+  }
+
+  // Make the global search index notice the newly added Base Shear section.
+  setTimeout(()=>window.StructuralSuiteSearch?.rebuild?.(),120);
+  updateBaseShearCheck();
+})();
+</script>
 </body>
 </html>
