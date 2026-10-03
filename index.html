@@ -15477,7 +15477,7 @@ html[data-theme="index4-single"] .gate-contact span{ color:var(--copper) !import
 @media(max-width:900px){.e2k-results-upload-grid{grid-template-columns:1fr 1fr!important}.e2k-file-slot{grid-column:1/-1}.e2k-results-upload-grid button{width:100%!important}}
 @media(max-width:560px){.e2k-results-upload-grid{grid-template-columns:1fr!important}.e2k-file-slot{grid-column:auto!important}}
 </style>
-<script data-ss-order="3.8" id="structural-suite-etabs-oneclick-analysis-v3" type="text/x-structural-suite-deferred">
+<script data-ss-order="3.8" id="structural-suite-etabs-oneclick-analysis-v4" type="text/x-structural-suite-deferred">
 (function(){
 'use strict';
 const $=id=>document.getElementById(id);
@@ -15517,7 +15517,19 @@ function canonicalName(raw){
 }
 function firstTableTitle(rows,sheetName){const a=String(rows?.[0]?.[0]??'').trim();return /^table\s*:/i.test(a)?a.replace(/^table\s*:?\s*/i,'').trim():sheetName}
 function flatValues(rows){const out=[];for(let r=3;r<(rows||[]).length;r++){for(const v of rows[r]||[]){const t=String(v??'').trim();if(t!=='')out.push(t)}}return out}
-function looksHeader(row){const vals=(row||[]).map(v=>String(v??'').trim()).filter(Boolean);if(vals.length<2)return false;const keys=vals.map(nk);const markers=['story','tower','outputcase','case','casetype','steptype','stepnumber','direction','drift','stiffx','stiffy','fx','fy','vx','vy','ux','uy','maxdrift','avgdrift','ratio','height','elevation','location','mode','period','frequency','circfreq','eigenvalue'];let n=0;for(const k of keys)if(markers.some(m=>k===m||k.includes(m)))n++;return n>=2}
+function looksHeader(row){
+  const vals=(row||[]).map(v=>String(v??'').trim()).filter(Boolean);
+  if(vals.length<2)return false;
+  // Exporter sheets start with a two-cell title row: "TABLE: ..." / "TABLE KEY: ...".
+  // Never treat that metadata row as column headers (it previously broke Story Drifts,
+  // Diaphragm Max/Avg Drifts, Story Stiffness, Story Definitions, Modal Periods, etc.).
+  if(vals.some(v=>/^table(?:\s+key)?\s*:/i.test(v)))return false;
+  const keys=vals.map(nk);
+  const markers=new Set(['story','storyname','tower','towername','outputcase','case','casetype','steptype','stepnumber','direction','dir','drift','storydrift','driftratio','stiffx','stiffy','shearx','sheary','driftx','drifty','fx','fy','fz','vx','vy','ux','uy','rz','maxdrift','avgdrift','maxdisplacement','avgdisplacement','ratio','height','storyheight','elevation','location','loc','mode','period','frequency','circularfrequency','circfreq','eigenvalue','eigenvalue','item','label','x','y','z']);
+  let n=0;
+  for(const k of keys)if(markers.has(k))n++;
+  return n>=2;
+}
 function parseStandardRows(rows){let hi=-1;for(let i=0;i<Math.min(rows.length,12);i++)if(looksHeader(rows[i])){hi=i;break}if(hi<0)return null;const fields=(rows[hi]||[]).map((v,i)=>String(v??'').trim()||`Column ${i+1}`),data=[];for(let r=hi+1;r<rows.length;r++){const row=rows[r]||[];if(!row.some(v=>String(v??'').trim()!==''))continue;const obj={};let any=false;for(let c=0;c<fields.length;c++){const v=row[c]??'';obj[fields[c]]=v;if(String(v).trim()!=='')any=true}if(any)data.push(obj)}return {fields,rows:data}}
 function isCaseType(v){const k=nk(v);return k==='linmodeigen'||k==='linstatic'||k==='combination'||k==='nonlinstatic'||k==='nonlinearstatic'||k==='linrespspec'||k==='responsespectrum'||k==='lindirecthist'||k==='nondirecthist'||k==='buckling'||k==='hyperstatic'||k==='steadystate'||k==='powerspectraldensity'}
 function segments(vals,startPred){const starts=[];for(let i=0;i<vals.length;i++)if(startPred(vals,i))starts.push(i);const out=[];for(let j=0;j<starts.length;j++){const a=starts[j],b=j+1<starts.length?starts[j+1]:vals.length;if(b>a)out.push(vals.slice(a,b))}return out}
@@ -15551,7 +15563,12 @@ async function parseWorkbook(file){
   for(const sn of wb.SheetNames){const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});if(nk(sn)==='bnbcexportmeta'){payload.meta=parseMeta(rows);continue}if(nk(sn)==='exportsummary'){payload.summary=parseSummary(rows);continue}
     const name=canonicalName(firstTableTitle(rows,sn)),standard=parseStandardRows(rows);let recs=[],mode='unread';
     const key=targetMap[name];
-    if(standard){recs=normalizeStandard(name,standard.rows);mode='header'}else if(key){const vals=flatValues(rows);if(vals.length){recs=decodeSheet(name,vals);mode='compat-fallback';if(recs.length)payload.parserFallback=true}}else{mode='unmapped'}
+    if(standard){
+      recs=normalizeStandard(name,standard.rows);mode='header';
+      // Defensive fallback: if a future/variant header is detected but cannot be mapped,
+      // do not silently report "could not be recovered" while the table actually has data.
+      if(key&&!recs.length){const vals=flatValues(rows);if(vals.length){const fb=decodeSheet(name,vals);if(fb.length){recs=fb;mode='compat-fallback';payload.parserFallback=true}}}
+    }else if(key){const vals=flatValues(rows);if(vals.length){recs=decodeSheet(name,vals);mode='compat-fallback';if(recs.length)payload.parserFallback=true}}else{mode='unmapped'}
     if(key&&recs.length)payload.decoded[key].push(...recs);payload.tables[name]={name,sheet:sn,mode,records:recs.length,rawRows:Math.max(0,rows.length-3)};
   }
   const exported=String(payload.meta['Exporter']||''),ver=String(payload.meta['Exporter Version']||'').trim();if(exported&&!/BNBC ETABS Data Exporter/i.test(exported))payload.notes.push('Workbook metadata does not identify the expected BNBC ETABS Data Exporter.');
